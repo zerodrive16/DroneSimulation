@@ -48,8 +48,9 @@ public class Drones{
             }
             in.close();
 
-            // Gson is used to convert the String to an object and vise versa
+            // Gson is used to convert the Json String to a java object and vice versa
             Gson gson = new Gson();
+            // Returns the list that is encapsulated inside the result array (JSON)
             ApiResult apiResponse = gson.fromJson(response.toString(), ApiResult.class);
 
             // We use the ApiResponse and Drone files to tell Gson how the Json output format is formatted, so we can get the specific elements
@@ -78,7 +79,7 @@ public class Drones{
         } finally{
             System.out.println("Process completed");
         }
-        // bundling ArrayList inside constructor
+        // create new return instance to send the data to the constructor and store them temporarily inside the ArrayList
         return new ReturnDroneData(droneID, droneCreate, droneSerialnumber, droneCarriageWeight, droneCarriageType);
     }
 }
