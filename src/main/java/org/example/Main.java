@@ -9,7 +9,7 @@ import static org.example.Config.Drone_Mask;
 
 public class Main{
     public static void main(String[] args){
-        GUI gui = new GUI();
+        //GUI gui = new GUI();
         // creating new Drones and access the Data from the function
         Drones dronesAPI = new Drones();
         ReturnDroneData droneData = dronesAPI.APIDrones();

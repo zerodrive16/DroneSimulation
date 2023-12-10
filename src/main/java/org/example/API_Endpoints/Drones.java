@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import org.example.API_Properties.ApiResult;
 import org.example.API_Properties.Drone;
 import org.example.API_Properties.ReturnDroneData;
-import org.example.Config;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
