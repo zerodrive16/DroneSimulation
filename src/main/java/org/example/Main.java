@@ -14,6 +14,7 @@ public class Main{
 
         // creating variables that take the data from the encapsulation
         ArrayList<String> droneId = droneData.getDroneID();
+        ArrayList<String> droneType = droneData.getDroneTypeURL();
         ArrayList<String> droneCreate = droneData.getDroneCreate();
         ArrayList<String> droneSerialnumber = droneData.getDroneSerialnumber();
         ArrayList<String> droneCarriageWeight = droneData.getDroneCarriageWeight();
@@ -22,6 +23,7 @@ public class Main{
         // output the data
         for(int x = 0; x < droneId.size(); x++){
             System.out.println("Drone ID: " + droneId.get(x));
+            System.out.println("DroneType: " + droneType.get(x));
             System.out.println("Drone Creation: " + droneCreate.get(x));
             System.out.println("Drone Serialnumber: " + droneSerialnumber.get(x));
             System.out.println("Drone Carriage Weight: " + droneCarriageWeight.get(x));

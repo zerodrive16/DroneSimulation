@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class Drones{
     public ReturnDroneData APIDrones(){
         ArrayList<String> droneID = new ArrayList<>();
+        ArrayList<String> droneTypeURL = new ArrayList<>();
         ArrayList<String> droneCreate = new ArrayList<>();
         ArrayList<String> droneSerialnumber = new ArrayList<>();
         ArrayList<String> droneCarriageWeight = new ArrayList<>();
@@ -27,7 +28,7 @@ public class Drones{
         try{
             // REST API request to the webserver
             final String token = "Token 64f0e472cd96156e94da3c3e066c8d89e8b88f72";
-            URL url = new URL("https://dronesim.facets-labs.com/api/drones/?format=json");
+            URL url = new URL("http://dronesim.facets-labs.com/api/drones/?limit=20&offset=1&format=json"); // paginate to limit 20
             HttpURLConnection con;
             con = (HttpURLConnection) url.openConnection();
             con.setRequestProperty("Authorization", token);
@@ -52,12 +53,12 @@ public class Drones{
             Gson gson = new Gson();
             // Returns the list that is encapsulated inside the result array (JSON)
             ApiResult apiResponse = gson.fromJson(response.toString(), ApiResult.class);
-            System.out.println(apiResponse);
 
             // We use the ApiResponse and Drone files to tell Gson how the Json output format is formatted, so we can get the specific elements
             if(apiResponse != null && apiResponse.getResults() != null){
                 for(Drone drone : apiResponse.getResults()){
                     droneID.add(drone.getId());
+                    droneTypeURL.add(drone.getDronetype());
                     droneCreate.add(drone.getCreated());
                     droneSerialnumber.add(drone.getSerialnumber());
                     droneCarriageWeight.add(drone.getCarriage_weight());
@@ -81,6 +82,6 @@ public class Drones{
             System.out.println("Process completed");
         }
         // create new return instance to send the data to the constructor and store them temporarily inside the ArrayList
-        return new ReturnDroneData(droneID, droneCreate, droneSerialnumber, droneCarriageWeight, droneCarriageType);
+        return new ReturnDroneData(droneID, droneTypeURL, droneCreate, droneSerialnumber, droneCarriageWeight, droneCarriageType);
     }
 }
