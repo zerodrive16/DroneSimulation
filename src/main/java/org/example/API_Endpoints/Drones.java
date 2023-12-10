@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import org.example.API_Properties.ApiResult;
 import org.example.API_Properties.Drone;
 import org.example.API_Properties.ReturnDroneData;
+import org.example.Config;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -27,10 +28,11 @@ public class Drones{
         ArrayList<String> droneCarriageType = new ArrayList<>();
         try{
             // REST API request to the webserver
-            final String token = "Token 64f0e472cd96156e94da3c3e066c8d89e8b88f72";
             URL url = new URL("http://dronesim.facets-labs.com/api/drones/?limit=20&offset=1&format=json"); // paginate to limit 20
             HttpURLConnection con;
             con = (HttpURLConnection) url.openConnection();
+            Config config = new Config();
+            String token = config.getToken();
             con.setRequestProperty("Authorization", token);
             con.setRequestMethod("GET");
             con.setRequestProperty("User-Agent", "XYZ");
