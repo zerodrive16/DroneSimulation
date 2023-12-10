@@ -42,6 +42,7 @@ public class Drones{
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String inputLine;
             StringBuilder response = new StringBuilder();
+            System.out.println(response);
 
             while((inputLine = in.readLine()) != null){
                 response.append(inputLine);
