@@ -42,7 +42,6 @@ public class Drones{
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String inputLine;
             StringBuilder response = new StringBuilder();
-            System.out.println(response);
 
             while((inputLine = in.readLine()) != null){
                 response.append(inputLine);
@@ -53,6 +52,7 @@ public class Drones{
             Gson gson = new Gson();
             // Returns the list that is encapsulated inside the result array (JSON)
             ApiResult apiResponse = gson.fromJson(response.toString(), ApiResult.class);
+            System.out.println(apiResponse);
 
             // We use the ApiResponse and Drone files to tell Gson how the Json output format is formatted, so we can get the specific elements
             if(apiResponse != null && apiResponse.getResults() != null){
