@@ -18,6 +18,8 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.util.ArrayList;
 
+import static org.example.Config.token;
+
 public class Drones{
     public ReturnDroneData APIDrones(){
         ArrayList<String> droneID = new ArrayList<>();
@@ -31,8 +33,6 @@ public class Drones{
             URL url = new URL("http://dronesim.facets-labs.com/api/drones/?limit=20&offset=1&format=json"); // paginate to limit 20
             HttpURLConnection con;
             con = (HttpURLConnection) url.openConnection();
-            Config config = new Config();
-            String token = config.getToken();
             con.setRequestProperty("Authorization", token);
             con.setRequestMethod("GET");
             con.setRequestProperty("User-Agent", "XYZ");
