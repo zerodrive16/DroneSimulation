@@ -17,7 +17,7 @@ public class ReturnDroneData {
         this.data_droneCreate = droneCreate;
         this.data_droneSerialnumber = droneSerialnumber;
         this.data_droneCarriageWeight = droneCarriageWeight;
-        this.data_droneCarriageType = droneCarriageWeight;
+        this.data_droneCarriageType = droneCarriageType;
     }
 
     public ArrayList<String> getDroneID(){

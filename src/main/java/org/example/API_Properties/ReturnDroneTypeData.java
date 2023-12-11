@@ -44,5 +44,4 @@ public class ReturnDroneTypeData {
     public ArrayList<String> getDroneMaxCarriage(){
         return data_droneMaxCarriage;
     }
-
 }
