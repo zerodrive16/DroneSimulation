@@ -2,7 +2,7 @@ package org.example.API_Endpoints;
 
 // HTTP Request properties
 import com.google.gson.Gson;
-import org.example.API_Properties.ApiResult;
+import org.example.API_Properties.DroneResult;
 import org.example.API_Properties.Drone;
 import org.example.API_Properties.ReturnDroneData;
 
@@ -53,11 +53,11 @@ public class Drones{
             // Gson is used to convert the Json String to a java object and vice versa
             Gson gson = new Gson();
             // Returns the list that is encapsulated inside the result array (JSON)
-            ApiResult apiResponse = gson.fromJson(response.toString(), ApiResult.class);
+            DroneResult apiResponse = gson.fromJson(response.toString(), DroneResult.class);
 
             // We use the ApiResponse and Drone files to tell Gson how the Json output format is formatted, so we can get the specific elements
-            if(apiResponse != null && apiResponse.getResults() != null){
-                for(Drone drone : apiResponse.getResults()){
+            if(apiResponse != null && apiResponse.getDroneResults() != null){
+                for(Drone drone : apiResponse.getDroneResults()){
                     droneID.add(drone.getId());
                     droneTypeURL.add(drone.getDronetype());
                     droneCreate.add(drone.getCreated());

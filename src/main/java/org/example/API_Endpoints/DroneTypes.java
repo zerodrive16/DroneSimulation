@@ -1,8 +1,11 @@
 package org.example.API_Endpoints;
 
-import org.example.API_Properties.ReturnDroneTypeData;
+import com.google.gson.Gson;
+import org.example.API_Properties.*;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -31,6 +34,33 @@ public class DroneTypes {
 
             int responseCode = con.getResponseCode();
             System.out.println(responseCode);
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+
+            while((inputLine = in.readLine()) != null){
+                response.append(inputLine);
+            }
+            in.close();
+
+            Gson gson = new Gson();
+            DroneTypeResult apiResponse = gson.fromJson(response.toString(), DroneTypeResult.class);
+
+            if(apiResponse != null && apiResponse.getDroneTypeResults() != null){
+                for(DroneType droneType : apiResponse.getDroneTypeResults()){
+                    droneManufacturer.add(droneType.getManufacturer());
+                    droneTypeName.add(droneType.getTypename());
+                    droneWeight.add(droneType.getWeight());
+                    droneMaxSpeed.add(droneType.getMax_Speed());
+                    droneBatteryCapacity.add(droneType.getBattery_Capacity());
+                    droneControlRange.add(droneType.getControl_Range());
+                    droneMaxCarriage.add(droneType.getMax_Carriage());
+                }
+            } else {
+                System.err.println("Result error / Null");
+            }
+
 
         } catch(MalformedURLException ex1){
             System.err.println("MalformedURLException: " + ex1.getMessage());
