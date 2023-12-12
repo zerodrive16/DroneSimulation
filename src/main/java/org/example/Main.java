@@ -47,6 +47,6 @@ public class Main{
         ArrayList<String> droneTypeMaxCarriage = droneTypeData.getDroneMaxCarriage();
 
         System.out.println("Drone Manufacturer: " + droneTypeManufacturer);
-        System.out.println("This is a new change");
+        System.out.println("New Change");
     }
 }
