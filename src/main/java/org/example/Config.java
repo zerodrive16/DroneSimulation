@@ -42,6 +42,5 @@ public class Config {
         DroneTypes_Mask.add("Battery Capacity: ");
         DroneTypes_Mask.add("Control Range: ");
         DroneTypes_Mask.add("Max Carriage: ");
-
     }
 }

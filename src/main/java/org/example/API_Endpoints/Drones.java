@@ -29,7 +29,7 @@ public class Drones{
         ArrayList<String> droneCarriageType = new ArrayList<>();
         try{
             // REST API request to the webserver
-            URL url = new URL("http://dronesim.facets-labs.com/api/drones/?limit=20&offset=1&format=json"); // paginate to limit 20
+            URL url = new URL("http://dronesim.facets-labs.com/api/drones/?limit=20&format=json"); // paginate to limit 20
             HttpURLConnection con;
             con = (HttpURLConnection) url.openConnection();
             con.setRequestProperty("Authorization", token);
