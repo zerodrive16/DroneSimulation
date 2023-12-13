@@ -48,6 +48,6 @@ public class Main{
 
         System.out.println("Drone Manufacturer: " + droneTypeManufacturer);
         System.out.println("New Change");
-        System.out.println("New Change from Howard");
+        System.out.println("New Change Howard");
     }
 }
