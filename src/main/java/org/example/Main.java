@@ -50,6 +50,6 @@ public class Main{
 
         System.out.println("New");
         System.out.println("Stefan");
-        System.out.println("Nguyen");
+        System.out.println("Nguyenn");
     }
 }
