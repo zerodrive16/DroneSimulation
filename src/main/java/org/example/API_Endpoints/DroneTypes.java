@@ -71,9 +71,8 @@ public class DroneTypes {
         } catch(IOException ex3){
             System.err.println("IOException: " + ex3.getMessage());
             ex3.printStackTrace();
-        } catch(Exception ex4){
-            System.err.println("Exception: " + ex4.getMessage());
-            ex4.printStackTrace();
+        } finally {
+            System.out.println("Process Completed!");
         }
 
         return new ReturnDroneTypeData(droneManufacturer, droneTypeName, droneWeight, droneMaxSpeed,
