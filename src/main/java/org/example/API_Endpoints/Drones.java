@@ -2,6 +2,7 @@ package org.example.API_Endpoints;
 
 // HTTP Request properties
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.example.API_Properties.DroneResult;
 import org.example.API_Properties.Drone;
 import org.example.API_Properties.ReturnDroneData;

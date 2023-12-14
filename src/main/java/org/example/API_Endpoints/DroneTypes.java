@@ -25,7 +25,7 @@ public class DroneTypes {
         ArrayList<String> droneMaxCarriage = new ArrayList<>();
 
         try{
-            URL url = new URL("http://dronesim.facets-labs.com/api/dronetypes/60/?format=json");
+            URL url = new URL("http://dronesim.facets-labs.com/api/dronetypes/61/?format=json");
             HttpURLConnection con;
             con = (HttpURLConnection) url.openConnection();
             con.setRequestProperty("Authorization", token);
