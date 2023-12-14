@@ -49,9 +49,7 @@ public class Main{
         System.out.println("Drone Manufacturer: " + droneTypeManufacturer);
 
         System.out.println("New");
-        System.out.println("Hello World");
-        System.out.println("Nice");
-        System.out.println("Howard");
+        System.out.println("Github pull request");
 
     }
 }
