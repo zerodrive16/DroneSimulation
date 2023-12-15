@@ -1,2 +1,2 @@
-The Drone Simulation is a REST API which handles the Requests and outputs it in a GUI
+Drone Simulation Project that uses the REST API to fetch data and displays it on a GUI.
 
