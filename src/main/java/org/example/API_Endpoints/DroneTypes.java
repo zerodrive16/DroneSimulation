@@ -16,6 +16,11 @@ import static org.example.Config.token;
 
 public class DroneTypes {
     public ReturnDroneTypeData APIDroneTypes(){
+        Drones dronesID = new Drones();
+        ReturnDroneData returnData = dronesID.APIDrones();
+
+        ArrayList<String> droneID = returnData.getDroneID();
+
         ArrayList<String> droneManufacturer = new ArrayList<>();
         ArrayList<String> droneTypeName = new ArrayList<>();
         ArrayList<String> droneWeight = new ArrayList<>();

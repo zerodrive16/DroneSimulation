@@ -8,7 +8,7 @@ public class ReturnDroneDynamicData {
     final private ArrayList<String> data_droneSpeed;
     final private ArrayList<String> data_droneAlignRoll;
     final private ArrayList<String> data_droneAlignPitch;
-    final private ArrayList<String> data_droneYaw;
+    final private ArrayList<String> data_droneAlignYaw;
     final private ArrayList<String> data_droneLongitude;
     final private ArrayList<String> data_droneLatitude;
     final private ArrayList<String> data_droneBatteryStatus;
@@ -24,7 +24,7 @@ public class ReturnDroneDynamicData {
         this.data_droneSpeed = droneSpeed;
         this.data_droneAlignRoll = droneAlignRoll;
         this.data_droneAlignPitch = droneAlignPitch;
-        this.data_droneYaw = droneAlignYaw;
+        this.data_droneAlignYaw = droneAlignYaw;
         this.data_droneLongitude = droneLongitude;
         this.data_droneLatitude = droneLatitude;
         this.data_droneBatteryStatus = droneBatteryStatus;
@@ -47,7 +47,7 @@ public class ReturnDroneDynamicData {
         return data_droneAlignPitch;
     }
     public ArrayList<String> getDroneAlignYaw(){
-        return data_droneYaw;
+        return data_droneAlignYaw;
     }
     public ArrayList<String> getDroneLongitude(){
         return data_droneLongitude;
