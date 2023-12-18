@@ -33,7 +33,7 @@ public class Drones{
             URL url = new URL("http://dronesim.facets-labs.com/api/drones/?limit=20&format=json"); // paginate to limit 20
             HttpURLConnection con;
             con = (HttpURLConnection) url.openConnection();
-            con.setRequestProperty("Authorization", token);
+            con.setRequestProperty("Authorization", System.getenv("Secure_Token"));
             con.setRequestMethod("GET");
             con.setRequestProperty("User-Agent", "XYZ");
 
