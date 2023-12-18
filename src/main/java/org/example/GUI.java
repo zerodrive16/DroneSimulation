@@ -6,36 +6,41 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GUI extends JFrame implements ActionListener {
-
+    //colors and fonts
     Color primaryColor = new Color(44,44,44); //dark Gray
     Color secondaryColor = new Color(22,22,22); //even darker Gray
     Color thirdColor = new Color(66,66,66);
-
     Font primaryFont = new Font("Roboto", Font.PLAIN,12);
 
+    //images for icons and more
+    ImageIcon menuIcon = new ImageIcon("src/main/java/org/example/menuIcon.png");
+    ImageIcon refreshIcon = new ImageIcon("src/main/java/org/example/refreshIcon.png");
+    ImageIcon infoIcon = new ImageIcon("src/main/java/org/example/infoIcon.png");
 
+    //main components
     JPanel mainP = new JPanel(new BorderLayout());
     JPanel topBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JPanel sideBar = new JPanel();
     JPanel mainScreen = new JPanel(new CardLayout());
 
-
+    // main screens
     JPanel card1 = new JPanel();
     JPanel card2 = new JPanel();
     JPanel card3 = new JPanel();
 
-    ImageIcon menuIMG = new ImageIcon("src/main/java/org/example/test.png");
-    ImageIcon menuIMG2 = new ImageIcon("src/main/java/org/example/test2.png");
-    JButton menu = new JButton(menuIMG);
+    //topbar buttons
+    JButton menuButton = new JButton(menuIcon);
     JButton b1 = new JButton();
-    JButton b2 = new JButton();
-    JButton refresh = new JButton(menuIMG2);
+    JButton infoButton = new JButton(infoIcon);
+    JButton refreshButton = new JButton(refreshIcon);
+
+    //Sidebar Buttons
     JButton a1 = new JButton("Drone Catalog");
     JButton a2 = new JButton("Flight Dynamics");
     JButton a3 = new JButton("Drone Log");
 
 
-
+    //important variables
     private static int status = 1; //status of MainScreen
     private int width = 1024;
     private int height = 768;
@@ -72,18 +77,20 @@ public class GUI extends JFrame implements ActionListener {
         mainScreen.add(card2, "Card2");
         mainScreen.add(card3, "Card3");
 
-        card1.add(new JLabel("CARD 1"));
-        card2.add(new JLabel("CARD 2"));
-        card3.add(new JLabel("CARD 3"));
+        configureCard1();
+        configureCard2();
+        configureCard3();
     }
+    private void configureCard1() {
 
-
-
-
-
-    //topBar, menu, b1, b2, refresh
+    }
+    private void configureCard2() {
+    }
+    private void configureCard3() {
+    }
+    //topBar, menuButton, b1, infoButton, refreshButton
     private void topBarSettings() {
-        quickSet(primaryFont,Color.WHITE,secondaryColor,menu,b1,b2,refresh);
+        quickSet(primaryFont,Color.WHITE,secondaryColor, menuButton,b1, infoButton, refreshButton);
         topBar.setBackground(secondaryColor);
         topBar.setPreferredSize(new Dimension(Short.MAX_VALUE,80));
         topButtonSettings();
@@ -91,8 +98,8 @@ public class GUI extends JFrame implements ActionListener {
     private void topButtonSettings() {
         Dimension topBarButtonSize = new Dimension(70,70);
 
-        menu.setPreferredSize(topBarButtonSize);
-        menu.addActionListener(new ActionListener() {
+        menuButton.setPreferredSize(topBarButtonSize);
+        menuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 toggleMenu();
@@ -101,14 +108,14 @@ public class GUI extends JFrame implements ActionListener {
 
         //set Button Size
         b1.setPreferredSize(topBarButtonSize);
-        b2.setPreferredSize(topBarButtonSize);
-        refresh.setPreferredSize(topBarButtonSize);
+        infoButton.setPreferredSize(topBarButtonSize);
+        refreshButton.setPreferredSize(topBarButtonSize);
 
         //add Buttons
-        topBar.add(menu);
+        topBar.add(menuButton);
         topBar.add(b1);
-        topBar.add(b2);
-        topBar.add(refresh);
+        topBar.add(infoButton);
+        topBar.add(refreshButton);
     }
 
     //sideBar, a1, a2, a3
