@@ -14,7 +14,6 @@ public class ReturnDroneDynamicData {
     final private ArrayList<String> data_droneBatteryStatus;
     final private ArrayList<String> data_droneLastSeen;
     final private ArrayList<String> data_droneStatus;
-
     public ReturnDroneDynamicData(ArrayList<String> droneURL, ArrayList<String> droneTimestamp, ArrayList<String> droneSpeed,
                                   ArrayList<String> droneAlignRoll, ArrayList<String> droneAlignPitch, ArrayList<String> droneAlignYaw,
                                   ArrayList<String> droneLongitude, ArrayList<String> droneLatitude, ArrayList<String> droneBatteryStatus,
