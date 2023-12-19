@@ -16,6 +16,11 @@ import static org.example.Config.token;
 
 public class DroneTypes {
     public ReturnDroneTypeData APIDroneTypes(){
+
+        Drones droneAPI = new Drones();
+        ReturnDroneData returnData = droneAPI.APIDrones();
+        ArrayList<String> droneID = returnData.getDroneID();
+
         ArrayList<String> droneManufacturer = new ArrayList<>();
         ArrayList<String> droneTypeName = new ArrayList<>();
         ArrayList<String> droneWeight = new ArrayList<>();
@@ -25,42 +30,39 @@ public class DroneTypes {
         ArrayList<String> droneMaxCarriage = new ArrayList<>();
 
         try{
-            URL url = new URL("http://dronesim.facets-labs.com/api/dronetypes/61/?format=json");
-            HttpURLConnection con;
-            con = (HttpURLConnection) url.openConnection();
-            con.setRequestProperty("Authorization", token);
-            con.setRequestMethod("GET");
-            con.setRequestProperty("User-Agent", "XYZ");
+            for (String s : droneID) {
+                URL url = new URL("http://dronesim.facets-labs.com/api/dronetypes/" + s + "/?format=json");
+                HttpURLConnection con;
+                con = (HttpURLConnection) url.openConnection();
+                con.setRequestProperty("Authorization", token);
+                con.setRequestMethod("GET");
+                con.setRequestProperty("User-Agent", "XYZ");
 
-            int responseCode = con.getResponseCode();
-            System.out.println(responseCode);
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                StringBuilder response = new StringBuilder();
 
-            while((inputLine = in.readLine()) != null){
-                response.append(inputLine);
-            }
-            in.close();
-
-            Gson gson = new Gson();
-            DroneTypeResult apiResponse = gson.fromJson(response.toString(), DroneTypeResult.class);
-
-            if(apiResponse != null && apiResponse.getDroneTypeResults() != null){
-                for(DroneType droneType : apiResponse.getDroneTypeResults()){
-                    droneManufacturer.add(droneType.getManufacturer());
-                    droneTypeName.add(droneType.getTypename());
-                    droneWeight.add(droneType.getWeight());
-                    droneMaxSpeed.add(droneType.getMax_Speed());
-                    droneBatteryCapacity.add(droneType.getBattery_Capacity());
-                    droneControlRange.add(droneType.getControl_Range());
-                    droneMaxCarriage.add(droneType.getMax_Carriage());
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
                 }
-            } else {
-                System.err.println("Result error / Null");
-            }
+                in.close();
 
+                Gson gson = new Gson();
+                DroneType apiResponse = gson.fromJson(response.toString(), DroneType.class);
+
+                if (apiResponse != null) {
+                    droneManufacturer.add(apiResponse.getManufacturer());
+                    droneTypeName.add(apiResponse.getTypename());
+                    droneWeight.add(apiResponse.getWeight());
+                    droneMaxSpeed.add(apiResponse.getMax_Speed());
+                    droneBatteryCapacity.add(apiResponse.getBattery_Capacity());
+                    droneControlRange.add(apiResponse.getControl_Range());
+                    droneMaxCarriage.add(apiResponse.getMax_Carriage());
+                } else {
+                    System.err.println("Result error / Null");
+                }
+            }
 
         } catch(MalformedURLException ex1){
             System.err.println("MalformedURLException: " + ex1.getMessage());

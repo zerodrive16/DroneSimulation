@@ -46,6 +46,16 @@ public class Main{
         ArrayList<String> droneTypeControlRange = droneTypeData.getDroneControlRange();
         ArrayList<String> droneTypeMaxCarriage = droneTypeData.getDroneMaxCarriage();
 
-        System.out.println("Drone Manufacturer: " + droneTypeManufacturer);
+        for(int i = 0; i < droneId.size(); i++) {
+            System.out.println("Drone Manufacturer: " + droneTypeManufacturer.get(i));
+            System.out.println("Drone TypeName: " + droneTypeTypeName.get(i));
+            System.out.println("Drone TypeWeight: " + droneTypeWeight.get(i));
+            System.out.println("Drone MaxSpeed: " + droneTypeMaxSpeed.get(i));
+            System.out.println("Drone BatteryCapacity: " + droneTypeBatteryCapacity.get(i));
+            System.out.println("Drone Control Range: " + droneTypeControlRange.get(i));
+            System.out.println("Drone MaxCarriage: " + droneTypeMaxCarriage.get(i));
+        }
+
+
     }
 }

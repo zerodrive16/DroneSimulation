@@ -37,9 +37,6 @@ public class Drones{
             con.setRequestMethod("GET");
             con.setRequestProperty("User-Agent", "XYZ");
 
-            // Output from responseCode
-            int responseCode = con.getResponseCode();
-            System.out.println(responseCode);
 
             // Read and constructs the API response and format to String
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
