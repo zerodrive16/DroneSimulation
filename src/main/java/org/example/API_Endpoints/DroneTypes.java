@@ -7,8 +7,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -39,15 +37,9 @@ public class DroneTypes {
                 storeAPIResponse(apiResponse, droneManufacturer, droneTypeName, droneWeight, droneMaxSpeed, droneBatteryCapacity, droneControlRange, droneMaxCarriage);
             }
 
-        } catch(MalformedURLException ex1){
-            System.err.println("MalformedURLException: " + ex1.getMessage());
+        } catch(IOException ex1) {
+            System.err.println("IOException: " + ex1.getMessage());
             ex1.printStackTrace();
-        } catch(ProtocolException ex2){
-            System.err.println("ProtocolException: " + ex2.getMessage());
-            ex2.printStackTrace();
-        } catch(IOException ex3){
-            System.err.println("IOException: " + ex3.getMessage());
-            ex3.printStackTrace();
         } finally {
             System.out.println("Process Completed!");
         }
