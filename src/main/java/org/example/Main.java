@@ -55,7 +55,5 @@ public class Main{
             System.out.println("Drone Control Range: " + droneTypeControlRange.get(i));
             System.out.println("Drone MaxCarriage: " + droneTypeMaxCarriage.get(i));
         }
-
-
     }
 }
