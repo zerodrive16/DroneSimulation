@@ -23,7 +23,7 @@ public class GUI extends JFrame implements ActionListener {
 
     //main components
     JPanel mainP = new JPanel(new BorderLayout());
-    JPanel topBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    JPanel navbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JPanel sideBar = new JPanel();
     JPanel mainScreen = new JPanel(new CardLayout());
 
@@ -32,7 +32,7 @@ public class GUI extends JFrame implements ActionListener {
     JPanel card2 = new JPanel();
     JPanel card3 = new JPanel();
 
-    //topbar buttons
+    //navbar buttons
     JButton menuButton = new JButton(menuIcon);
     JButton b1 = new JButton();
     JButton infoButton = new JButton(infoIcon);
@@ -58,7 +58,7 @@ public class GUI extends JFrame implements ActionListener {
     private void initUI() {
         addingComponents();
         mainScreenSettings();
-        topBarSettings();
+        navbarSettings();
         sideBarSettings();
     }
 
@@ -66,7 +66,7 @@ public class GUI extends JFrame implements ActionListener {
 
     private void addingComponents() {
         this.add(mainP);
-        mainP.add(topBar, BorderLayout.NORTH);
+        mainP.add(navbar, BorderLayout.NORTH);
         mainP.add(sideBar, BorderLayout.WEST);
         mainP.add(mainScreen,BorderLayout.EAST);
     }
@@ -99,17 +99,17 @@ public class GUI extends JFrame implements ActionListener {
     }
     private void configureCard3() {
     }
-    //topBar, menuButton, b1, infoButton, refreshButton
-    private void topBarSettings() {
+    //navbar, menuButton, b1, infoButton, refreshButton
+    private void navbarSettings() {
         quickSet(primaryFont,Color.WHITE,secondaryColor, menuButton,b1, infoButton, refreshButton);
-        topBar.setBackground(secondaryColor);
-        topBar.setPreferredSize(new Dimension(Short.MAX_VALUE,80));
+        navbar.setBackground(secondaryColor);
+        navbar.setPreferredSize(new Dimension(Short.MAX_VALUE,80));
         topButtonSettings();
     }
     private void topButtonSettings() {
-        Dimension topBarButtonSize = new Dimension(70,70);
+        Dimension navbarButtonSize = new Dimension(70,70);
 
-        menuButton.setPreferredSize(topBarButtonSize);
+        menuButton.setPreferredSize(navbarButtonSize);
         menuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -118,15 +118,15 @@ public class GUI extends JFrame implements ActionListener {
         });
 
         //set Button Size
-        b1.setPreferredSize(topBarButtonSize);
-        infoButton.setPreferredSize(topBarButtonSize);
-        refreshButton.setPreferredSize(topBarButtonSize);
+        b1.setPreferredSize(navbarButtonSize);
+        infoButton.setPreferredSize(navbarButtonSize);
+        refreshButton.setPreferredSize(navbarButtonSize);
 
         //add Buttons
-        topBar.add(menuButton);
-        topBar.add(b1);
-        topBar.add(infoButton);
-        topBar.add(refreshButton);
+        navbar.add(menuButton);
+        navbar.add(b1);
+        navbar.add(infoButton);
+        navbar.add(refreshButton);
     }
 
     //sideBar, a1, a2, a3
