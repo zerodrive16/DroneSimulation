@@ -2,7 +2,6 @@ package org.example.API_Endpoints;
 
 // HTTP Request properties
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import org.example.API_Properties.DroneResult;
 import org.example.API_Properties.Drone;
 import org.example.API_Properties.ReturnDroneData;
@@ -14,73 +13,88 @@ import java.net.HttpURLConnection;
 
 // Exception Library
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.util.ArrayList;
 
 import static org.example.Config.token;
 
 public class Drones{
     public ReturnDroneData APIDrones(){
+        // declaring ArrayLists to store the data
         ArrayList<String> droneID = new ArrayList<>();
         ArrayList<String> droneTypeURL = new ArrayList<>();
         ArrayList<String> droneCreate = new ArrayList<>();
         ArrayList<String> droneSerialnumber = new ArrayList<>();
         ArrayList<String> droneCarriageWeight = new ArrayList<>();
         ArrayList<String> droneCarriageType = new ArrayList<>();
+
+        // Declaring the pagination URL and Gson
+        String paginationURL = "http://dronesim.facets-labs.com/api/drones/?format=json";
+        Gson gson = new Gson();
+
         try{
-            // REST API request to the webserver
-            URL url = new URL("http://dronesim.facets-labs.com/api/drones/?limit=20&format=json"); // paginate to limit 20
-            HttpURLConnection con;
-            con = (HttpURLConnection) url.openConnection();
-            con.setRequestProperty("Authorization", System.getenv("Secure_Token"));
-            con.setRequestMethod("GET");
-            con.setRequestProperty("User-Agent", "XYZ");
+            while(paginationURL != null) {
+                String response = APIRequest(paginationURL);
 
+                // Returns the list that is encapsulated inside the result array (JSON)
+                DroneResult apiResponse = gson.fromJson(response, DroneResult.class);
 
-            // Read and constructs the API response and format to String
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
-
-            while((inputLine = in.readLine()) != null){
-                response.append(inputLine);
-            }
-            in.close();
-
-            // Gson is used to convert the Json String to a java object and vice versa
-            Gson gson = new Gson();
-            // Returns the list that is encapsulated inside the result array (JSON)
-            DroneResult apiResponse = gson.fromJson(response.toString(), DroneResult.class);
-
-            // We use the ApiResponse and Drone files to tell Gson how the Json output format is formatted, so we can get the specific elements
-            if(apiResponse != null && apiResponse.getDroneResults() != null){
-                for(Drone drone : apiResponse.getDroneResults()){
-                    droneID.add(drone.getId());
-                    droneTypeURL.add(drone.getDronetype());
-                    droneCreate.add(drone.getCreated());
-                    droneSerialnumber.add(drone.getSerialnumber());
-                    droneCarriageWeight.add(drone.getCarriage_weight());
-                    droneCarriageType.add(drone.getCarriage_type());
-                }
-            } else {
-                System.err.println("Result error / Null");
-            }
-
-            // Catching the Exceptions
-        } catch(MalformedURLException ex1){
-            System.err.println("MalformedURLException: " + ex1.getMessage());
+                storeAPIResponse(apiResponse, droneID, droneTypeURL, droneCreate, droneSerialnumber, droneCarriageWeight, droneCarriageType);
+                paginationURL = apiResponse != null ? apiResponse.getNext() : null;
+            } // Catching the Exceptions
+        } catch(IOException ex1){
+            System.err.println("IOException error: " + ex1.getMessage());
             ex1.printStackTrace();
-        } catch(ProtocolException ex2) {
-            System.err.println("ProtocolException: " + ex2.getMessage());
-            ex2.printStackTrace();
-        } catch(IOException ex3){
-            System.err.println("IOException: " + ex3.getMessage());
-            ex3.printStackTrace();
-        } finally{
-            System.out.println("Process completed");
         }
         // create new return instance to send the data to the constructor and store them temporarily inside the ArrayList
         return new ReturnDroneData(droneID, droneTypeURL, droneCreate, droneSerialnumber, droneCarriageWeight, droneCarriageType);
+    }
+
+
+    // Retrieving token and also check if null or empty and throw exception
+    private String retrieveToken() {
+        if(token == null || token.isEmpty()){
+            throw new IllegalStateException("Token is either null or empty");
+        }
+        return token;
+    }
+
+    // Preparing the REST API request to the webserver with GET (URL, token, CRUD operation etc...)
+    private String APIRequest(String url) throws IOException{
+        // REST API request to the webserver
+        HttpURLConnection con;
+        con = (HttpURLConnection) new URL(url).openConnection();
+        con.setRequestProperty("Authorization", retrieveToken());
+        con.setRequestMethod("GET");
+        con.setRequestProperty("User-Agent", "XYZ");
+
+
+        // Read and constructs the API response and format to String
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        return String.valueOf(response);
+    }
+
+
+    // Fetching the data from the apiResponse and store them in the ArrayList
+    private void storeAPIResponse(DroneResult apiResponse, ArrayList<String> droneID, ArrayList<String> droneTypeURL, ArrayList<String> droneCreate, ArrayList<String> droneSerialnumber,
+                                   ArrayList<String> droneCarriageWeight, ArrayList<String> droneCarriageType) {
+        if (apiResponse != null && apiResponse.getDroneResults() != null) {
+            for (Drone drone : apiResponse.getDroneResults()) {
+                droneID.add(drone.getId());
+                droneTypeURL.add(drone.getDronetype());
+                droneCreate.add(drone.getCreated());
+                droneSerialnumber.add(drone.getSerialnumber());
+                droneCarriageWeight.add(drone.getCarriage_weight());
+                droneCarriageType.add(drone.getCarriage_type());
+            }
+        } else {
+            System.err.println("Result error / Null");
+        }
     }
 }

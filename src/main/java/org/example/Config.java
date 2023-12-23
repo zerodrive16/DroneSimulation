@@ -3,15 +3,7 @@ package org.example;
 import java.util.ArrayList;
 
 public class Config {
-    public static String token = retrieveToken();
-
-    private static String retrieveToken(){
-        String token = System.getenv("Secure_Token");
-        if(token == null || token.isEmpty()){
-            throw new RuntimeException("Token null or empty");
-        }
-        return token;
-    }
+    public static String token = "Token 64f0e472cd96156e94da3c3e066c8d89e8b88f72";
 
     public static ArrayList<String> Drone_Mask;
 
