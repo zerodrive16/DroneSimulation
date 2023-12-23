@@ -33,7 +33,9 @@ public class Drones{
                 DronesData.DroneResult apiResponse = gson.fromJson(response, DronesData.DroneResult.class);
 
                 storeAPIResponse(apiResponse, droneID, droneTypeURL, droneCreate, droneSerialnumber, droneCarriageWeight, droneCarriageType);
+
                 paginationURL = apiResponse != null ? apiResponse.getNext() : null;
+
             } // Catching the Exceptions
         } catch(IOException ex1){
             System.err.println("IOException error: " + ex1.getMessage());
