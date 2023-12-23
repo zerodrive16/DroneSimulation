@@ -1,9 +1,13 @@
 package org.example;
 
+import org.example.API_Endpoints.Drones;
+import org.example.API_Properties.ReturnDroneData;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class GUI extends JFrame implements ActionListener {
     //colors and fonts
@@ -82,6 +86,13 @@ public class GUI extends JFrame implements ActionListener {
         configureCard3();
     }
     private void configureCard1() {
+        /* Beispiel
+        Drones dronesAPI = new Drones();
+        ReturnDroneData droneData = dronesAPI.APIDrones();
+        ArrayList<String> droneID = droneData.getDroneID();
+        JLabel label = new JLabel("Drone ID: " + droneID.get(0));
+        this.add(label);
+        */
 
     }
     private void configureCard2() {
@@ -210,6 +221,5 @@ public class GUI extends JFrame implements ActionListener {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new GUI());
     }
-
 
 }
