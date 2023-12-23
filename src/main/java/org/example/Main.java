@@ -1,20 +1,19 @@
 package org.example;
 
+import org.example.API_Properties.DroneTypesData;
+import org.example.API_Properties.DronesData;
 import org.example.API_Endpoints.DroneTypes;
 import org.example.API_Endpoints.Drones;
-import org.example.API_Properties.ReturnDroneData;
-import org.example.API_Properties.ReturnDroneTypeData;
+import org.example.GUI.GUI;
 
 import java.util.ArrayList;
-
-import static org.example.Config.Drone_Mask;
 
 public class Main{
     public static void main(String[] args){
          GUI gui = new GUI();
         // creating new Drones and access the Data from the function
         Drones dronesAPI = new Drones();
-        ReturnDroneData droneData = dronesAPI.APIDrones();
+        DronesData.ReturnDroneData droneData = dronesAPI.APIDrones();
 
         // creating variables that take the data from the encapsulation
         ArrayList<String> droneId = droneData.getDroneID();
@@ -36,7 +35,7 @@ public class Main{
         }
 
         DroneTypes droneTypeAPI = new DroneTypes();
-        ReturnDroneTypeData droneTypeData = droneTypeAPI.APIDroneTypes();
+        DroneTypesData.ReturnDroneTypeData droneTypeData = droneTypeAPI.APIDroneTypes();
 
         ArrayList<String> droneTypeManufacturer = droneTypeData.getDroneManufacturer();
         ArrayList<String> droneTypeTypeName = droneTypeData.getDroneTypeName();

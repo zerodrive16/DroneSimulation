@@ -2,9 +2,7 @@ package org.example.API_Endpoints;
 
 // HTTP Request properties
 import com.google.gson.Gson;
-import org.example.API_Properties.DroneResult;
-import org.example.API_Properties.Drone;
-import org.example.API_Properties.ReturnDroneData;
+import org.example.API_Properties.DronesData;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,7 +16,7 @@ import java.util.ArrayList;
 import static org.example.Config.token;
 
 public class Drones{
-    public ReturnDroneData APIDrones(){
+    public DronesData.ReturnDroneData APIDrones(){
         // declaring ArrayLists to store the data
         ArrayList<String> droneID = new ArrayList<>();
         ArrayList<String> droneTypeURL = new ArrayList<>();
@@ -36,7 +34,7 @@ public class Drones{
                 String response = APIRequest(paginationURL);
 
                 // Returns the list that is encapsulated inside the result array (JSON)
-                DroneResult apiResponse = gson.fromJson(response, DroneResult.class);
+                DronesData.DroneResult apiResponse = gson.fromJson(response, DronesData.DroneResult.class);
 
                 storeAPIResponse(apiResponse, droneID, droneTypeURL, droneCreate, droneSerialnumber, droneCarriageWeight, droneCarriageType);
                 paginationURL = apiResponse != null ? apiResponse.getNext() : null;
@@ -46,7 +44,7 @@ public class Drones{
             ex1.printStackTrace();
         }
         // create new return instance to send the data to the constructor and store them temporarily inside the ArrayList
-        return new ReturnDroneData(droneID, droneTypeURL, droneCreate, droneSerialnumber, droneCarriageWeight, droneCarriageType);
+        return new DronesData.ReturnDroneData(droneID, droneTypeURL, droneCreate, droneSerialnumber, droneCarriageWeight, droneCarriageType);
     }
 
 
@@ -82,10 +80,10 @@ public class Drones{
 
 
     // Fetching the data from the apiResponse and store them in the ArrayList
-    private void storeAPIResponse(DroneResult apiResponse, ArrayList<String> droneID, ArrayList<String> droneTypeURL, ArrayList<String> droneCreate, ArrayList<String> droneSerialnumber,
-                                   ArrayList<String> droneCarriageWeight, ArrayList<String> droneCarriageType) {
+    private void storeAPIResponse(DronesData.DroneResult apiResponse, ArrayList<String> droneID, ArrayList<String> droneTypeURL, ArrayList<String> droneCreate, ArrayList<String> droneSerialnumber,
+                                  ArrayList<String> droneCarriageWeight, ArrayList<String> droneCarriageType) {
         if (apiResponse != null && apiResponse.getDroneResults() != null) {
-            for (Drone drone : apiResponse.getDroneResults()) {
+            for (DronesData.Drone drone : apiResponse.getDroneResults()) {
                 droneID.add(drone.getId());
                 droneTypeURL.add(drone.getDronetype());
                 droneCreate.add(drone.getCreated());

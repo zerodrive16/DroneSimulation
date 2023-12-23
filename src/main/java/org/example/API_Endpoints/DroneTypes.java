@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import static org.example.Config.token;
 
 public class DroneTypes {
-    public ReturnDroneTypeData APIDroneTypes(){
+    public DroneTypesData.ReturnDroneTypeData APIDroneTypes(){
 
         Drones droneAPI = new Drones();
-        ReturnDroneData returnData = droneAPI.APIDrones();
+        DronesData.ReturnDroneData returnData = droneAPI.APIDrones();
         ArrayList<String> droneID = returnData.getDroneID();
 
         ArrayList<String> droneManufacturer = new ArrayList<>();
@@ -49,7 +49,7 @@ public class DroneTypes {
                 in.close();
 
                 Gson gson = new Gson();
-                DroneType apiResponse = gson.fromJson(response.toString(), DroneType.class);
+                DroneTypesData.DroneType apiResponse = gson.fromJson(response.toString(), DroneTypesData.DroneType.class);
 
                 if (apiResponse != null) {
                     droneManufacturer.add(apiResponse.getManufacturer());
@@ -77,7 +77,7 @@ public class DroneTypes {
             System.out.println("Process Completed!");
         }
 
-        return new ReturnDroneTypeData(droneManufacturer, droneTypeName, droneWeight, droneMaxSpeed,
+        return new DroneTypesData.ReturnDroneTypeData(droneManufacturer, droneTypeName, droneWeight, droneMaxSpeed,
                 droneBatteryCapacity, droneControlRange, droneMaxCarriage);
     }
 }

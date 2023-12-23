@@ -1,13 +1,9 @@
-package org.example;
-
-import org.example.API_Endpoints.Drones;
-import org.example.API_Properties.ReturnDroneData;
+package org.example.GUI;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class GUI extends JFrame implements ActionListener {
     //colors and fonts
@@ -17,9 +13,9 @@ public class GUI extends JFrame implements ActionListener {
     Font primaryFont = new Font("Roboto", Font.PLAIN,12);
 
     //images for icons and more
-    ImageIcon menuIcon = new ImageIcon("src/main/java/org/example/menuIcon.png");
-    ImageIcon refreshIcon = new ImageIcon("src/main/java/org/example/refreshIcon.png");
-    ImageIcon infoIcon = new ImageIcon("src/main/java/org/example/infoIcon.png");
+    ImageIcon menuIcon = new ImageIcon("src/main/java/org/example/GUI/img/menuIcon.png");
+    ImageIcon refreshIcon = new ImageIcon("src/main/java/org/example/GUI/img/refreshIcon.png");
+    ImageIcon infoIcon = new ImageIcon("src/main/java/org/example/GUI/img/infoIcon.png");
 
     //main components
     JPanel mainP = new JPanel(new BorderLayout());
@@ -50,7 +46,7 @@ public class GUI extends JFrame implements ActionListener {
     private int height = 768;
 
 
-    GUI(){
+    public GUI(){
         initUI();
         windowSettings();
     }
