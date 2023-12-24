@@ -14,11 +14,11 @@ import static org.example.Config.token;
 public class Drones{
     public DronesData.ReturnDroneData APIDrones(){
         // declaring ArrayLists to store the data
-        ArrayList<String> droneID = new ArrayList<>();
+        ArrayList<Integer> droneID = new ArrayList<>();
         ArrayList<String> droneTypeURL = new ArrayList<>();
         ArrayList<String> droneCreate = new ArrayList<>();
         ArrayList<String> droneSerialnumber = new ArrayList<>();
-        ArrayList<String> droneCarriageWeight = new ArrayList<>();
+        ArrayList<Integer> droneCarriageWeight = new ArrayList<>();
         ArrayList<String> droneCarriageType = new ArrayList<>();
 
         // Declaring the pagination URL and Gson
@@ -78,8 +78,8 @@ public class Drones{
 
 
     // Fetching the data from the apiResponse and store them in the ArrayList
-    private void storeAPIResponse(DronesData.DroneResult apiResponse, ArrayList<String> droneID, ArrayList<String> droneTypeURL, ArrayList<String> droneCreate, ArrayList<String> droneSerialnumber,
-                                  ArrayList<String> droneCarriageWeight, ArrayList<String> droneCarriageType) {
+    private void storeAPIResponse(DronesData.DroneResult apiResponse, ArrayList<Integer> droneID, ArrayList<String> droneTypeURL, ArrayList<String> droneCreate, ArrayList<String> droneSerialnumber,
+                                  ArrayList<Integer> droneCarriageWeight, ArrayList<String> droneCarriageType) {
         if (apiResponse != null && apiResponse.getDroneResults() != null) {
             for (DronesData.Drone drone : apiResponse.getDroneResults()) {
                 droneID.add(drone.getId());

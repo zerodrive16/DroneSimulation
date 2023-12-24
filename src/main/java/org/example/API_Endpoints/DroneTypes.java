@@ -17,16 +17,16 @@ public class DroneTypes {
 
         ArrayList<String> droneManufacturer = new ArrayList<>();
         ArrayList<String> droneTypeName = new ArrayList<>();
-        ArrayList<String> droneWeight = new ArrayList<>();
-        ArrayList<String> droneMaxSpeed = new ArrayList<>();
-        ArrayList<String> droneBatteryCapacity = new ArrayList<>();
-        ArrayList<String> droneControlRange = new ArrayList<>();
-        ArrayList<String> droneMaxCarriage = new ArrayList<>();
+        ArrayList<Integer> droneWeight = new ArrayList<>();
+        ArrayList<Integer> droneMaxSpeed = new ArrayList<>();
+        ArrayList<Integer> droneBatteryCapacity = new ArrayList<>();
+        ArrayList<Integer> droneControlRange = new ArrayList<>();
+        ArrayList<Integer> droneMaxCarriage = new ArrayList<>();
 
         Gson gson = new Gson();
         Drones droneAPI = new Drones();
         DronesData.ReturnDroneData returnData = droneAPI.APIDrones();
-        ArrayList<String> droneID = returnData.getDroneID();
+        ArrayList<Integer> droneID = returnData.getDroneID();
 
         try{
             for (int x = 0; x < droneID.size(); x++) {
@@ -56,7 +56,7 @@ public class DroneTypes {
         return token;
     }
 
-    private String APIRequest(Integer x, ArrayList<String> droneID) throws IOException {
+    private String APIRequest(Integer x, ArrayList<Integer> droneID) throws IOException {
         URL url = new URL("http://dronesim.facets-labs.com/api/dronetypes/" + droneID.get(x) + "/?format=json");
         HttpURLConnection con;
         con = (HttpURLConnection) url.openConnection();
@@ -77,7 +77,9 @@ public class DroneTypes {
         return String.valueOf(response);
     }
 
-    private void storeAPIResponse(DroneTypesData.DroneType apiResponse, ArrayList<String> droneManufacturer, ArrayList<String> droneTypeName, ArrayList<String> droneWeight, ArrayList<String> droneMaxSpeed, ArrayList<String> droneBatteryCapacity, ArrayList<String> droneControlRange, ArrayList<String> droneMaxCarriage) {
+    private void storeAPIResponse(DroneTypesData.DroneType apiResponse, ArrayList<String> droneManufacturer, ArrayList<String> droneTypeName,
+                                  ArrayList<Integer> droneWeight, ArrayList<Integer> droneMaxSpeed, ArrayList<Integer> droneBatteryCapacity,
+                                  ArrayList<Integer> droneControlRange, ArrayList<Integer> droneMaxCarriage) {
         if (apiResponse != null) {
             droneManufacturer.add(apiResponse.getManufacturer());
             droneTypeName.add(apiResponse.getTypename());

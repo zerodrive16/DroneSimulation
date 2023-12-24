@@ -5,14 +5,14 @@ import java.util.List;
 
 public class DronesData {
     public static class Drone {
-        private String id;
+        private Integer id;
         private String dronetype;
         private String created;
         private String serialnumber;
-        private String carriage_weight;
+        private Integer carriage_weight;
         private String carriage_type;
 
-        public String getId(){
+        public Integer getId(){
             return id;
         }
         public String getDronetype(){
@@ -24,7 +24,7 @@ public class DronesData {
         public String getSerialnumber(){
             return serialnumber;
         }
-        public String getCarriage_weight(){
+        public Integer getCarriage_weight(){
             return carriage_weight;
         }
         public String getCarriage_type(){
@@ -45,15 +45,15 @@ public class DronesData {
     }
 
     public static class ReturnDroneData {
-        final private ArrayList<String> data_droneID;
+        final private ArrayList<Integer> data_droneID;
         final private ArrayList<String> data_droneType;
         final private ArrayList<String> data_droneCreate;
         final private ArrayList<String> data_droneSerialnumber;
-        final private ArrayList<String> data_droneCarriageWeight;
+        final private ArrayList<Integer> data_droneCarriageWeight;
         final private ArrayList<String> data_droneCarriageType;
 
-        public ReturnDroneData(ArrayList<String> droneID, ArrayList<String> droneTypeURL, ArrayList<String> droneCreate, ArrayList<String> droneSerialnumber,
-                               ArrayList<String> droneCarriageWeight, ArrayList<String> droneCarriageType){
+        public ReturnDroneData(ArrayList<Integer> droneID, ArrayList<String> droneTypeURL, ArrayList<String> droneCreate, ArrayList<String> droneSerialnumber,
+                               ArrayList<Integer> droneCarriageWeight, ArrayList<String> droneCarriageType){
             this.data_droneID = droneID;
             this.data_droneType = droneTypeURL;
             this.data_droneCreate = droneCreate;
@@ -62,7 +62,7 @@ public class DronesData {
             this.data_droneCarriageType = droneCarriageType;
         }
 
-        public ArrayList<String> getDroneID(){
+        public ArrayList<Integer> getDroneID(){
             return data_droneID;
         }
         public ArrayList<String> getDroneTypeURL() { return data_droneType; }
@@ -72,7 +72,7 @@ public class DronesData {
         public ArrayList<String> getDroneSerialnumber(){
             return data_droneSerialnumber;
         }
-        public ArrayList<String> getDroneCarriageWeight(){
+        public ArrayList<Integer> getDroneCarriageWeight(){
             return data_droneCarriageWeight;
         }
         public ArrayList<String> getDroneCarriageType(){

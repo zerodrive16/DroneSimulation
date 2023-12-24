@@ -6,11 +6,11 @@ public class DroneTypesData {
     public static class DroneType {
         private String manufacturer;
         private String typename;
-        private String weight;
-        private String max_speed;
-        private String battery_capacity;
-        private String control_range;
-        private String max_carriage;
+        private Integer weight;
+        private Integer max_speed;
+        private Integer battery_capacity;
+        private Integer control_range;
+        private Integer max_carriage;
 
         public String getManufacturer(){
             return manufacturer;
@@ -18,19 +18,19 @@ public class DroneTypesData {
         public String getTypename(){
             return typename;
         }
-        public String getWeight(){
+        public Integer getWeight(){
             return weight;
         }
-        public String getMax_Speed(){
+        public Integer getMax_Speed(){
             return max_speed;
         }
-        public String getBattery_Capacity(){
+        public Integer getBattery_Capacity(){
             return battery_capacity;
         }
-        public String getControl_Range(){
+        public Integer getControl_Range(){
             return control_range;
         }
-        public String getMax_Carriage(){
+        public Integer getMax_Carriage(){
             return max_carriage;
         }
     }
@@ -38,15 +38,15 @@ public class DroneTypesData {
     public static class ReturnDroneTypeData {
         final private ArrayList<String> data_droneManufacturer;
         final private ArrayList<String> data_droneTypeName;
-        final private ArrayList<String> data_droneWeight;
-        final private ArrayList<String> data_droneMaxSpeed;
-        final private ArrayList<String> data_droneBatteryCapacity;
-        final private ArrayList<String> data_droneControlRange;
-        final private ArrayList<String> data_droneMaxCarriage;
+        final private ArrayList<Integer> data_droneWeight;
+        final private ArrayList<Integer> data_droneMaxSpeed;
+        final private ArrayList<Integer> data_droneBatteryCapacity;
+        final private ArrayList<Integer> data_droneControlRange;
+        final private ArrayList<Integer> data_droneMaxCarriage;
 
-        public ReturnDroneTypeData(ArrayList<String> droneManufacturer, ArrayList<String> droneTypeName, ArrayList<String> droneWeight,
-                                   ArrayList<String> droneMaxSpeed, ArrayList<String> droneBatteryCapacity, ArrayList<String> droneControlRange,
-                                   ArrayList<String> droneMaxCarriage){
+        public ReturnDroneTypeData(ArrayList<String> droneManufacturer, ArrayList<String> droneTypeName, ArrayList<Integer> droneWeight,
+                                   ArrayList<Integer> droneMaxSpeed, ArrayList<Integer> droneBatteryCapacity, ArrayList<Integer> droneControlRange,
+                                   ArrayList<Integer> droneMaxCarriage){
             this.data_droneManufacturer = droneManufacturer;
             this.data_droneTypeName = droneTypeName;
             this.data_droneWeight = droneWeight;
@@ -62,19 +62,19 @@ public class DroneTypesData {
         public ArrayList<String> getDroneTypeName(){
             return data_droneTypeName;
         }
-        public ArrayList<String> getDroneWeight(){
+        public ArrayList<Integer> getDroneWeight(){
             return data_droneWeight;
         }
-        public ArrayList<String> getDroneMaxSpeed(){
+        public ArrayList<Integer> getDroneMaxSpeed(){
             return data_droneMaxSpeed;
         }
-        public ArrayList<String> getDroneBatteryCapacity(){
+        public ArrayList<Integer> getDroneBatteryCapacity(){
             return data_droneBatteryCapacity;
         }
-        public ArrayList<String> getDroneControlRange(){
+        public ArrayList<Integer> getDroneControlRange(){
             return data_droneControlRange;
         }
-        public ArrayList<String> getDroneMaxCarriage(){
+        public ArrayList<Integer> getDroneMaxCarriage(){
             return data_droneMaxCarriage;
         }
     }
