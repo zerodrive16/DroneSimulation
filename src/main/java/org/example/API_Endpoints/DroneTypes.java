@@ -26,15 +26,16 @@ public class DroneTypes {
     private final ArrayList<Integer> droneControlRange = new ArrayList<>();
     private final ArrayList<Integer> droneMaxCarriage = new ArrayList<>();
 
-    // The ExecutorService services managing threads and choose the desired amount
+    // The ExecutorService services managing threads and choose the desired amount of threads
     private static final ExecutorService executor = Executors.newFixedThreadPool(10);
 
     // defining the Async function and declare the resultFuture as Async to transfer data outside its class
     public CompletableFuture<DroneTypesData.ReturnDroneTypeData> APIDroneTypesAsync() {
         CompletableFuture<DroneTypesData.ReturnDroneTypeData> resultFuture = new CompletableFuture<>();
 
-        // calling the Drones class with the function and fetch the returnData (droneID with getter)
-        // declare ArrayList which accepts the CompletableFuture
+        /* calling the Drones class with the function and thenAccept which usually is used after the process of Drones call
+        and accepts returnData as lambda parameter. Inside the body it declares the ArrayList with the droneID and use the futures
+        as ArrayLists which contain the Asynchronous function. */
         new Drones().APIDronesAsync().thenAccept(returnData -> {
             ArrayList<Integer> droneID = returnData.getDroneID();
             ArrayList<CompletableFuture<Void>> futures = new ArrayList<>();
