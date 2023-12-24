@@ -1,6 +1,5 @@
 package org.example.API_Endpoints;
 
-
 import com.google.gson.Gson;
 import org.example.API_Properties.DronesData;
 import java.io.BufferedReader;
@@ -12,81 +11,81 @@ import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import static org.example.Config.token;
 
 public class Drones{
+    // declaring ArrayLists which store the API data temporarily
+    private final ArrayList<Integer> droneID = new ArrayList<>();
+    private final ArrayList<String> droneTypeURL = new ArrayList<>();
+    private final ArrayList<String> droneCreate = new ArrayList<>();
+    private final ArrayList<String> droneSerialnumber = new ArrayList<>();
+    private final ArrayList<Integer> droneCarriageWeight = new ArrayList<>();
+    private final ArrayList<String> droneCarriageType = new ArrayList<>();
 
-    // managing threads
-    private static final ExecutorService executor = Executors.newFixedThreadPool(10);
-    public DronesData.ReturnDroneData APIDrones(){
-        // declaring ArrayLists to store the data
-        ArrayList<Integer> droneID = new ArrayList<>();
-        ArrayList<String> droneTypeURL = new ArrayList<>();
-        ArrayList<String> droneCreate = new ArrayList<>();
-        ArrayList<String> droneSerialnumber = new ArrayList<>();
-        ArrayList<Integer> droneCarriageWeight = new ArrayList<>();
-        ArrayList<String> droneCarriageType = new ArrayList<>();
+    // Define the amount of threads the program uses (work Async)
+    private static final ExecutorService EHexecutor = Executors.newFixedThreadPool(10);
 
-        // Declaring the pagination URL and Gson
-        String paginationURL = "http://dronesim.facets-labs.com/api/drones/?format=json";
-        Gson gson = new Gson();
+    // writing Async code and store resultFuture inside CompletableFuture
+    public CompletableFuture<DronesData.ReturnDroneData> APIDronesAsync() {
+        CompletableFuture<DronesData.ReturnDroneData> resultFuture = new CompletableFuture<>();
 
-        try{
-            while(paginationURL != null) {
-                String response = APIRequest(paginationURL);
-
-                // Returns the list that is encapsulated inside the result array (JSON)
-                DronesData.DroneResult apiResponse = gson.fromJson(response, DronesData.DroneResult.class);
-
-                storeAPIResponse(apiResponse, droneID, droneTypeURL, droneCreate, droneSerialnumber, droneCarriageWeight, droneCarriageType);
-
-                paginationURL = apiResponse != null ? apiResponse.getNext() : null;
-
-            } // Catching the Exceptions
-        } catch(IOException ex1){
-            System.err.println("IOException error: " + ex1.getMessage());
-            ex1.printStackTrace();
-        }
-        // create new return instance to send the data to the constructor and store them temporarily inside the ArrayList
-        return new DronesData.ReturnDroneData(droneID, droneTypeURL, droneCreate, droneSerialnumber, droneCarriageWeight, droneCarriageType);
+        // calling processAsync which takes Pagination and Recursion and prepare Asynchronous Programming
+        String paginationUrl= "http://dronesim.facets-labs.com/api/drones/?format=json";
+        processAsync(paginationUrl, resultFuture);
+        return resultFuture;
     }
 
-
-    // Retrieving token and also check if null or empty and throw exception
-    private String retrieveToken() {
-        if(token == null || token.isEmpty()){
-            throw new IllegalStateException("Token is either null or empty");
+    // Pagination and Recursion
+    private void processAsync(String paginationUrl, CompletableFuture<DronesData.ReturnDroneData> resultFuture){
+        // when no more entities are left we leave the program and transfer its data to the constructor
+        if(paginationUrl == null){
+            resultFuture.complete(new DronesData.ReturnDroneData(droneID, droneTypeURL, droneCreate, droneSerialnumber, droneCarriageWeight, droneCarriageType));
+            return;
         }
-        return token;
+        // If data is fetched, immediately continue with the rest of the code
+        APIRequestAsync(paginationUrl).thenAccept(response -> {
+            Gson gson = new Gson();
+            DronesData.DroneResult apiResponse = gson.fromJson(response, DronesData.DroneResult.class);
+
+            // storing data to the constructor
+            storeAPIResponse(apiResponse);
+
+            // proceeds next page if entity reached end
+            processAsync(apiResponse.getNext(), resultFuture);
+            // Error handling the Asynchronous programming
+        }).exceptionally(ex -> {
+            resultFuture.completeExceptionally(ex);
+            return null;
+        });
     }
 
-    // Preparing the REST API request to the webserver with GET (URL, token, CRUD operation etc...)
-    private String APIRequest(String url) throws IOException{
-        // REST API request to the webserver
-        HttpURLConnection con;
-        con = (HttpURLConnection) new URL(url).openConnection();
-        con.setRequestProperty("Authorization", retrieveToken());
-        con.setRequestMethod("GET");
-        con.setRequestProperty("User-Agent", "XYZ");
+    // Creating a separate thread which runs the Asynchronous HTTP request
+    private CompletableFuture<String> APIRequestAsync(String url) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                HttpURLConnection con;
+                con = (HttpURLConnection) new URL(url).openConnection();
+                con.setRequestProperty("Authorization", retrieveToken());
+                con.setRequestMethod("GET");
+                con.setRequestProperty("User-Agent", "XYZ");
 
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                StringBuilder response = new StringBuilder();
 
-        // Read and constructs the API response and format to String
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuilder response = new StringBuilder();
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-        return String.valueOf(response);
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+                return String.valueOf(response);
+            } catch(IOException e) {
+                throw new RuntimeException(e);
+            }
+        }, EHexecutor);
     }
 
-
-    // Fetching the data from the apiResponse and store them in the ArrayList
-    private void storeAPIResponse(DronesData.DroneResult apiResponse, ArrayList<Integer> droneID, ArrayList<String> droneTypeURL, ArrayList<String> droneCreate, ArrayList<String> droneSerialnumber,
-                                  ArrayList<Integer> droneCarriageWeight, ArrayList<String> droneCarriageType) {
+    // function for storing the data to the constructor in DronesData.DroneResult
+    private void storeAPIResponse(DronesData.DroneResult apiResponse) {
         if (apiResponse != null && apiResponse.getDroneResults() != null) {
             for (DronesData.Drone drone : apiResponse.getDroneResults()) {
                 droneID.add(drone.getId());
@@ -99,5 +98,13 @@ public class Drones{
         } else {
             System.err.println("Result error / Null");
         }
+    }
+
+    // get token from Config.java and check for possible errors
+    private String retrieveToken() {
+        if(token == null || token.isEmpty()){
+            throw new IllegalStateException("Token is either null or empty");
+        }
+        return token;
     }
 }

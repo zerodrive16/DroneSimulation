@@ -9,77 +9,81 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static org.example.Config.token;
 
 public class DroneTypes {
-    public DroneTypesData.ReturnDroneTypeData APIDroneTypes(){
 
-        ArrayList<String> droneManufacturer = new ArrayList<>();
-        ArrayList<String> droneTypeName = new ArrayList<>();
-        ArrayList<Integer> droneWeight = new ArrayList<>();
-        ArrayList<Integer> droneMaxSpeed = new ArrayList<>();
-        ArrayList<Integer> droneBatteryCapacity = new ArrayList<>();
-        ArrayList<Integer> droneControlRange = new ArrayList<>();
-        ArrayList<Integer> droneMaxCarriage = new ArrayList<>();
+    private final ArrayList<String> droneManufacturer = new ArrayList<>();
+    private final ArrayList<String> droneTypeName = new ArrayList<>();
+    private final ArrayList<Integer> droneWeight = new ArrayList<>();
+    private final ArrayList<Integer> droneMaxSpeed = new ArrayList<>();
+    private final ArrayList<Integer> droneBatteryCapacity = new ArrayList<>();
+    private final ArrayList<Integer> droneControlRange = new ArrayList<>();
+    private final ArrayList<Integer> droneMaxCarriage = new ArrayList<>();
 
-        Gson gson = new Gson();
-        Drones droneAPI = new Drones();
-        DronesData.ReturnDroneData returnData = droneAPI.APIDrones();
-        ArrayList<Integer> droneID = returnData.getDroneID();
+    private static final ExecutorService EHexecutor = Executors.newFixedThreadPool(10);
 
-        try{
-            for (int x = 0; x < droneID.size(); x++) {
-                String response = APIRequest(x, droneID);
+    public CompletableFuture<DroneTypesData.ReturnDroneTypeData> APIDroneTypesAsync() {
+        CompletableFuture<DroneTypesData.ReturnDroneTypeData> resultFuture = new CompletableFuture<>();
 
-                DroneTypesData.DroneType apiResponse = gson.fromJson(response, DroneTypesData.DroneType.class);
+        new Drones().APIDronesAsync().thenAccept(returnData -> {
+            ArrayList<Integer> droneID = returnData.getDroneID();
+            ArrayList<CompletableFuture<Void>> futures = new ArrayList<>();
 
-                storeAPIResponse(apiResponse, droneManufacturer, droneTypeName, droneWeight, droneMaxSpeed, droneBatteryCapacity, droneControlRange, droneMaxCarriage);
+            for (int temp_id : droneID) {
+                futures.add(APIRequestAsync(temp_id).thenAccept(response -> {
+                    Gson gson = new Gson();
+                    DroneTypesData.DroneType apiResponse = gson.fromJson(response, DroneTypesData.DroneType.class);
+
+                    storeAPIResponse(apiResponse);
+                }));
             }
 
-        } catch(IOException ex1) {
-            System.err.println("IOException: " + ex1.getMessage());
-            ex1.printStackTrace();
-        } finally {
-            System.out.println("Process Completed!");
-        }
+            CompletableFuture<Void> chainFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+            chainFutures.thenRun(() -> {
+                resultFuture.complete(new DroneTypesData.ReturnDroneTypeData(droneManufacturer, droneTypeName, droneWeight, droneMaxSpeed,
+                        droneBatteryCapacity, droneControlRange, droneMaxCarriage));
+            }).exceptionally(ex -> {
+                resultFuture.completeExceptionally(ex);
+                return null;
+            });
+        });
 
-        return new DroneTypesData.ReturnDroneTypeData(droneManufacturer, droneTypeName, droneWeight, droneMaxSpeed,
-                droneBatteryCapacity, droneControlRange, droneMaxCarriage);
+        return resultFuture;
     }
 
-    // checking if token is either null or empty
-    private String retrieveToken() {
-        if(token == null || token.isEmpty()){
-            throw new IllegalStateException("Token is either null or empty");
-        }
-        return token;
+    private CompletableFuture<String> APIRequestAsync(Integer x){
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                URL url = new URL("http://dronesim.facets-labs.com/api/dronetypes/" + x + "/?format=json");
+                HttpURLConnection con;
+                con = (HttpURLConnection) url.openConnection();
+                con.setRequestProperty("Authorization", retrieveToken());
+                con.setRequestMethod("GET");
+                con.setRequestProperty("User-Agent", "XYZ");
+
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                StringBuilder response = new StringBuilder();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                return response.toString();
+            } catch(IOException e){
+                throw new RuntimeException(e);
+            }
+        }, EHexecutor);
     }
 
-    private String APIRequest(Integer x, ArrayList<Integer> droneID) throws IOException {
-        URL url = new URL("http://dronesim.facets-labs.com/api/dronetypes/" + droneID.get(x) + "/?format=json");
-        HttpURLConnection con;
-        con = (HttpURLConnection) url.openConnection();
-        con.setRequestProperty("Authorization", retrieveToken());
-        con.setRequestMethod("GET");
-        con.setRequestProperty("User-Agent", "XYZ");
-
-
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuilder response = new StringBuilder();
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-
-        return String.valueOf(response);
-    }
-
-    private void storeAPIResponse(DroneTypesData.DroneType apiResponse, ArrayList<String> droneManufacturer, ArrayList<String> droneTypeName,
-                                  ArrayList<Integer> droneWeight, ArrayList<Integer> droneMaxSpeed, ArrayList<Integer> droneBatteryCapacity,
-                                  ArrayList<Integer> droneControlRange, ArrayList<Integer> droneMaxCarriage) {
+    private void storeAPIResponse(DroneTypesData.DroneType apiResponse) {
         if (apiResponse != null) {
             droneManufacturer.add(apiResponse.getManufacturer());
             droneTypeName.add(apiResponse.getTypename());
@@ -91,5 +95,13 @@ public class DroneTypes {
         } else {
             System.err.println("Result error / Null");
         }
+    }
+
+    // checking if token is either null or empty
+    private String retrieveToken() {
+        if(token == null || token.isEmpty()){
+            throw new IllegalStateException("Token is either null or empty");
+        }
+        return token;
     }
 }

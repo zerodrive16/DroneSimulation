@@ -1,24 +1,21 @@
 package org.example;
 
-import org.example.API_Properties.DroneTypesData;
-import org.example.API_Properties.DronesData;
 import org.example.API_Endpoints.DroneTypes;
 import org.example.API_Endpoints.Drones;
 import org.example.GUI.GUI;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 public class Main {
     public static void main(String[] args) {
-        GUI gui = new GUI();
+        new GUI();
 
+        /*creating new thread which runs asynchronously, which calls the Drones class and outputs its data
+        to the screen. When the separate thread finishes it joins the main thread and display the data to the screen*/
         CompletableFuture<Void> futureDrones = CompletableFuture.runAsync(() -> {
-            try {
-                System.out.println("Data processing...");
-                DronesData.ReturnDroneData droneData = new Drones().APIDrones();
-
-                Thread.sleep(2000);
+            System.out.println("Drones Data processing...");
+            Drones drones = new Drones();
+            drones.APIDronesAsync().thenAccept(droneData -> {
                 for (int i = 0; i < droneData.getDroneID().size(); i++) {
                     System.out.println("Drone ID: " + droneData.getDroneID().get(i));
                     System.out.println("DroneType: " + droneData.getDroneTypeURL().get(i));
@@ -28,17 +25,16 @@ public class Main {
                     System.out.println("Drone Carriage Type: " + droneData.getDroneCarriageType().get(i));
                     System.out.println();
                 }
-            } catch(InterruptedException e){
-                throw new IllegalStateException();
-            }
+            }).exceptionally(ex -> {
+                System.err.println("Error fetching API data: " + ex.getMessage());
+                return null;
+            });
         });
 
         CompletableFuture<Void> futureDroneTypes = CompletableFuture.runAsync(() -> {
-            try {
-                System.out.println("Data processing...");
-                DroneTypesData.ReturnDroneTypeData droneTypeData = new DroneTypes().APIDroneTypes();
-
-                Thread.sleep(2000);
+            System.out.println("DroneTypes Data processing...");
+            DroneTypes droneTypes = new DroneTypes();
+            droneTypes.APIDroneTypesAsync().thenAccept(droneTypeData -> {
                 for (int i = 0; i < droneTypeData.getDroneManufacturer().size(); i++) {
                     System.out.println("Drone Manufacturer: " + droneTypeData.getDroneManufacturer().get(i));
                     System.out.println("Drone TypeName: " + droneTypeData.getDroneTypeName().get(i));
@@ -49,19 +45,19 @@ public class Main {
                     System.out.println("Drone MaxCarriage: " + droneTypeData.getDroneMaxCarriage().get(i));
                     System.out.println();
                 }
-
-            } catch(InterruptedException e){
-                throw new IllegalStateException();
-            }
+            }).exceptionally(ex -> {
+                System.err.println("Error fetching API data: " + ex.getMessage());
+                return null;
+            });
         });
-        //System.out.println(Thread.activeCount());
-        CompletableFuture<Void> combineFuture = CompletableFuture.allOf(futureDrones, futureDroneTypes);
 
-        try {
-            combineFuture.get();
-            System.out.println("All data processing completed!");
-        } catch(InterruptedException | ExecutionException e){
-            e.printStackTrace();
-        }
+        CompletableFuture<Void> combine = CompletableFuture.allOf(futureDrones, futureDroneTypes);
+
+        combine.thenRun(() -> {
+            System.out.println("All data outputted");
+        }).exceptionally(ex -> {
+            System.err.println("Error occurred: " + ex.getMessage());
+            return null;
+        });
     }
 }
