@@ -10,7 +10,9 @@ public class Main {
     public static void main(String[] args) {
         new GUI();
 
-        /*creating new thread which runs asynchronously, which calls the Drones class and outputs its data
+        // lambda expressions define callback functions
+
+        /*creating new thread which runs asynchronously, which calls the Drones class and output its data
         to the screen. When the separate thread finishes it joins the main thread and display the data to the screen*/
         CompletableFuture<Void> futureDrones = CompletableFuture.runAsync(() -> {
             System.out.println("Drones Data processing...");
@@ -51,6 +53,7 @@ public class Main {
             });
         });
 
+        // waiting for both threads to finish, combines them and output the data to their respective threads
         CompletableFuture<Void> combine = CompletableFuture.allOf(futureDrones, futureDroneTypes);
 
         combine.thenRun(() -> {
