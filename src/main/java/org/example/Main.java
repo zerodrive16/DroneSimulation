@@ -6,51 +6,62 @@ import org.example.API_Endpoints.DroneTypes;
 import org.example.API_Endpoints.Drones;
 import org.example.GUI.GUI;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 public class Main {
     public static void main(String[] args) {
         GUI gui = new GUI();
 
-        // Fetching drones data
-        DronesData.ReturnDroneData droneData = new Drones().APIDrones();
-        printDroneData(droneData);
+        CompletableFuture<Void> futureDrones = CompletableFuture.runAsync(() -> {
+            try {
+                System.out.println("Data processing...");
+                DronesData.ReturnDroneData droneData = new Drones().APIDrones();
 
-        // Fetching drone types data
-        DroneTypesData.ReturnDroneTypeData droneTypeData = new DroneTypes().APIDroneTypes();
-        printDroneTypeData(droneTypeData);
-    }
+                Thread.sleep(2000);
+                for (int i = 0; i < droneData.getDroneID().size(); i++) {
+                    System.out.println("Drone ID: " + droneData.getDroneID().get(i));
+                    System.out.println("DroneType: " + droneData.getDroneTypeURL().get(i));
+                    System.out.println("Drone Creation: " + droneData.getDroneCreate().get(i));
+                    System.out.println("Drone Serialnumber: " + droneData.getDroneSerialnumber().get(i));
+                    System.out.println("Drone Carriage Weight: " + droneData.getDroneCarriageWeight().get(i));
+                    System.out.println("Drone Carriage Type: " + droneData.getDroneCarriageType().get(i));
+                    System.out.println();
+                }
+            } catch(InterruptedException e){
+                throw new IllegalStateException();
+            }
+        });
 
-    private static void printDroneData(DronesData.ReturnDroneData data) {
-        if (data == null) {
-            System.out.println("No drone data available.");
-            return;
-        }
+        CompletableFuture<Void> futureDroneTypes = CompletableFuture.runAsync(() -> {
+            try {
+                System.out.println("Data processing...");
+                DroneTypesData.ReturnDroneTypeData droneTypeData = new DroneTypes().APIDroneTypes();
 
-        for (int i = 0; i < data.getDroneID().size(); i++) {
-            System.out.println("Drone ID: " + data.getDroneID().get(i));
-            System.out.println("DroneType: " + data.getDroneTypeURL().get(i));
-            System.out.println("Drone Creation: " + data.getDroneCreate().get(i));
-            System.out.println("Drone Serialnumber: " + data.getDroneSerialnumber().get(i));
-            System.out.println("Drone Carriage Weight: " + data.getDroneCarriageWeight().get(i));
-            System.out.println("Drone Carriage Type: " + data.getDroneCarriageType().get(i));
-            System.out.println();
-        }
-    }
+                Thread.sleep(2000);
+                for (int i = 0; i < droneTypeData.getDroneManufacturer().size(); i++) {
+                    System.out.println("Drone Manufacturer: " + droneTypeData.getDroneManufacturer().get(i));
+                    System.out.println("Drone TypeName: " + droneTypeData.getDroneTypeName().get(i));
+                    System.out.println("Drone TypeWeight: " + droneTypeData.getDroneWeight().get(i));
+                    System.out.println("Drone MaxSpeed: " + droneTypeData.getDroneMaxSpeed().get(i));
+                    System.out.println("Drone BatteryCapacity: " + droneTypeData.getDroneBatteryCapacity().get(i));
+                    System.out.println("Drone Control Range: " + droneTypeData.getDroneControlRange().get(i));
+                    System.out.println("Drone MaxCarriage: " + droneTypeData.getDroneMaxCarriage().get(i));
+                    System.out.println();
+                }
 
-    private static void printDroneTypeData(DroneTypesData.ReturnDroneTypeData data) {
-        if (data == null) {
-            System.out.println("No drone type data available.");
-            return;
-        }
+            } catch(InterruptedException e){
+                throw new IllegalStateException();
+            }
+        });
+        //System.out.println(Thread.activeCount());
+        CompletableFuture<Void> combineFuture = CompletableFuture.allOf(futureDrones, futureDroneTypes);
 
-        for (int i = 0; i < data.getDroneManufacturer().size(); i++) {
-            System.out.println("Drone Manufacturer: " + data.getDroneManufacturer().get(i));
-            System.out.println("Drone TypeName: " + data.getDroneTypeName().get(i));
-            System.out.println("Drone TypeWeight: " + data.getDroneWeight().get(i));
-            System.out.println("Drone MaxSpeed: " + data.getDroneMaxSpeed().get(i));
-            System.out.println("Drone BatteryCapacity: " + data.getDroneBatteryCapacity().get(i));
-            System.out.println("Drone Control Range: " + data.getDroneControlRange().get(i));
-            System.out.println("Drone MaxCarriage: " + data.getDroneMaxCarriage().get(i));
-            System.out.println();
+        try {
+            combineFuture.get();
+            System.out.println("All data processing completed!");
+        } catch(InterruptedException | ExecutionException e){
+            e.printStackTrace();
         }
     }
 }

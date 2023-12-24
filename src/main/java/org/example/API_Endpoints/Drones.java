@@ -9,9 +9,16 @@ import java.net.URL;
 import java.net.HttpURLConnection;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import static org.example.Config.token;
 
 public class Drones{
+
+    // managing threads
+    private static final ExecutorService executor = Executors.newFixedThreadPool(10);
     public DronesData.ReturnDroneData APIDrones(){
         // declaring ArrayLists to store the data
         ArrayList<Integer> droneID = new ArrayList<>();

@@ -7,13 +7,13 @@ public class DroneDynamicsData {
     public static class DroneDynamic {
         private String drone;
         private String timestamp;
-        private String speed;
-        private String align_roll;
-        private String align_pitch;
-        private String align_yaw;
-        private String longitude;
-        private String latitude;
-        private String battery_status;
+        private Integer speed;
+        private Float align_roll;
+        private Float align_pitch;
+        private Float align_yaw;
+        private Double longitude;
+        private Double latitude;
+        private Integer battery_status;
         private String last_seen;
         private String status;
 
@@ -23,30 +23,31 @@ public class DroneDynamicsData {
         public String getTimestamp() {
             return timestamp;
         }
-        public String getSpeed() {
+        public Integer getSpeed() {
             return speed;
         }
-        public String getAlignRoll() {
+        public Float getAlignRoll() {
             return align_roll;
         }
-        public String getAlignPitch() {
+        public Float getAlignPitch() {
             return align_pitch;
         }
-        public String getAlignYaw() {
+        public Float getAlignYaw() {
             return align_yaw;
         }
-        public String getLongitude() {
+        public Double getLongitude() {
             return longitude;
         }
-        public String getLatitude() {
+        public Double getLatitude() {
             return latitude;
         }
-        public String getBatteryStatus() {
+        public Integer getBatteryStatus() {
             return battery_status;
         }
         public String getLastSeen() {
             return last_seen;
         }
+        public String getStatus() { return status; }
     }
     public static class DroneDynamicResult {
         private List<DroneDynamic> results;
@@ -64,18 +65,18 @@ public class DroneDynamicsData {
     public static class ReturnDroneDynamicData {
         final private ArrayList<String> data_droneURL;
         final private ArrayList<String> data_droneTimeStamp;
-        final private ArrayList<String> data_droneSpeed;
-        final private ArrayList<String> data_droneAlignRoll;
-        final private ArrayList<String> data_droneAlignPitch;
-        final private ArrayList<String> data_droneAlignYaw;
-        final private ArrayList<String> data_droneLongitude;
-        final private ArrayList<String> data_droneLatitude;
-        final private ArrayList<String> data_droneBatteryStatus;
+        final private ArrayList<Integer> data_droneSpeed;
+        final private ArrayList<Float> data_droneAlignRoll;
+        final private ArrayList<Float> data_droneAlignPitch;
+        final private ArrayList<Float> data_droneAlignYaw;
+        final private ArrayList<Double> data_droneLongitude;
+        final private ArrayList<Double> data_droneLatitude;
+        final private ArrayList<Integer> data_droneBatteryStatus;
         final private ArrayList<String> data_droneLastSeen;
         final private ArrayList<String> data_droneStatus;
-        public ReturnDroneDynamicData(ArrayList<String> droneURL, ArrayList<String> droneTimestamp, ArrayList<String> droneSpeed,
-                                      ArrayList<String> droneAlignRoll, ArrayList<String> droneAlignPitch, ArrayList<String> droneAlignYaw,
-                                      ArrayList<String> droneLongitude, ArrayList<String> droneLatitude, ArrayList<String> droneBatteryStatus,
+        public ReturnDroneDynamicData(ArrayList<String> droneURL, ArrayList<String> droneTimestamp, ArrayList<Integer> droneSpeed,
+                                      ArrayList<Float> droneAlignRoll, ArrayList<Float> droneAlignPitch, ArrayList<Float> droneAlignYaw,
+                                      ArrayList<Double> droneLongitude, ArrayList<Double> droneLatitude, ArrayList<Integer> droneBatteryStatus,
                                       ArrayList<String> droneLastSeen, ArrayList<String> droneStatus){
             this.data_droneURL = droneURL;
             this.data_droneTimeStamp = droneTimestamp;
@@ -95,25 +96,25 @@ public class DroneDynamicsData {
         public ArrayList<String> getDroneTimeStamp(){
             return data_droneTimeStamp;
         }
-        public ArrayList<String> getDroneSpeed(){
+        public ArrayList<Integer> getDroneSpeed(){
             return data_droneSpeed;
         }
-        public ArrayList<String> getDroneAlignRoll(){
+        public ArrayList<Float> getDroneAlignRoll(){
             return data_droneAlignRoll;
         }
-        public ArrayList<String> getDroneAlignPitch(){
+        public ArrayList<Float> getDroneAlignPitch(){
             return data_droneAlignPitch;
         }
-        public ArrayList<String> getDroneAlignYaw(){
+        public ArrayList<Float> getDroneAlignYaw(){
             return data_droneAlignYaw;
         }
-        public ArrayList<String> getDroneLongitude(){
+        public ArrayList<Double> getDroneLongitude(){
             return data_droneLongitude;
         }
-        public ArrayList<String> getDroneLatitude(){
+        public ArrayList<Double> getDroneLatitude(){
             return data_droneLatitude;
         }
-        public ArrayList<String> getDroneBatteryStatus(){
+        public ArrayList<Integer> getDroneBatteryStatus(){
             return data_droneBatteryStatus;
         }
         public ArrayList<String> getDroneLastSeen(){
