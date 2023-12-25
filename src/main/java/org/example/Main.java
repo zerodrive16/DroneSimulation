@@ -17,7 +17,7 @@ public class Main {
         CompletableFuture<Void> futureDrones = CompletableFuture.runAsync(() -> {
             System.out.println("Drones Data processing...");
             Drones drones = new Drones();
-            drones.APIDronesAsync().thenAccept(droneData -> {
+            drones.APIBuildAsync().thenAccept(droneData -> {
                 for (int i = 0; i < droneData.getDroneID().size(); i++) {
                     System.out.println("Drone ID: " + droneData.getDroneID().get(i));
                     System.out.println("DroneType: " + droneData.getDroneTypeURL().get(i));
@@ -38,7 +38,7 @@ public class Main {
         CompletableFuture<Void> futureDroneTypes = CompletableFuture.runAsync(() -> {
             System.out.println("DroneTypes Data processing...");
             DroneTypes droneTypes = new DroneTypes();
-            droneTypes.APIDroneTypesAsync().thenAccept(droneTypeData -> {
+            droneTypes.APIBuildAsync().thenAccept(droneTypeData -> {
                 for (int i = 0; i < droneTypeData.getDroneManufacturer().size(); i++) {
                     System.out.println("Drone Manufacturer: " + droneTypeData.getDroneManufacturer().get(i));
                     System.out.println("Drone TypeName: " + droneTypeData.getDroneTypeName().get(i));

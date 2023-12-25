@@ -3,19 +3,11 @@ package org.example.API_Endpoints;
 import com.google.gson.Gson;
 import org.example.API_Properties.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import static org.example.Config.token;
 
-public class DroneTypes {
+public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypeData>{
 
     // declaring ArrayLists which store the REST API data temporarily
     private final ArrayList<String> droneManufacturer = new ArrayList<>();
@@ -26,17 +18,15 @@ public class DroneTypes {
     private final ArrayList<Integer> droneControlRange = new ArrayList<>();
     private final ArrayList<Integer> droneMaxCarriage = new ArrayList<>();
 
-    // The ExecutorService services managing threads and choose the desired amount of threads
-    private static final ExecutorService executor = Executors.newFixedThreadPool(10);
-
     // defining the Async function and declare the resultFuture as Async to transfer data outside its class
-    public CompletableFuture<DroneTypesData.ReturnDroneTypeData> APIDroneTypesAsync() {
+    @Override
+    public CompletableFuture<DroneTypesData.ReturnDroneTypeData> APIBuildAsync() {
         CompletableFuture<DroneTypesData.ReturnDroneTypeData> resultFuture = new CompletableFuture<>();
 
         /* calling the Drones class with the function and thenAccept which usually is used after the process of Drones call
         and accepts returnData as lambda parameter. Inside the body it declares the ArrayList with the droneID and use the futures
         as ArrayLists which contain the Asynchronous function. */
-        new Drones().APIDronesAsync().thenAccept(returnData -> {
+        new Drones().APIBuildAsync().thenAccept(returnData -> {
             ArrayList<Integer> droneID = returnData.getDroneID();
             ArrayList<CompletableFuture<Void>> futures = new ArrayList<>();
 
@@ -58,7 +48,8 @@ public class DroneTypes {
             /* Creating a CompletableFuture which handles an amount of asynchronous operations. chainFutures converts the future
             CompletedFuture to an Array. thenRun is a callback and is used once the chainFutures is completed. It runs a lambda function
             which completes the asynchronous programming and adds a new return value and save the ArrayLists inside the constructor. The
-            exceptionally is to handle the errors which might occur in Asynchronous programming. */
+            exceptionally is to handle the errors which might occur in Asynchronous programming while it waits the async in the other thread
+            to be finished before executing the exception error. */
             CompletableFuture<Void> chainFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
             chainFutures.thenRun(() -> {
                 resultFuture.complete(new DroneTypesData.ReturnDroneTypeData(droneManufacturer, droneTypeName, droneWeight, droneMaxSpeed,
@@ -73,36 +64,9 @@ public class DroneTypes {
         return resultFuture;
     }
 
-    /* The Asynchronous function takes an Integer as parameter which stores the current id for current iteration. Then it
-    uses supplyAsync which means that the HTTP request runs on a different thread asynchronously. Within the code it prepares
-    an HTTP request which takes token, URL, CRUD operation and  reads it inside the inputStreamReader. It iterates through every
-    entity till it reaches null. After that it returns the response (holds json format) as a String. The try-catch block handles
-    the error of the HTTP request. Lastly, the executor creates a pool of threads, managing concurrent execution of multiple threads */
-    private CompletableFuture<String> APIRequestAsync(Integer x){
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                URL url = new URL("http://dronesim.facets-labs.com/api/dronetypes/" + x + "/?format=json");
-                HttpURLConnection con;
-                con = (HttpURLConnection) url.openConnection();
-                con.setRequestProperty("Authorization", retrieveToken());
-                con.setRequestMethod("GET");
-                con.setRequestProperty("User-Agent", "XYZ");
+    @Override
+    protected void processAsync(String paginationUrl, CompletableFuture<DroneTypesData.ReturnDroneTypeData> resultFuture) {
 
-
-                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                String inputLine;
-                StringBuilder response = new StringBuilder();
-
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                in.close();
-
-                return response.toString();
-            } catch(IOException e){
-                throw new RuntimeException(e);
-            }
-        }, executor);
     }
 
     /* The function accepts the apiResponse which stores the java objects and checks with an if statement if its null or not
@@ -119,13 +83,5 @@ public class DroneTypes {
         } else {
             System.err.println("Result error / Null");
         }
-    }
-
-    // this function checks if the token is either empty or null and if so it throws an Exception if not it returns the token
-    private String retrieveToken() {
-        if(token == null || token.isEmpty()){
-            throw new IllegalStateException("Token is either null or empty");
-        }
-        return token;
     }
 }
