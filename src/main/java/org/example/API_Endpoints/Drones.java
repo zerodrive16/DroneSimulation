@@ -41,7 +41,7 @@ public class Drones extends Abs_APIBuilding<DronesData.ReturnDroneData> {
             // storing data to the constructor
             storeAPIResponse(apiResponse);
 
-            // proceeds next page if entity reached end
+            // proceeds with the next entity in the webserver and do the recursion
             processAsync(apiResponse.getNext(), resultFuture);
 
             // Error handling the Asynchronous programming
