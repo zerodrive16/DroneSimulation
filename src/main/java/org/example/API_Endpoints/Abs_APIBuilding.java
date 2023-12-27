@@ -11,8 +11,11 @@ import java.util.concurrent.Executors;
 
 import static org.example.Config.token;
 
+/* The generic type doesn't assign an Object or datatype but rather temporarily holds a generic type parameter. The
+object or datatype can be assigned later if the subclass of the abstract function is implemented */
 public abstract class Abs_APIBuilding<Generic> {
-    // The ExecutorService services managing threads and choose the desired amount of threads
+    /* The ExecutorService creates a thread pool with the desired threads. It can submit tasks for execution and provides a cycle
+    that manages the execution or shutdown of the thread services */
     protected static final ExecutorService executor = Executors.newFixedThreadPool(10);
 
     /* Both functions are needed to secure the DroneID from drones. It's needed to iterate through every droneTypes to the respected
@@ -64,9 +67,9 @@ public abstract class Abs_APIBuilding<Generic> {
         }
         return token;
     }
-    /* Defining the functions which can be used outside it's class. It's used for defining the content of the REST API operation
-    and the content on what it should specifically fetch. */
 
+    /* Two abstract classes that play a crucial part in building the REST API request which can be implemented in a
+    subclass with the extend implementation */
     public abstract CompletableFuture<Generic> APIBuildAsync();
 
     protected abstract void processAsync(String paginationUrl, CompletableFuture<Generic> resultFuture);
