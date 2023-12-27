@@ -10,10 +10,9 @@ public class Main {
     public static void main(String[] args) {
         new GUI();
 
-        /* The CompletableFuture with runAsync runs the function in a different thread asynchronously. It then proceeds with
-        the initialization of Drones and call its class + function to get the desired output data. It then uses the thenAccept to run
-        after the completion of drones.APIDronesAsync(). It takes a lambda function and iterates to all Drones ID's and output the data.
-        Exceptionally is used to handle the error that might occur inside the asynchronous programming. */
+        /* the CompletableFuture function runs the runAsync on a sub-task also called ForkJoinPool asynchronously. It divides the
+        so-called task in sub-tasks and does that for both functions (futureDrones and futureDroneTypes). In this code specifically we
+         call the Drones class and run the function and get the return variables which are inside the constructor and output it*/
         CompletableFuture<Void> futureDrones = CompletableFuture.runAsync(() -> {
             System.out.println("Drones Data processing...");
             Drones drones = new Drones();
@@ -33,8 +32,6 @@ public class Main {
             });
         });
 
-        /* The same concept follows in this function as well which runs a different thread asynchronously. It initializes
-        the DroneTypes class and runs through the functions and output its data. */
         CompletableFuture<Void> futureDroneTypes = CompletableFuture.runAsync(() -> {
             System.out.println("DroneTypes Data processing...");
             DroneTypes droneTypes = new DroneTypes();
@@ -55,14 +52,12 @@ public class Main {
             });
         });
 
-        // This is used to expect that both different threads are finished and combines them together
+        // When both sub-tasks are done it uses a so-called join method to bring the tasks together.
         CompletableFuture<Void> combine = CompletableFuture.allOf(futureDrones, futureDroneTypes);
 
         /* it thenRun the lambda function once the code above is finished (callback) and prints a message that the output
         was successful or not. (Exception handling) */
-        combine.thenRun(() -> {
-            System.out.println("All data outputted");
-        }).exceptionally(ex -> {
+        combine.thenRun(() -> System.out.println("All data outputted")).exceptionally(ex -> {
             System.err.println("Error occurred: " + ex.getMessage());
             return null;
         });

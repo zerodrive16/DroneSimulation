@@ -14,22 +14,11 @@ import static org.example.Config.token;
 /* The generic type doesn't assign an Object or datatype but rather temporarily holds a generic type parameter. The
 object or datatype can be assigned later if the subclass of the abstract function is implemented */
 public abstract class Abs_APIBuilding<Generic> {
+    /* The CPUCoreCount counts the number of available cores which should be used as threads */
+    protected static final int CPUCoreCount = Runtime.getRuntime().availableProcessors();
     /* The ExecutorService creates a thread pool with the desired threads. It can submit tasks for execution and provides a cycle
     that manages the execution or shutdown of the thread services */
-    protected static final ExecutorService executor = Executors.newFixedThreadPool(10);
-
-    /* Both functions are needed to secure the DroneID from drones. It's needed to iterate through every droneTypes to the respected
-    drones. Each droneTypes has properties which can we get by the ID. So we need to build the buildUrlFromId to insert the id inside the
-    url and return it to the APIRequestAsync which performs the async and store the changes in the url and sends it to the APIRequestAsync
-    where the http request will take place. */
-    protected CompletableFuture<String> APIRequestAsync(Integer droneID) {
-        String url = buildUrlFromId(droneID);
-        return APIRequestAsync(url);
-    }
-
-    private String buildUrlFromId(Integer droneID){
-        return "http://dronesim.facets-labs.com/api/dronetypes/" + droneID + "/?format=json";
-    }
+    protected static final ExecutorService executor = Executors.newFixedThreadPool(CPUCoreCount);
 
     /* The Asynchronous function takes an Integer as parameter which stores the current id for current iteration. Then it
     uses supplyAsync which means that the HTTP request runs on a different thread asynchronously. Within the code it prepares
@@ -69,7 +58,7 @@ public abstract class Abs_APIBuilding<Generic> {
     }
 
     /* Two abstract classes that play a crucial part in building the REST API request which can be implemented in a
-    subclass with the extend implementation */
+    subclass with the "extend" implementation */
     public abstract CompletableFuture<Generic> APIBuildAsync();
 
     protected abstract void processAsync(String paginationUrl, CompletableFuture<Generic> resultFuture);

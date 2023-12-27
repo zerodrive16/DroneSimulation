@@ -24,18 +24,18 @@ public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypeDa
         CompletableFuture<DroneTypesData.ReturnDroneTypeData> resultFuture = new CompletableFuture<>();
 
         /* calling the Drones class with the function and thenAccept which usually is used after the process of Drones call
-        and accepts returnData as lambda parameter. Inside the body it declares the ArrayList with the droneID and use the futures
+        and accepts returnData as lambda parameter. Inside the body it declares the ArrayList with the droneTypeURL and use the futures
         as ArrayLists which contain the Asynchronous function. */
         new Drones().APIBuildAsync().thenAccept(returnData -> {
-            ArrayList<Integer> droneID = returnData.getDroneID();
+            ArrayList<String> droneTypeURL = returnData.getDroneTypeURL();
             ArrayList<CompletableFuture<Void>> futures = new ArrayList<>();
 
-            /* iterating through every element of droneID and calling the APIRequestAsync function which accepts the id as
-            parameter which can be used inside the url. ThenAccept handles the callback after CompletableFuture has been done.
+            /* iterating through every element of droneTypeURL and calling the APIRequestAsync function which uses the url as
+            parameter to parse it to the http request. ThenAccept handles the callback after CompletableFuture has been done.
             After I/O of inputStream has been done we declare Gson to convert json format to java object and enter the list of
             properties such as manufacturer etc... and store the java object in apiResponse */
-            for (int temp_id : droneID) {
-                futures.add(APIRequestAsync(temp_id).thenAccept(response -> {
+            for (String temp_URL : droneTypeURL) {
+                futures.add(APIRequestAsync(temp_URL).thenAccept(response -> {
                     Gson gson = new Gson();
                     DroneTypesData.DroneType apiResponse = gson.fromJson(response, DroneTypesData.DroneType.class);
 
@@ -69,8 +69,8 @@ public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypeDa
 
     }
 
-    /* The function accepts the apiResponse which stores the java objects and checks with an if statement if its null or not
-    Then it assign the getters to their respective ArrayLists and store the data temporarily */
+    /* The storeAPIResponse takes the data from apiResponse in the ArrayLists and store them temporarily. It also checks if
+    data exists in the droneTypes data.  */
     private void storeAPIResponse(DroneTypesData.DroneType apiResponse) {
         if (apiResponse != null) {
             droneManufacturer.add(apiResponse.getManufacturer());
