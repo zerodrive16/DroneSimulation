@@ -11,25 +11,27 @@ import java.util.concurrent.Executors;
 
 import static org.example.Config.token;
 
-/* The generic type doesn't assign an Object or datatype but rather temporarily holds a generic type parameter. The
-object or datatype can be assigned later if the subclass of the abstract function is implemented */
+/*
+ * The abstract class defines the templates that can be used in subclasses
+ * It has a generic type, which can be used in subclasses to define the specific datatype or object
+*/
 public abstract class Abs_APIBuilding<Generic> {
-    /* The CPUCoreCount counts the number of available cores which should be used as threads */
+    // number of available CPU cores to optimise the executor thread pool
     protected static final int CPUCoreCount = Runtime.getRuntime().availableProcessors();
-    /* The ExecutorService creates a thread pool with the desired threads. It can submit tasks for execution and provides a cycle
-    that manages the execution or shutdown of the thread services */
+    // Executor service to manage the thread pool in asynchronous task operations
     protected static final ExecutorService executor = Executors.newFixedThreadPool(CPUCoreCount);
 
-    /* The Asynchronous function takes an Integer as parameter which stores the current id for current iteration. Then it
-    uses supplyAsync which means that the HTTP request runs on a different thread asynchronously. Within the code it prepares
-    an HTTP request which takes token, URL, CRUD operation and  reads it inside the inputStreamReader. It iterates through every
-    entity till it reaches null. After that it returns the response (holds json format) as a String. The try-catch block handles
-    the error of the HTTP request. Lastly, the executor creates a pool of threads, managing concurrent execution of multiple threads */
+    /*
+     * Asynchronously sends an HTTP request with GET operation to the specified URL and returns the response
+     * @param url: The url to send the request to
+     * @return: It's a CompletableFuture that , when complete, will convert the response as a String value
+    */
     protected CompletableFuture<String> APIRequestAsync(String url) {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 HttpURLConnection con;
                 con = (HttpURLConnection) new URL(url).openConnection();
+                // setting the Authorization and token, GET operation
                 con.setRequestProperty("Authorization", retrieveToken());
                 con.setRequestMethod("GET");
                 con.setRequestProperty("User-Agent", "XYZ");
@@ -38,18 +40,24 @@ public abstract class Abs_APIBuilding<Generic> {
                 String inputLine;
                 StringBuilder response = new StringBuilder();
 
+                // it reads through the inputStream and appends each line to the response
                 while ((inputLine = in.readLine()) != null) {
                     response.append(inputLine);
                 }
                 in.close();
                 return String.valueOf(response);
+                // exception for error handling the HTTP request
             } catch(IOException e) {
                 throw new RuntimeException(e);
             }
         }, executor);
     }
 
-    // this function checks if the token is either empty or null and if so it throws an Exception if not it returns the token
+    /*
+     * Retrieves the authorization token for the API request
+     * It checks if the token is either empty or null
+     * @throw it throws the IllegalStateException
+    */
     protected String retrieveToken(){
         if(token == null || token.isEmpty()){
             throw new IllegalStateException("Token is either null or empty");
@@ -57,9 +65,16 @@ public abstract class Abs_APIBuilding<Generic> {
         return token;
     }
 
-    /* Two abstract classes that play a crucial part in building the REST API request which can be implemented in a
-    subclass with the "extend" implementation */
+    /*
+     * Abstract function to build the asynchronous API subclass
+     * @return it returns the CompletableFuture resultFuture
+    */
     public abstract CompletableFuture<Generic> APIBuildAsync();
 
+    /*
+     * abstract function to processAsync
+     * It builds and checks for the next page (pagination)
+     * It uses the resultFuture as parameter to store the API data
+    */
     protected abstract void processAsync(String paginationUrl, CompletableFuture<Generic> resultFuture);
 }

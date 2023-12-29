@@ -2,6 +2,7 @@ package org.example.API_Properties;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class DroneDynamicsData {
     public static class DroneDynamic {
@@ -63,21 +64,21 @@ public class DroneDynamicsData {
     }
 
     public static class ReturnDroneDynamicData {
-        final private ArrayList<String> data_droneURL;
-        final private ArrayList<String> data_droneTimeStamp;
-        final private ArrayList<Integer> data_droneSpeed;
-        final private ArrayList<Float> data_droneAlignRoll;
-        final private ArrayList<Float> data_droneAlignPitch;
-        final private ArrayList<Float> data_droneAlignYaw;
-        final private ArrayList<Double> data_droneLongitude;
-        final private ArrayList<Double> data_droneLatitude;
-        final private ArrayList<Integer> data_droneBatteryStatus;
-        final private ArrayList<String> data_droneLastSeen;
-        final private ArrayList<String> data_droneStatus;
-        public ReturnDroneDynamicData(ArrayList<String> droneURL, ArrayList<String> droneTimestamp, ArrayList<Integer> droneSpeed,
-                                      ArrayList<Float> droneAlignRoll, ArrayList<Float> droneAlignPitch, ArrayList<Float> droneAlignYaw,
-                                      ArrayList<Double> droneLongitude, ArrayList<Double> droneLatitude, ArrayList<Integer> droneBatteryStatus,
-                                      ArrayList<String> droneLastSeen, ArrayList<String> droneStatus){
+        final private Map<Integer, ArrayList<String>> data_droneURL;
+        final private Map<Integer, ArrayList<String>> data_droneTimeStamp;
+        final private Map<Integer, ArrayList<String>> data_droneSpeed;
+        final private Map<Integer, ArrayList<String>> data_droneAlignRoll;
+        final private Map<Integer, ArrayList<String>> data_droneAlignPitch;
+        final private Map<Integer, ArrayList<String>> data_droneAlignYaw;
+        final private Map<Integer, ArrayList<String>> data_droneLongitude;
+        final private Map<Integer, ArrayList<String>> data_droneLatitude;
+        final private Map<Integer, ArrayList<String>> data_droneBatteryStatus;
+        final private Map<Integer, ArrayList<String>> data_droneLastSeen;
+        final private Map<Integer, ArrayList<String>> data_droneStatus;
+        public ReturnDroneDynamicData(Map<Integer, ArrayList<String>> droneURL, Map<Integer, ArrayList<String>> droneTimestamp, Map<Integer, ArrayList<String>> droneSpeed,
+                                      Map<Integer, ArrayList<String>> droneAlignRoll, Map<Integer, ArrayList<String>> droneAlignPitch, Map<Integer, ArrayList<String>> droneAlignYaw,
+                                      Map<Integer, ArrayList<String>> droneLongitude, Map<Integer, ArrayList<String>> droneLatitude, Map<Integer, ArrayList<String>> droneBatteryStatus,
+                                      Map<Integer, ArrayList<String>> droneLastSeen, Map<Integer, ArrayList<String>> droneStatus){
             this.data_droneURL = droneURL;
             this.data_droneTimeStamp = droneTimestamp;
             this.data_droneSpeed = droneSpeed;
@@ -90,37 +91,37 @@ public class DroneDynamicsData {
             this.data_droneLastSeen = droneLastSeen;
             this.data_droneStatus = droneStatus;
         }
-        public ArrayList<String> getDroneURL(){
+        public Map<Integer, ArrayList<String>> getDroneURL(){
             return data_droneURL;
         }
-        public ArrayList<String> getDroneTimeStamp(){
+        public Map<Integer, ArrayList<String>> getDroneTimeStamp(){
             return data_droneTimeStamp;
         }
-        public ArrayList<Integer> getDroneSpeed(){
+        public Map<Integer, ArrayList<String>> getDroneSpeed(){
             return data_droneSpeed;
         }
-        public ArrayList<Float> getDroneAlignRoll(){
+        public Map<Integer, ArrayList<String>> getDroneAlignRoll(){
             return data_droneAlignRoll;
         }
-        public ArrayList<Float> getDroneAlignPitch(){
+        public Map<Integer, ArrayList<String>> getDroneAlignPitch(){
             return data_droneAlignPitch;
         }
-        public ArrayList<Float> getDroneAlignYaw(){
+        public Map<Integer, ArrayList<String>> getDroneAlignYaw(){
             return data_droneAlignYaw;
         }
-        public ArrayList<Double> getDroneLongitude(){
+        public Map<Integer, ArrayList<String>> getDroneLongitude(){
             return data_droneLongitude;
         }
-        public ArrayList<Double> getDroneLatitude(){
+        public Map<Integer, ArrayList<String>> getDroneLatitude(){
             return data_droneLatitude;
         }
-        public ArrayList<Integer> getDroneBatteryStatus(){
+        public Map<Integer, ArrayList<String>> getDroneBatteryStatus(){
             return data_droneBatteryStatus;
         }
-        public ArrayList<String> getDroneLastSeen(){
+        public Map<Integer, ArrayList<String>> getDroneLastSeen(){
             return data_droneLastSeen;
         }
-        public ArrayList<String> getDroneStatus(){
+        public Map<Integer, ArrayList<String>> getDroneStatus(){
             return data_droneStatus;
         }
     }

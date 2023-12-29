@@ -1,25 +1,31 @@
 package org.example.API_Endpoints;
 
 import org.example.API_Properties.DroneDynamicsData;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
-import java.util.ArrayList;
+public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDroneDynamicData> {
+
+    private Map<Integer, ArrayList<String>> droneURL = new HashMap<>();
+    private Map<Integer, ArrayList<String>> droneTimestamp = new HashMap<>();
+    private Map<Integer, ArrayList<String>> droneSpeed = new HashMap<>();
+    private Map<Integer, ArrayList<String>> droneAlignRoll = new HashMap<>();
+    private Map<Integer, ArrayList<String>> droneAlignPitch = new HashMap<>();
+    private Map<Integer, ArrayList<String>> droneAlignYaw = new HashMap<>();
+    private Map<Integer, ArrayList<String>> droneLongitude = new HashMap<>();
+    private Map<Integer, ArrayList<String>> droneLatitude = new HashMap<>();
+    private Map<Integer, ArrayList<String>> droneBatteryStatus = new HashMap<>();
+    private Map<Integer, ArrayList<String>> droneLastSeen = new HashMap<>();
+    private Map<Integer, ArrayList<String>> droneStatus = new HashMap<>();
 
 
-public class DroneDynamics {
-    public DroneDynamicsData.ReturnDroneDynamicData APIDroneDynamics(){
-        ArrayList<String> droneURL = new ArrayList<>();
-        ArrayList<String> droneTimestamp = new ArrayList<>();
-        ArrayList<Integer> droneSpeed = new ArrayList<>();
-        ArrayList<Float> droneAlignRoll = new ArrayList<>();
-        ArrayList<Float> droneAlignPitch = new ArrayList<>();
-        ArrayList<Float> droneAlignYaw = new ArrayList<>();
-        ArrayList<Double> droneLongitude = new ArrayList<>();
-        ArrayList<Double> droneLatitude = new ArrayList<>();
-        ArrayList<Integer> droneBatteryStatus = new ArrayList<>();
-        ArrayList<String> droneLastSeen = new ArrayList<>();
-        ArrayList<String> droneStatus = new ArrayList<>();
+    @Override
+    public CompletableFuture<DroneDynamicsData.ReturnDroneDynamicData> APIBuildAsync() {
+        return null;
+    }
 
-        return new DroneDynamicsData.ReturnDroneDynamicData(droneURL, droneTimestamp, droneSpeed, droneAlignRoll, droneAlignPitch, droneAlignYaw,
-                droneLongitude, droneLatitude, droneBatteryStatus, droneLastSeen, droneStatus);
+    @Override
+    protected void processAsync(String paginationUrl, CompletableFuture<DroneDynamicsData.ReturnDroneDynamicData> resultFuture) {
+
     }
 }

@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.API_Endpoints.DroneDynamics;
 import org.example.API_Endpoints.DroneTypes;
 import org.example.API_Endpoints.Drones;
 import org.example.GUI.GUI;
