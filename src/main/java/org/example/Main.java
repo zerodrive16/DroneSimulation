@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.API_Endpoints.DroneDynamics;
 import org.example.API_Endpoints.DroneTypes;
 import org.example.API_Endpoints.Drones;
 import org.example.GUI.GUI;
@@ -31,7 +32,13 @@ public class Main {
                 return null;
             });
         });
+        CompletableFuture<Void> futureDroneDynamics = CompletableFuture.runAsync(() -> {
+                    System.out.println("DroneDynamics Data processing...");
+                    DroneDynamics droneDynamics = new DroneDynamics();
+                    //gets Drone Dynamics from a drone specified by the id
+                    droneDynamics.urlGen(81);
 
+        });
         CompletableFuture<Void> futureDroneTypes = CompletableFuture.runAsync(() -> {
             System.out.println("DroneTypes Data processing...");
             DroneTypes droneTypes = new DroneTypes();
@@ -53,7 +60,7 @@ public class Main {
         });
 
         // When both sub-tasks are done it uses a so-called join method to bring the tasks together.
-        CompletableFuture<Void> combine = CompletableFuture.allOf(futureDrones, futureDroneTypes);
+        CompletableFuture<Void> combine = CompletableFuture.allOf(futureDrones, futureDroneDynamics, futureDroneTypes);
 
         /* it thenRun the lambda function once the code above is finished (callback) and prints a message that the output
         was successful or not. (Exception handling) */
