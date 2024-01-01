@@ -5,52 +5,44 @@ import org.example.API_Properties.DronesData;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
 public class GUI extends JFrame implements ActionListener {
-    //colors and fonts
+    //Zuerst Komponente der GUI erstellen
+    
+    //Farben und Fonts werden in Variablen eingespeichert für einfachere Nutzung
     Color primaryColor = new Color(44,44,44); //dark Gray
     Color secondaryColor = new Color(22,22,22); //even darker Gray
     Color thirdColor = new Color(66,66,66);
     Font primaryFont = new Font("Roboto", Font.PLAIN,12);
 
-    //images for icons and more
+    //Bilder werden in Variablen eingespeichert für einfachere Nutzung
     ImageIcon menuIcon = new ImageIcon("src/main/java/org/example/GUI/img/menuIcon.png");
     ImageIcon refreshIcon = new ImageIcon("src/main/java/org/example/GUI/img/refreshIcon.png");
     ImageIcon infoIcon = new ImageIcon("src/main/java/org/example/GUI/img/infoIcon.png");
-
-    //main components
-    JPanel mainP = new JPanel(new BorderLayout());
+    
+    //Hauptkomponente werden erstellt.
     JPanel navbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    JPanel sideBar = new JPanel();
     JPanel mainScreen = new JPanel(new CardLayout());
 
     // main screens
     JPanel card1 = new JPanel();
-    JPanel card2 = new JPanel();
-    JPanel card3 = new JPanel();
+
 
     //navbar buttons
     JButton menuButton = new JButton(menuIcon);
     JButton b1 = new JButton();
     JButton infoButton = new JButton(infoIcon);
     JButton refreshButton = new JButton(refreshIcon);
-
-    //Sidebar Buttons
-    JButton a1 = new JButton("Drone Catalog");
-    JButton a2 = new JButton("Flight Dynamics");
-    JButton a3 = new JButton("Drone Log");
+    JLabel test = new JLabel();
 
 
     //important variables
-    private static int status = 1; //status of MainScreen
-    private int width = 1024;
-    private int height = 768;
+    private int width = 1600;
+    private int height = 900;
+    private double aspectRatio = (double) width /height;
 
 
     public GUI(){
@@ -62,62 +54,39 @@ public class GUI extends JFrame implements ActionListener {
         addingComponents();
         mainScreenSettings();
         navbarSettings();
-        sideBarSettings();
     }
-
-
 
     private void addingComponents() {
-        this.add(mainP);
-        mainP.add(navbar, BorderLayout.NORTH);
-        mainP.add(sideBar, BorderLayout.WEST);
-        mainP.add(mainScreen,BorderLayout.EAST);
+        add(navbar, BorderLayout.NORTH);
+        add(mainScreen,BorderLayout.CENTER);
     }
-    
-    //mainScreen, card1, card2 ,card3
+    //-----------------------------------------------------------------
+    //mainScreen, card1
     private void mainScreenSettings() {
         //quickSet for font, font color and background color
-        quickSet(primaryFont,Color.WHITE,primaryColor,card1,card2,card3);
+        quickSet(primaryFont,Color.WHITE,primaryColor,card1);
 
-        mainScreen.setPreferredSize(new Dimension(width,Short.MAX_VALUE));
+        mainScreen.setPreferredSize(new Dimension(width,height));
         mainScreen.add(card1, "Card1");
-        mainScreen.add(card2, "Card2");
-        mainScreen.add(card3, "Card3");
 
         configureCard1(primaryColor, card1);
-        configureCard2(primaryColor, card2);
-        configureCard3(primaryColor, card3);
     }
     public void configureCard1(Color primaryColor, JPanel card1) {
         Card1 card = new Card1();
         card.configureCard1(primaryColor, card1);
     }
-    public void configureCard2(Color primaryColor, JPanel card2) {
-        Card2 card = new Card2();
-        card.configureCard2(primaryColor, card2);
-    }
-    public void configureCard3(Color primaryColor, JPanel card3) {
-        Card3 card = new Card3();
-        card.configureCard3(primaryColor, card3);
-    }
+    //-----------------------------------------------------------------
     //navbar, menuButton, b1, infoButton, refreshButton
     private void navbarSettings() {
         quickSet(primaryFont,Color.WHITE,secondaryColor, menuButton,b1, infoButton, refreshButton);
         navbar.setBackground(secondaryColor);
-        navbar.setPreferredSize(new Dimension(Short.MAX_VALUE,80));
-        topButtonSettings();
+        navbar.setPreferredSize(new Dimension(width,(height/18)));
+        navbarButtonSettings();
     }
-    private void topButtonSettings() {
-        Dimension navbarButtonSize = new Dimension(70,70);
+    private void navbarButtonSettings() {
+        Dimension navbarButtonSize = new Dimension((width/4)-10,(height/18)-10);
 
         menuButton.setPreferredSize(navbarButtonSize);
-        menuButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                toggleMenu();
-            }
-        });
-
         //set Button Size
         b1.setPreferredSize(navbarButtonSize);
         infoButton.setPreferredSize(navbarButtonSize);
@@ -128,54 +97,64 @@ public class GUI extends JFrame implements ActionListener {
         navbar.add(b1);
         navbar.add(infoButton);
         navbar.add(refreshButton);
+
+        b1.add(test);
     }
-
-    //sideBar, a1, a2, a3
-    private void sideBarSettings() {
-        //quickSet for font, font color and background color
-        quickSet(primaryFont,Color.WHITE,Color.BLUE,a1,a2,a3);
-
-        sideBar.setLayout(new BoxLayout(sideBar, BoxLayout.Y_AXIS));
-        sideBar.setBackground(thirdColor);
-        sideBar.setPreferredSize(new Dimension(300,Short.MAX_VALUE));
-        sideBar.setVisible(false);
-        addSideBarButtons();
-
-    }
-
-    private void addSideBarButtons() {
-        Dimension sideBarButtonSize = new Dimension(300,70);
-
-        //set Button Size
-        a1.setPreferredSize(sideBarButtonSize);
-        a2.setPreferredSize(sideBarButtonSize);
-        a3.setPreferredSize(sideBarButtonSize);
-        a1.setMaximumSize(sideBarButtonSize);
-        a2.setMaximumSize(sideBarButtonSize);
-        a3.setMaximumSize(sideBarButtonSize);
-
-        //add Button Functionality
-        a1.addActionListener(createMainScreenListener(mainScreen, "Card1"));
-        a2.addActionListener(createMainScreenListener(mainScreen, "Card2"));
-        a3.addActionListener(createMainScreenListener(mainScreen, "Card3"));
-
-        //add Buttons
-        sideBar.add(a1);
-        sideBar.add(a2);
-        sideBar.add(a3);
-    }
-
-
+    //-----------------------------------------------------------------
 
     //general Window settings
     private void windowSettings(){
-        this.setTitle("Drone Simulation");
-        this.setLocation(300,100);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(width,height);
-        this.setVisible(true);
-        this.setResizable(false);
+        setTitle("Drone Simulation");
+        setLocation(100,100);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(width,height);
+        setVisible(true);
+        setBackground(primaryColor);
+
+        addComponentListener(new ComponentAdapter() {
+
+            @Override
+            public void componentResized(ComponentEvent e) {
+                if(width!=getWidth()) {
+                    int newWidth = getWidth();
+                    int newHeight = (int) (getWidth() / aspectRatio);
+                    Dimension newSize = new Dimension(newWidth,newHeight);
+                    setSize(newSize);
+                    test.setText("width " + newWidth + "height" + newHeight);
+
+                    width = newWidth;
+                    height = newHeight;
+                }
+                else {
+                    int newHeight = getHeight();
+                    int newWidth = (int) (newHeight * aspectRatio);
+                    Dimension newSize = new Dimension(newWidth,newHeight);
+                    setSize(newSize);
+                    test.setText("width " + newWidth + "height" + newHeight);
+
+                    width = newWidth;
+                    height = newHeight;
+                }
+
+                navbar.setPreferredSize(new Dimension(width,Math.max((height/18),30)));
+                Dimension navbarButtonSize = new Dimension((width/4)-10,(height/18)-10);
+                navbarButtonSize.height = Math.max(navbarButtonSize.height,20);
+
+                menuButton.setPreferredSize(navbarButtonSize);
+                b1.setPreferredSize(navbarButtonSize);
+                infoButton.setPreferredSize(navbarButtonSize);
+                refreshButton.setPreferredSize(navbarButtonSize);
+
+                Dimension size = getSize();
+                int newSize = (int) (size.width / 50);
+                newSize = Math.max(newSize, 12);
+                b1.setFont(new Font(b1.getFont().getName(), Font.PLAIN, newSize));
+
+            }
+        });
     }
+
+
 
 
     @Override
@@ -183,34 +162,9 @@ public class GUI extends JFrame implements ActionListener {
 
     }
 
-    //ACTION LISTENER FUNCTIONS
-    private void toggleMenu() {
-        sideBar.setVisible(!sideBar.isVisible());
-    }
 
-    private ActionListener createMainScreenListener(JPanel cardPanel, String cardName) {
-        return new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                CardLayout cardLayout = (CardLayout) cardPanel.getLayout();
-                cardLayout.show(cardPanel, cardName);
-                sideBar.setVisible(false);
-                switch(cardName) {
-                    case "Card1":
-                        status = 1;
-                        break;
-                    case "Card2":
-                        status = 2;
-                        break;
-                    case "Card3":
-                        status = 3;
-                        break;
-                }
-            }
-        };
-    }
-
-    //quickSet functions
+    //quickSet ist eine Funktion die schnell Farben und Fonts ändert. Sie wird benutzt um den Code übersichtlicher zu gestalten.
+    //Mann gibt Font, Schriftfarbe und Hintergrundfarbe ein, danach all Komponente die man ändern möchte
     private static void quickSet(Font font, Color color1, Color color2, JComponent... components){
         for (JComponent component : components) {
             component.setFont(font);
