@@ -1,9 +1,16 @@
 package org.example.GUI;
 
+import org.example.API_Endpoints.Drones;
+import org.example.API_Properties.DronesData;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
 
 public class GUI extends JFrame implements ActionListener {
     //colors and fonts
@@ -77,23 +84,21 @@ public class GUI extends JFrame implements ActionListener {
         mainScreen.add(card2, "Card2");
         mainScreen.add(card3, "Card3");
 
-        configureCard1();
-        configureCard2();
-        configureCard3();
+        configureCard1(primaryColor, card1);
+        configureCard2(primaryColor, card2);
+        configureCard3(primaryColor, card3);
     }
-    private void configureCard1() {
-        /* Beispiel
-        Drones dronesAPI = new Drones();
-        ReturnDroneData droneData = dronesAPI.APIDrones();
-        ArrayList<String> droneID = droneData.getDroneID();
-        JLabel label = new JLabel("Drone ID: " + droneID.get(0));
-        this.add(label);
-        */
-
+    public void configureCard1(Color primaryColor, JPanel card1) {
+        Card1 card = new Card1();
+        card.configureCard1(primaryColor, card1);
     }
-    private void configureCard2() {
+    public void configureCard2(Color primaryColor, JPanel card2) {
+        Card2 card = new Card2();
+        card.configureCard2(primaryColor, card2);
     }
-    private void configureCard3() {
+    public void configureCard3(Color primaryColor, JPanel card3) {
+        Card3 card = new Card3();
+        card.configureCard3(primaryColor, card3);
     }
     //navbar, menuButton, b1, infoButton, refreshButton
     private void navbarSettings() {
