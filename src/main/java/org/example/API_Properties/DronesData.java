@@ -5,12 +5,14 @@ import java.util.List;
 
 public class DronesData {
     public static class Drone {
+
         private Integer id;
         private String dronetype;
         private String created;
         private String serialnumber;
         private Integer carriage_weight;
         private String carriage_type;
+        
 
         public Integer getId(){
             return id;

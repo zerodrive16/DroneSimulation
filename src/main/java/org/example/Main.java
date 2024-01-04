@@ -1,19 +1,23 @@
 package org.example;
 
-import org.example.API_Endpoints.DroneDynamics;
 import org.example.API_Endpoints.DroneTypes;
 import org.example.API_Endpoints.Drones;
 import org.example.GUI.GUI;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletableFuture;
 
 public class Main {
     public static void main(String[] args) {
         new GUI();
 
+
         /* the CompletableFuture function runs the runAsync on a sub-task also called ForkJoinPool asynchronously. It divides the
         so-called task in sub-tasks and does that for both functions (futureDrones and futureDroneTypes). In this code specifically we
          call the Drones class and run the function and get the return variables which are inside the constructor and output it*/
+
         CompletableFuture<Void> futureDrones = CompletableFuture.runAsync(() -> {
             System.out.println("Drones Data processing...");
             Drones drones = new Drones();
@@ -62,5 +66,18 @@ public class Main {
             System.err.println("Error occurred: " + ex.getMessage());
             return null;
         });
+
+        // getting real time date
+        LocalDate dateNow = LocalDate.now();
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String outputDate = dateNow.format(dateFormat);
+
+        // getting real time time
+        LocalTime timeNow = LocalTime.now();
+        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
+        String outputTime = timeNow.format(timeFormat);
+
+        System.out.println("Current date: " + outputDate);
+        System.out.println("Current time: " + outputTime);
     }
 }
