@@ -1,25 +1,25 @@
 package org.example.API_Endpoints;
-
 import org.example.API_Properties.DroneDynamicsData;
 import com.google.gson.Gson;
 import org.example.API_Properties.DroneTypesData;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDroneDynamicData> {
-       private final ArrayList<String> droneURL = new ArrayList<>();
-       private final ArrayList<String> droneTimestamp = new ArrayList<>();
-       private final ArrayList<Integer> droneSpeed = new ArrayList<>();
-       private final ArrayList<Float> droneAlignRoll = new ArrayList<>();
-       private final ArrayList<Float> droneAlignPitch = new ArrayList<>();
-       private final ArrayList<Float> droneAlignYaw = new ArrayList<>();
-       private final ArrayList<Double> droneLongitude = new ArrayList<>();
-       private final ArrayList<Double> droneLatitude = new ArrayList<>();
-       private final ArrayList<Integer> droneBatteryStatus = new ArrayList<>();
-       private final ArrayList<String> droneLastSeen = new ArrayList<>();
-       private final ArrayList<String> droneStatus = new ArrayList<>();
+       private final Map<Integer,String> droneURL = new HashMap<>();
+       private final Map<Integer,String> droneTimestamp = new HashMap<>();
+       private final Map<Integer,Integer> droneSpeed = new HashMap<>();
+       private final Map<Integer,Float> droneAlignRoll = new HashMap<>();
+       private final Map<Integer,Float> droneAlignPitch = new HashMap<>();
+       private final Map<Integer,Float> droneAlignYaw = new HashMap<>();
+       private final Map<Integer,Double> droneLongitude = new HashMap<>();
+       private final Map<Integer,Double> droneLatitude = new HashMap<>();
+       private final Map<Integer,Integer> droneBatteryStatus = new HashMap<>();
+       private final Map<Integer,String> droneLastSeen = new HashMap<>();
+       private final Map<Integer,String> droneStatus = new HashMap<>();
 
        private String url;
        public void urlGen(int id){
@@ -31,7 +31,7 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
            //return builder.toString();
            APIBuildAsync().thenAccept(droneDynamicData -> {
 
-               System.out.println(droneDynamicData.getDroneURL().size());
+              // System.out.println(droneDynamicData.getDroneURL().size());
                for (int i = 0; i < droneDynamicData.getDroneURL().size(); i++) {
                    System.out.println("Drone: " + droneDynamicData.getDroneURL().get(i));
                    System.out.println("Timestamp: " + droneDynamicData.getDroneTimeStamp().get(i));
@@ -56,7 +56,7 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
            CompletableFuture<DroneDynamicsData.ReturnDroneDynamicData> resultFuture = new CompletableFuture<>();
 
            //final String url = "http://dronesim.facets-labs.com/api/dronedynamics/?format=json";
-           System.out.println(url);
+           //System.out.println(url);
            processAsync(url, resultFuture);
            return resultFuture;
 
@@ -69,7 +69,6 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
                resultFuture.complete(new DroneDynamicsData.ReturnDroneDynamicData(droneURL, droneTimestamp, droneSpeed, droneAlignRoll, droneAlignPitch, droneAlignYaw,droneLongitude,droneLatitude,droneBatteryStatus,droneLastSeen,droneStatus));
                return;
            }
-
 
             APIRequestAsync(paginationUrl).thenAccept(response -> {
                 Gson gson = new Gson();
@@ -88,18 +87,20 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
 
 private void storeAPIResponse(DroneDynamicsData.DroneDynamicResult apiResponse){
     if (apiResponse != null && apiResponse.getResults() != null) {
+        int iterator = 0;
         for(DroneDynamicsData.DroneDynamic drone : apiResponse.getResults()) {
-            droneURL.add(drone.getDrone());
-            droneTimestamp.add(drone.getTimestamp());
-            droneSpeed.add(drone.getSpeed());
-            droneAlignRoll.add(drone.getAlignRoll());
-            droneAlignPitch.add(drone.getAlignPitch());
-            droneAlignYaw.add(drone.getAlignYaw());
-            droneLongitude.add(drone.getLongitude());
-            droneLatitude.add(drone.getLatitude());
-            droneBatteryStatus.add(drone.getBatteryStatus());
-            droneLastSeen.add(drone.getLastSeen());
-            droneStatus.add(drone.getStatus());
+            droneURL.put(iterator,drone.getDrone());
+            droneTimestamp.put(iterator,drone.getTimestamp());
+            droneSpeed.put(iterator,drone.getSpeed());
+            droneAlignRoll.put(iterator,drone.getAlignRoll());
+            droneAlignPitch.put(iterator,drone.getAlignPitch());
+            droneAlignYaw.put(iterator,drone.getAlignYaw());
+            droneLongitude.put(iterator,drone.getLongitude());
+            droneLatitude.put(iterator,drone.getLatitude());
+            droneBatteryStatus.put(iterator,drone.getBatteryStatus());
+            droneLastSeen.put(iterator,drone.getLastSeen());
+            droneStatus.put(iterator,drone.getStatus());
+            iterator++;
         }
 
     } else {
