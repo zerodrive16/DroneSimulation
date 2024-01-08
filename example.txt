@@ -1,1 +1,3 @@
-Hello, this is the content to be saved in the file.
+First line of data
+Second line of data
+Third line of data
