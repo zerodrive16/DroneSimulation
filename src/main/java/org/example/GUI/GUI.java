@@ -5,6 +5,7 @@ import org.example.API_Properties.DronesData;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
@@ -49,6 +50,7 @@ public class GUI extends JFrame implements ActionListener {
     JPanel droneType = new JPanel();
 
     JPanel droneDynamics = new JPanel();
+    JPanel droneDynamics2 = new JPanel();
 
     //The second card contains...
     JPanel card2 = new JPanel();
@@ -93,46 +95,52 @@ public class GUI extends JFrame implements ActionListener {
 //----------------------------main screen settings-------------------------------
 
     private void mainScreenSettings() {
+        //First we set the size of the main screen properly so that there won't be complications with other components
         mainScreen.setPreferredSize(mainscreenSize);
 
         mainScreen.setLayout(cardLayout);
         mainScreen.add(card1, "Card1");
         mainScreen.add(card2,"Card2");
-
+        //Dronenliste card1
         configureCard1(mainScreenColor, card1);
 
-        JLabel test = new JLabel("card 2 test");
-        card2.add(test);
-        test.setForeground(Color.RED);
-        card2.setBackground(mainScreenColor);
 
-        card1.setLayout(new GridBagLayout());
-        GridBagConstraints constraints = new GridBagConstraints();
-        quickSet(textFont,Color.white,panelColor,droneData,droneType,droneDynamics);
+        //The dashboard will be split in drone data and drone type on the left side
+        //and drone dynamics on the right side
+//----------------------------card 2 dashboard-------------------------------
+        card2.setPreferredSize(new Dimension(mainscreenSize.width,mainscreenSize.width));
+        card2.setLayout(new GridLayout(2,2));
+        card2.setBorder(new EmptyBorder(10,10,10,10));
+
+        droneData.setBackground(Color.red);
+
+        droneType.setBackground(Color.blue);
+
+        droneDynamics.setBackground(Color.green);
+
+        droneDynamics2.setBackground(Color.green);
+
+        card2.add(droneData);
+        card2.add(droneDynamics);
+        card2.add(droneType);
+        card2.add(droneDynamics2);
+
 
         //drone data
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.insets = new Insets(5, 5, 5, 5);
-        card1.add(droneData,constraints);
+
 
         //drone type
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.insets = new Insets(5, 5, 5, 5);
-        card1.add(droneType,constraints);
+
 
         //drone dynamic
-        constraints.gridx = 1;
-        constraints.gridy = 0;
-        constraints.gridheight = 2;
-        constraints.insets = new Insets(5, 5, 5, 5);
-        card1.add(droneDynamics,constraints);
+
 
         //quickSet for font, font color and background color
         //specifically made for buttons and texts
-        quickSet(textFont,Color.WHITE,mainScreenColor,card1,card2,test);
+        quickSet(textFont,Color.WHITE,mainScreenColor,card1,card2);
     }
+
+//----------------------------configureCard1-------------------------------
     public void configureCard1(Color mainScreenColor, JPanel card1) {
         Card1 card = new Card1();
         card.configureCard1(mainScreenColor, card1);
@@ -148,9 +156,9 @@ public class GUI extends JFrame implements ActionListener {
     private void navbarButtonSettings() {
 
 //----------------------------dropdown drone list-------------------------------
-        JLabel droneList = new JLabel("Drone List <ID>");
-        quickSet(titleFont,Color.white,backgroundColor,droneList);
-        dropdown.add(droneList);
+        JLabel droneListText = new JLabel("Drone List <ID>");
+        quickSet(titleFont,Color.white,backgroundColor,droneListText);
+        dropdown.add(droneListText);
         dropdown.setPreferredSize(new Dimension(navbarButtonSize.width/2,navbarButtonSize.height));
         dropdown.setBorder(new LineBorder(mainScreenColor));
         dropdown.setBackground(backgroundColor);
@@ -276,7 +284,7 @@ public class GUI extends JFrame implements ActionListener {
         setMinimumSize(new Dimension(1024,576));
 
         addComponentListener(new ComponentAdapter() {
-
+//----------------------------code for resizing the window-------------------------------
             @Override
             public void componentResized(ComponentEvent e) {
                 if(width!=getWidth()) {
@@ -291,8 +299,16 @@ public class GUI extends JFrame implements ActionListener {
                     Dimension newSize = new Dimension(newWidth,newHeight);
                     setSize(newSize);
                 }
+                else{
+                    int newWidth = getWidth();
+                    int newHeight = getHeight();
+                    Dimension newSize = new Dimension(newWidth,newHeight);
+                    setSize(newSize);
+                }
+                width = getHeight();
+                height = getWidth();
 
-
+//----------------------------code for resizing components-------------------------------
 /*
 navbar.setPreferredSize(new Dimension(navbarSize.width,Math.max((navbarSize.height),30)));
 navbarButtonSize.height = Math.max(navbarButtonSize.height,20);
@@ -315,8 +331,8 @@ b1.setFont(new Font(b1.getFont().getName(), Font.PLAIN, newSize));
     }
 
 
-    //quickSet ist eine Funktion die schnell Farben und Fonts ändert. Sie wird benutzt um den Code übersichtlicher zu gestalten.
-    //Mann gibt Font, Schriftfarbe und Hintergrundfarbe ein, danach all Komponente die man ändern möchte
+    //quickSet is a function that quickly changes Font, Fontcolor and Backgroundcolor of the given components
+    //it's used to change either of these properties for alot of components in one line
     protected static void quickSet(Font font, Color color1, Color color2, JComponent... components){
         for (JComponent component : components) {
             component.setFont(font);
