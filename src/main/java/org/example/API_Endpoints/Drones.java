@@ -26,7 +26,6 @@ public class Drones extends Abs_APIBuilding<DronesData.ReturnDroneData> {
     @Override
     public CompletableFuture<DronesData.ReturnDroneData> APIBuildAsync() {
         CompletableFuture<DronesData.ReturnDroneData> resultFuture = new CompletableFuture<>();
-
         final String url = "http://dronesim.facets-labs.com/api/drones/?format=json";
         // using the initial url inside the asynchronous process
         processAsync(url, resultFuture);
