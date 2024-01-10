@@ -60,7 +60,7 @@ public class Main {
         });
 
         CompletableFuture<Void> futureDroneDynamics = CompletableFuture.runAsync(() -> {
-            System.out.println("DroneTypes Data processing...");
+            System.out.println("DroneDynamics Data processing...");
             DroneDynamics droneDynamics = new DroneDynamics();
             droneDynamics.APIBuildAsync().thenAccept(droneDynamicData -> {
                 for (Integer droneId : droneDynamicData.getDroneURL().keySet()) {
@@ -71,8 +71,8 @@ public class Main {
                     ArrayList<String> alignRolls = droneDynamicData.getDroneAlignRoll().get(droneId);
                     ArrayList<String> alignPitchs = droneDynamicData.getDroneAlignPitch().get(droneId);
                     ArrayList<String> alignYaws = droneDynamicData.getDroneAlignYaw().get(droneId);
-                    ArrayList<String> longitude = droneDynamicData.getDroneLongitude().get(droneId);
-                    ArrayList<String> latitude = droneDynamicData.getDroneLatitude().get(droneId);
+                    ArrayList<Double> longitude = droneDynamicData.getDroneLongitude().get(droneId);
+                    ArrayList<Double> latitude = droneDynamicData.getDroneLatitude().get(droneId);
                     ArrayList<String> batteryStatus = droneDynamicData.getDroneBatteryStatus().get(droneId);
                     ArrayList<String> lastSeen = droneDynamicData.getDroneLastSeen().get(droneId);
                     ArrayList<String> status = droneDynamicData.getDroneStatus().get(droneId);
@@ -110,18 +110,5 @@ public class Main {
         });
 
         combine.join();
-
-        // getting real time date
-        LocalDate dateNow = LocalDate.now();
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        String outputDate = dateNow.format(dateFormat);
-
-        // getting real time time
-        LocalTime timeNow = LocalTime.now();
-        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
-        String outputTime = timeNow.format(timeFormat);
-
-        System.out.println("Current date: " + outputDate);
-        System.out.println("Current time: " + outputTime);
     }
 }
