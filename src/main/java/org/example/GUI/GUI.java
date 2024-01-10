@@ -35,6 +35,7 @@ public class GUI extends JFrame implements ActionListener {
     
     //Main Components are initialized
     //We chose to have a navbar, a main screen and an infobar
+    //We initialize our navbar in BorderLayout.
     JPanel navbar = new JPanel(new BorderLayout());
     JPanel mainScreen = new JPanel();
     JPanel infobar = new JPanel();
@@ -50,7 +51,6 @@ public class GUI extends JFrame implements ActionListener {
     JPanel droneType = new JPanel();
 
     JPanel droneDynamics = new JPanel();
-    JPanel droneDynamics2 = new JPanel();
 
     //The second card contains...
     JPanel card2 = new JPanel();
@@ -60,8 +60,8 @@ public class GUI extends JFrame implements ActionListener {
     //1 more for refreshing the data and 1 for opening up a list of drones to access
     JButton tab1 = new JButton();
     JButton tab2 = new JButton();
-    JButton refresh = new JButton("REFRESH");
-    JButton dropdown = new JButton();
+    JButton refreshButton = new JButton("REFRESH");
+    JButton dropdownButton = new JButton();
 
     //Variables are initialized
     //These variables are kept for convenience in arithmetic operations
@@ -96,51 +96,81 @@ public class GUI extends JFrame implements ActionListener {
 
     private void mainScreenSettings() {
         //First we set the size of the main screen properly so that there won't be complications with other components
+        //But it should work without, because of the way the BorderLayout works
         mainScreen.setPreferredSize(mainscreenSize);
 
+        //We set the main screen as the CardLayout we initialized in the beginning and add the cards
         mainScreen.setLayout(cardLayout);
         mainScreen.add(card1, "Card1");
         mainScreen.add(card2,"Card2");
-        //Dronenliste card1
+
+        //This function creates a DroneList with a List on the left and a text panel on the right
+        //The list is scrollable so there is no problem to show many drones. The text panel shows info
         configureCard1(mainScreenColor, card1);
 
 
         //The dashboard will be split in drone data and drone type on the left side
         //and drone dynamics on the right side
+        //It's initialized as 2 BoxLayouts. The first BoxLayout is set horizontal and carries 2 Boxes
 //----------------------------card 2 dashboard-------------------------------
-        card2.setPreferredSize(new Dimension(mainscreenSize.width,mainscreenSize.width));
-        card2.setLayout(new GridLayout(2,2));
-        card2.setBorder(new EmptyBorder(10,10,10,10));
+        card1.setBackground(mainScreenColor);
+        card2.setBackground(mainScreenColor);
+        card2.setLayout(new BoxLayout(card2, BoxLayout.X_AXIS));
+        card2.setBorder(new EmptyBorder(5,5,5,5));
 
-        droneData.setBackground(Color.red);
+        //The second BoxLayout is placed inside the first Box and is set vertically with 2 Boxes
+        //This way we have exactly 3 Boxes to put our Dashboard elements into
+        JPanel leftBox = new JPanel();
+        leftBox.setBackground(mainScreenColor);
+        leftBox.setLayout(new BoxLayout(leftBox,BoxLayout.Y_AXIS));
+        leftBox.setBorder(new EmptyBorder(0,0,0,5));
 
-        droneType.setBackground(Color.blue);
+        //The borders have been placed to differentiate each components area easily
+        droneData.setBackground(panelColor);
+        droneType.setBackground(panelColor);
+        droneDynamics.setBackground(panelColor);
 
-        droneDynamics.setBackground(Color.green);
+        leftBox.add(droneData);
+        leftBox.add(Box.createRigidArea(new Dimension(0,5)));
+        leftBox.add(droneType);
 
-        droneDynamics2.setBackground(Color.green);
-
-        card2.add(droneData);
+        card2.add(leftBox);
         card2.add(droneDynamics);
-        card2.add(droneType);
-        card2.add(droneDynamics2);
 
 
+        //This is where we add content for the dashboard.
+        //We use the BorderLayout to place their contents
+        JLabel dataTitle = new JLabel("Drone Data");
+        JLabel typeTitle = new JLabel("Drone Type");
+        JLabel dynamicsTitle = new JLabel("Drone Dynamic");
+        quickSet(textFont,Color.white,panelColor,dataTitle,typeTitle,dynamicsTitle);
+
+//----------------------------dashboard content-------------------------------
         //drone data
+        droneData.add(dataTitle,BorderLayout.NORTH);
+
+
+
 
 
         //drone type
+        droneType.add(typeTitle,BorderLayout.NORTH);
+
+
+
 
 
         //drone dynamic
+        droneDynamics.add(dynamicsTitle,BorderLayout.NORTH);
 
 
-        //quickSet for font, font color and background color
-        //specifically made for buttons and texts
-        quickSet(textFont,Color.WHITE,mainScreenColor,card1,card2);
+
+
+
     }
 
 //----------------------------configureCard1-------------------------------
+    //Recursive function to create the DroneList
     public void configureCard1(Color mainScreenColor, JPanel card1) {
         Card1 card = new Card1();
         card.configureCard1(mainScreenColor, card1);
@@ -148,20 +178,27 @@ public class GUI extends JFrame implements ActionListener {
 
 
 //----------------------------navbar-------------------------------
+    //The navbar contains the dropdownButton Menu, the Tabs and the Time
     private void navbarSettings() {
         navbar.setBackground(backgroundColor);
         navbar.setPreferredSize(navbarSize);
-        navbarButtonSettings();
-    }
-    private void navbarButtonSettings() {
+//----------------------------dropdownButton drone list-------------------------------
 
-//----------------------------dropdown drone list-------------------------------
         JLabel droneListText = new JLabel("Drone List <ID>");
         quickSet(titleFont,Color.white,backgroundColor,droneListText);
-        dropdown.add(droneListText);
-        dropdown.setPreferredSize(new Dimension(navbarButtonSize.width/2,navbarButtonSize.height));
-        dropdown.setBorder(new LineBorder(mainScreenColor));
-        dropdown.setBackground(backgroundColor);
+        dropdownButton.add(droneListText);
+        dropdownButton.setBorder(new LineBorder(mainScreenColor));
+        dropdownButton.setBackground(backgroundColor);
+
+
+        JPanel dropdownMenu = new JPanel();
+
+        dropdownMenu.setBackground(Color.red);
+        dropdownMenu.add(dropdownButton);
+
+        navbar.add(dropdownMenu,BorderLayout.EAST);
+
+
 
 
 //----------------------------tabsPanel and the tabs-------------------------------
@@ -189,15 +226,17 @@ public class GUI extends JFrame implements ActionListener {
 
         tabsPanel.add(tab1);
         tabsPanel.add(tab2);
+
+
+        navbar.add(tabsPanel,BorderLayout.SOUTH);
+
 //----------------------------time and date-------------------------------
 
         JTextArea time = new JTextArea("HH:mm"+"      "+"dd.MM.yyyy");
         quickSet(titleFont,Color.white,backgroundColor,time);
 
-
-        navbar.add(dropdown,BorderLayout.WEST);
         navbar.add(time,BorderLayout.EAST);
-        navbar.add(tabsPanel,BorderLayout.SOUTH);
+
 
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
@@ -221,8 +260,9 @@ public class GUI extends JFrame implements ActionListener {
     }
 
 //----------------------------info bar and refresh button-------------------------------
-    
+    //The infobar has a refresh button to refresh the data
     private void infobarSettings() {
+        JLabel creatorText = new JLabel(">>this program was made by group15<< ");
         JLabel refreshText = new JLabel("since Last Update: X Seconds     ");
         Timer refreshTimer = new Timer(1000, new ActionListener() {
             int seconds = 0;
@@ -241,14 +281,15 @@ public class GUI extends JFrame implements ActionListener {
         infobar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         infobar.setBackground(backgroundColor);
         infobar.setPreferredSize(infobarSize);
-        refresh.setPreferredSize(new Dimension(infobarSize.width/16,infobarSize.height-8));
-        refresh.setBackground(Color.WHITE);
-        refresh.setBorderPainted(false);
-        refresh.setFocusPainted(false);
+        refreshButton.setPreferredSize(new Dimension(infobarSize.width/16,infobarSize.height-8));
+        refreshButton.setBackground(Color.WHITE);
+        refreshButton.setBorderPainted(false);
+        refreshButton.setFocusPainted(false);
 
-        refresh.addActionListener(e->{
+        refreshButton.addActionListener(e->{
             refreshTimer.restart();
             refreshText.setText("since Last Update: 0 Seconds     ");
+
             /*
 
 
@@ -258,12 +299,15 @@ public class GUI extends JFrame implements ActionListener {
 
 
              */
+
         });
 
-        quickSet(new Font("Roboto",Font.PLAIN,12),Color.WHITE,backgroundColor,refreshText);
+        quickSet(new Font("Roboto",Font.PLAIN,12),Color.WHITE,backgroundColor,refreshText,creatorText);
+        infobar.add(Box.createRigidArea(new Dimension((width/5)*2,infobarSize.height)));
+        infobar.add(creatorText);
         infobar.add(Box.createHorizontalGlue());
         infobar.add(refreshText);
-        infobar.add(refresh);
+        infobar.add(refreshButton);
     }
 //----------------------------add components-------------------------------
 
