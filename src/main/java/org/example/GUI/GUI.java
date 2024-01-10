@@ -190,13 +190,7 @@ public class GUI extends JFrame implements ActionListener {
         dropdownButton.setBorder(new LineBorder(mainScreenColor));
         dropdownButton.setBackground(backgroundColor);
 
-
-        JPanel dropdownMenu = new JPanel();
-
-        dropdownMenu.setBackground(Color.red);
-        dropdownMenu.add(dropdownButton);
-
-        navbar.add(dropdownMenu,BorderLayout.EAST);
+        navbar.add(dropdownButton,BorderLayout.WEST);
 
 
 
