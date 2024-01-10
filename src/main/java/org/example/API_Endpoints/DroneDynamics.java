@@ -6,10 +6,7 @@ import org.example.API_Properties.DroneTypesData;
 import org.example.API_Properties.DronesData;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDroneDynamicData> {
@@ -79,6 +76,11 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
     }
     private void storeAPIResponse(DroneDynamicsData.DroneDynamicResult apiResponse, Integer droneID) {
         if (apiResponse != null && apiResponse.getResults() != null) {
+
+            // reversing the Entities that should be saved
+            List<DroneDynamicsData.DroneDynamic> reversedEntities = new ArrayList<>(apiResponse.getResults());
+            Collections.reverse(reversedEntities);
+
             ArrayList<String> urls = droneURL.computeIfAbsent(droneID, k -> new ArrayList<>());
             ArrayList<String> timestamps = droneTimestamp.computeIfAbsent(droneID, k -> new ArrayList<>());
             ArrayList<String> speed = droneSpeed.computeIfAbsent(droneID, k -> new ArrayList<>());
@@ -91,7 +93,7 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
             ArrayList<String> lastseen = droneLastSeen.computeIfAbsent(droneID, k -> new ArrayList<>());
             ArrayList<String> status = droneStatus.computeIfAbsent(droneID, k -> new ArrayList<>());
 
-            for (DroneDynamicsData.DroneDynamic dronedynamic : apiResponse.getResults()) {
+            for (DroneDynamicsData.DroneDynamic dronedynamic : reversedEntities) {
                 if (urls.size() >= 3) break;
                 urls.add(dronedynamic.getDrone());
                 timestamps.add(dronedynamic.getTimestamp());
