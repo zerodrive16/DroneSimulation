@@ -143,30 +143,75 @@ public class GUI extends JFrame implements ActionListener {
         JLabel dataTitle = new JLabel("Drone Data");
         JLabel typeTitle = new JLabel("Drone Type");
         JLabel dynamicsTitle = new JLabel("Drone Dynamic");
-        quickSet(textFont,Color.white,panelColor,dataTitle,typeTitle,dynamicsTitle);
+        quickSet(titleFont,Color.white,panelColor,dataTitle,typeTitle,dynamicsTitle);
+
+
+
 
 //----------------------------dashboard content-------------------------------
         //drone data
+        droneData.setLayout(new BorderLayout());
         droneData.add(dataTitle,BorderLayout.NORTH);
 
+        JTextPane droneDataText = new JTextPane();
+        droneDataText.setEditable(false);
+        droneDataText.setBackground(Color.WHITE);
+        JPanel droneDataPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+
+        //data text
+        new Drones().APIBuildAsync().thenAccept(response -> {
+
+            droneDataText.setText("Drone ID: " + response.getDroneID().get(0)+
+                                    "\nSerial Number: " + response.getDroneSerialnumber().get(0)+
+                                    "\ncreated " + response.getDroneCreate().get(0).substring(0,10) +"  "+ response.getDroneCreate().get(0).substring(12,19)+
+                                    "\nWeight: " + response.getDroneCarriageWeight().get(0)+
+                                    "\nType: " + response.getDroneCarriageType().get(0)
+            );
+        });
 
 
 
+
+        droneData.add(droneDataText,BorderLayout.WEST);
+        droneDataPanel.add(droneDataText);
+        droneData.add(droneDataPanel);
 
         //drone type
+        droneType.setLayout(new BorderLayout());
         droneType.add(typeTitle,BorderLayout.NORTH);
 
+        JTextPane droneTypeText = new JTextPane();
+        droneTypeText.setEditable(false);
+        droneTypeText.setBackground(Color.WHITE);
+        JPanel droneTypePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 
+        //type text
+        droneTypeText.setText("drone Type test");
 
+        droneType.add(droneTypeText,BorderLayout.WEST);
+        droneTypePanel.add(droneTypeText);
+        droneType.add(droneTypePanel);
 
-        //drone dynamic
+        //drone dynamics
+        droneDynamics.setLayout(new BorderLayout());
         droneDynamics.add(dynamicsTitle,BorderLayout.NORTH);
 
+        JTextPane droneDynamicsText = new JTextPane();
+        droneDynamicsText.setEditable(false);
+        droneDynamicsText.setBackground(Color.WHITE);
+        JPanel droneDynamicsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        //dynamic text
+        droneDynamicsText.setText("drone Dynamics test");
 
 
+        droneDynamics.add(droneDynamicsText,BorderLayout.WEST);
+        droneDynamicsPanel.add(droneDynamicsText);
+        droneDynamics.add(droneDynamicsPanel);
 
-
+        quickSet(textFont,Color.white,panelColor,droneDataPanel,droneDataText,droneTypePanel,droneTypeText,droneDynamicsPanel,droneDynamicsText);
     }
 
 //----------------------------configureCard1-------------------------------
