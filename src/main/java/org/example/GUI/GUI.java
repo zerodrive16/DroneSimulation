@@ -1,5 +1,7 @@
 package org.example.GUI;
 
+import org.example.API_Endpoints.DroneDynamics;
+import org.example.API_Endpoints.DroneTypes;
 import org.example.API_Endpoints.Drones;
 import org.example.API_Properties.DronesData;
 
@@ -12,13 +14,14 @@ import java.awt.event.*;
 import java.time.format.DateTimeFormatter;
 import java.time.*;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Flow;
 
 
 public class GUI extends JFrame implements ActionListener {
     //First we initialize the components of the GUI globally, so they can be used in every function when needed
-    
+
     //We use a monotone palette of grey tones to mimic a dark mode style. Our font of choice is Roboto.
     //We believe to have achieved a sleek modern look with these settings
     Color mainScreenColor = new Color(44,44,44); //dark Gray
@@ -32,7 +35,7 @@ public class GUI extends JFrame implements ActionListener {
     //These icons will be used to make our dashboard more appealing
     ImageIcon menuIcon = new ImageIcon("src/main/java/org/example/GUI/img/menuIcon.png");
     ImageIcon infoIcon = new ImageIcon("src/main/java/org/example/GUI/img/infoIcon.png");
-    
+
     //Main Components are initialized
     //We chose to have a navbar, a main screen and an infobar
     //We initialize our navbar in BorderLayout.
@@ -163,10 +166,10 @@ public class GUI extends JFrame implements ActionListener {
         new Drones().APIBuildAsync().thenAccept(response -> {
 
             droneDataText.setText("Drone ID: " + response.getDroneID().get(0)+
-                                    "\nSerial Number: " + response.getDroneSerialnumber().get(0)+
-                                    "\ncreated " + response.getDroneCreate().get(0).substring(0,10) +"  "+ response.getDroneCreate().get(0).substring(12,19)+
-                                    "\nWeight: " + response.getDroneCarriageWeight().get(0)+
-                                    "\nType: " + response.getDroneCarriageType().get(0)
+                    "\nSerial Number: " + response.getDroneSerialnumber().get(0)+
+                    "\ncreated " + response.getDroneCreate().get(0).substring(0,10) +"  "+ response.getDroneCreate().get(0).substring(12,19)+
+                    "\nWeight: " + response.getDroneCarriageWeight().get(0)+
+                    "\nType: " + response.getDroneCarriageType().get(0)
             );
         });
 
@@ -188,7 +191,17 @@ public class GUI extends JFrame implements ActionListener {
 
 
         //type text
-        droneTypeText.setText("drone Type test");
+        new DroneTypes().APIBuildAsync().thenAccept(response -> {
+
+            droneTypeText.setText("Type: " + response.getDroneTypeName().get(0)+
+                    "\nManufacturer: " + response.getDroneManufacturer().get(0)+
+                    "\nWeight: " + response.getDroneWeight().get(0)+
+                    "\nMax. Speed: " + response.getDroneMaxSpeed().get(0)+
+                    "\nBattery Capacity: " + response.getDroneBatteryCapacity().get(0)+
+                    "\nControl Range: " + response.getDroneControlRange().get(0)+
+                    "\nMax. Carriage: " + response.getDroneMaxCarriage().get(0)
+            );
+        });
 
         droneType.add(droneTypeText,BorderLayout.WEST);
         droneTypePanel.add(droneTypeText);
@@ -204,8 +217,43 @@ public class GUI extends JFrame implements ActionListener {
         JPanel droneDynamicsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         //dynamic text
-        droneDynamicsText.setText("drone Dynamics test");
+        new DroneDynamics().APIBuildAsync().thenAccept(response -> {
 
+            for(Integer droneId: response.getDroneTimeStamp().keySet()){
+
+                System.out.println("Drone ID: " + droneId);
+
+                ArrayList<String> timeStamp = response.getDroneTimeStamp().get(droneId);
+                ArrayList<String> speed = response.getDroneSpeed().get(droneId);
+                ArrayList<String> alignRoll = response.getDroneAlignRoll().get(droneId);
+                ArrayList<String> alignPitch = response.getDroneAlignPitch().get(droneId);
+                ArrayList<String> alignYaw = response.getDroneAlignYaw().get(droneId);
+                ArrayList<Double> droneLongitude = response.getDroneLongitude().get(droneId);
+                ArrayList<Double> droneLatitude = response.getDroneLatitude().get(droneId);
+                ArrayList<String> batteryStatus = response.getDroneBatteryStatus().get(droneId);
+                ArrayList<String> lastSeen = response.getDroneLastSeen().get(droneId);
+                ArrayList<String> status = response.getDroneStatus().get(droneId);
+
+                
+               // for(int i=0; i<timeStamp.size(); i++) {
+                    droneDynamicsText.setText("Time:  "+ timeStamp.get(0).substring(0,10) +"  "+ timeStamp.get(0).substring(11,19)+
+                            "\nSpeed:  "+ speed.get(0)+
+                            "\nAlign Roll:  "+ alignRoll.get(0)+
+                            "\nAlign Pitch:  "+ alignPitch.get(0)+
+                            "\nAlign Yaw:  "+ alignYaw.get(0)+
+                            "\nLongitude:  "+ droneLongitude.get(0)+
+                            "\nLatitude:  "+ droneLatitude.get(0)+
+                            "\nBattery Status:  "+ batteryStatus.get(0)+
+                            "\nLast Seen:  "+ lastSeen.get(0).substring(0,10) +"  "+ lastSeen.get(0).substring(11,19)+
+                            "\nStatus:  "+ status.get(0)
+
+
+                    );
+               // }
+
+            }
+
+        });
 
         droneDynamics.add(droneDynamicsText,BorderLayout.WEST);
         droneDynamicsPanel.add(droneDynamicsText);
@@ -214,7 +262,7 @@ public class GUI extends JFrame implements ActionListener {
         quickSet(textFont,Color.white,panelColor,droneDataPanel,droneDataText,droneTypePanel,droneTypeText,droneDynamicsPanel,droneDynamicsText);
     }
 
-//----------------------------configureCard1-------------------------------
+    //----------------------------configureCard1-------------------------------
     //Recursive function to create the DroneList
     public void configureCard1(Color mainScreenColor, JPanel card1) {
         Card1 card = new Card1();
@@ -222,7 +270,7 @@ public class GUI extends JFrame implements ActionListener {
     }
 
 
-//----------------------------navbar-------------------------------
+    //----------------------------navbar-------------------------------
     //The navbar contains the dropdownButton Menu, the Tabs and the Time
     private void navbarSettings() {
         navbar.setBackground(backgroundColor);
@@ -249,18 +297,18 @@ public class GUI extends JFrame implements ActionListener {
         tab1.setBorderPainted(false);
         tab1.setBackground(Color.GREEN);
         tab1.addActionListener(e-> {
-                cardLayout.show(mainScreen,"Card1");
-                tab2.setBackground(Color.RED);
-                tab1.setBackground(Color.GREEN);
+            cardLayout.show(mainScreen,"Card1");
+            tab2.setBackground(Color.RED);
+            tab1.setBackground(Color.GREEN);
         });
 
         tab2.setPreferredSize(navbarButtonSize);
         tab2.setBorderPainted(false);
         tab2.setBackground(Color.RED);
         tab2.addActionListener(e-> {
-                cardLayout.show(mainScreen,"Card2");
-                tab1.setBackground(Color.RED);
-                tab2.setBackground(Color.GREEN);
+            cardLayout.show(mainScreen,"Card2");
+            tab1.setBackground(Color.RED);
+            tab2.setBackground(Color.GREEN);
         });
 
         tabsPanel.add(tab1);
@@ -298,7 +346,7 @@ public class GUI extends JFrame implements ActionListener {
         timeAndDate.start();
     }
 
-//----------------------------info bar and refresh button-------------------------------
+    //----------------------------info bar and refresh button-------------------------------
     //The infobar has a refresh button to refresh the data
     private void infobarSettings() {
         JLabel creatorText = new JLabel(">>this program was made by group15<< ");
@@ -356,7 +404,7 @@ public class GUI extends JFrame implements ActionListener {
         add(infobar, BorderLayout.SOUTH);
     }
 
-//----------------------------windowsettings-------------------------------
+    //----------------------------windowsettings-------------------------------
     private void windowSettings(){
         setTitle("Drone Simulation");
         setLocation(100,100);
@@ -367,7 +415,7 @@ public class GUI extends JFrame implements ActionListener {
         setMinimumSize(new Dimension(1024,576));
 
         addComponentListener(new ComponentAdapter() {
-//----------------------------code for resizing the window-------------------------------
+            //----------------------------code for resizing the window-------------------------------
             @Override
             public void componentResized(ComponentEvent e) {
                 if(width!=getWidth()) {

@@ -2,10 +2,7 @@ package org.example.API_Endpoints;
 
 import org.example.API_Properties.DroneDynamicsData;
 import com.google.gson.Gson;
-import org.example.API_Properties.DroneTypesData;
-import org.example.API_Properties.DronesData;
 
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
