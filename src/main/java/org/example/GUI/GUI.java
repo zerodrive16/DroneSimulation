@@ -106,7 +106,7 @@ public class GUI extends JFrame implements ActionListener {
 
         //This function creates a DroneList with a List on the left and a text panel on the right
         //The list is scrollable so there is no problem to show many drones. The text panel shows info
-        configureCard1(mainScreenColor, card1);
+        configureCard1(mainScreenColor, card2);
 
 
         //The dashboard will be split in drone data and drone type on the left side
@@ -115,8 +115,8 @@ public class GUI extends JFrame implements ActionListener {
 //----------------------------card 2 dashboard-------------------------------
         card1.setBackground(mainScreenColor);
         card2.setBackground(mainScreenColor);
-        card2.setLayout(new BoxLayout(card2, BoxLayout.X_AXIS));
-        card2.setBorder(new EmptyBorder(5,5,5,5));
+        card1.setLayout(new BoxLayout(card1, BoxLayout.X_AXIS));
+        card1.setBorder(new EmptyBorder(5,5,5,5));
 
         //The second BoxLayout is placed inside the first Box and is set vertically with 2 Boxes
         //This way we have exactly 3 Boxes to put our Dashboard elements into
@@ -134,8 +134,8 @@ public class GUI extends JFrame implements ActionListener {
         leftBox.add(Box.createRigidArea(new Dimension(0,5)));
         leftBox.add(droneType);
 
-        card2.add(leftBox);
-        card2.add(droneDynamics);
+        card1.add(leftBox);
+        card1.add(droneDynamics);
 
 
         //This is where we add content for the dashboard.
@@ -143,30 +143,75 @@ public class GUI extends JFrame implements ActionListener {
         JLabel dataTitle = new JLabel("Drone Data");
         JLabel typeTitle = new JLabel("Drone Type");
         JLabel dynamicsTitle = new JLabel("Drone Dynamic");
-        quickSet(textFont,Color.white,panelColor,dataTitle,typeTitle,dynamicsTitle);
+        quickSet(titleFont,Color.white,panelColor,dataTitle,typeTitle,dynamicsTitle);
+
+
+
 
 //----------------------------dashboard content-------------------------------
         //drone data
+        droneData.setLayout(new BorderLayout());
         droneData.add(dataTitle,BorderLayout.NORTH);
 
+        JTextPane droneDataText = new JTextPane();
+        droneDataText.setEditable(false);
+        droneDataText.setBackground(Color.WHITE);
+        JPanel droneDataPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+
+        //data text
+        new Drones().APIBuildAsync().thenAccept(response -> {
+
+            droneDataText.setText("Drone ID: " + response.getDroneID().get(0)+
+                                    "\nSerial Number: " + response.getDroneSerialnumber().get(0)+
+                                    "\ncreated " + response.getDroneCreate().get(0).substring(0,10) +"  "+ response.getDroneCreate().get(0).substring(12,19)+
+                                    "\nWeight: " + response.getDroneCarriageWeight().get(0)+
+                                    "\nType: " + response.getDroneCarriageType().get(0)
+            );
+        });
 
 
 
+
+        droneData.add(droneDataText,BorderLayout.WEST);
+        droneDataPanel.add(droneDataText);
+        droneData.add(droneDataPanel);
 
         //drone type
+        droneType.setLayout(new BorderLayout());
         droneType.add(typeTitle,BorderLayout.NORTH);
 
+        JTextPane droneTypeText = new JTextPane();
+        droneTypeText.setEditable(false);
+        droneTypeText.setBackground(Color.WHITE);
+        JPanel droneTypePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 
+        //type text
+        droneTypeText.setText("drone Type test");
 
+        droneType.add(droneTypeText,BorderLayout.WEST);
+        droneTypePanel.add(droneTypeText);
+        droneType.add(droneTypePanel);
 
-        //drone dynamic
+        //drone dynamics
+        droneDynamics.setLayout(new BorderLayout());
         droneDynamics.add(dynamicsTitle,BorderLayout.NORTH);
 
+        JTextPane droneDynamicsText = new JTextPane();
+        droneDynamicsText.setEditable(false);
+        droneDynamicsText.setBackground(Color.WHITE);
+        JPanel droneDynamicsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        //dynamic text
+        droneDynamicsText.setText("drone Dynamics test");
 
 
+        droneDynamics.add(droneDynamicsText,BorderLayout.WEST);
+        droneDynamicsPanel.add(droneDynamicsText);
+        droneDynamics.add(droneDynamicsPanel);
 
-
+        quickSet(textFont,Color.white,panelColor,droneDataPanel,droneDataText,droneTypePanel,droneTypeText,droneDynamicsPanel,droneDynamicsText);
     }
 
 //----------------------------configureCard1-------------------------------
@@ -202,20 +247,20 @@ public class GUI extends JFrame implements ActionListener {
 
         tab1.setPreferredSize(navbarButtonSize);
         tab1.setBorderPainted(false);
-        tab1.setBackground(mainScreenColor);
+        tab1.setBackground(Color.GREEN);
         tab1.addActionListener(e-> {
                 cardLayout.show(mainScreen,"Card1");
-                tab2.setBackground(greytabColor);
-                tab1.setBackground(mainScreenColor);
+                tab2.setBackground(Color.RED);
+                tab1.setBackground(Color.GREEN);
         });
 
         tab2.setPreferredSize(navbarButtonSize);
         tab2.setBorderPainted(false);
-        tab2.setBackground(greytabColor);
+        tab2.setBackground(Color.RED);
         tab2.addActionListener(e-> {
                 cardLayout.show(mainScreen,"Card2");
-                tab1.setBackground(greytabColor);
-                tab2.setBackground(mainScreenColor);
+                tab1.setBackground(Color.RED);
+                tab2.setBackground(Color.GREEN);
         });
 
         tabsPanel.add(tab1);
@@ -276,7 +321,7 @@ public class GUI extends JFrame implements ActionListener {
         infobar.setBackground(backgroundColor);
         infobar.setPreferredSize(infobarSize);
         refreshButton.setPreferredSize(new Dimension(infobarSize.width/16,infobarSize.height-8));
-        refreshButton.setBackground(Color.WHITE);
+        refreshButton.setBackground(Color.GREEN);
         refreshButton.setBorderPainted(false);
         refreshButton.setFocusPainted(false);
 
