@@ -2,6 +2,7 @@ package org.example.API_Endpoints;
 
 import com.google.gson.Gson;
 import org.example.API_Properties.DronesData;
+import org.example.API_StoreData.DronesDataStore;
 
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
@@ -11,13 +12,8 @@ import java.util.concurrent.CompletableFuture;
  * It extends the Abs_APIBuilding of the generic type DronesData.ReturnDroneData which is returns the data
 */
 public class Drones extends Abs_APIBuilding<DronesData.ReturnDroneData> {
-    // ArrayLists to store the API fetch data temporarily
-    private final ArrayList<Integer> droneID = new ArrayList<>();
-    private final ArrayList<String> droneTypeURL = new ArrayList<>();
-    private final ArrayList<String> droneCreate = new ArrayList<>();
-    private final ArrayList<String> droneSerialnumber = new ArrayList<>();
-    private final ArrayList<Integer> droneCarriageWeight = new ArrayList<>();
-    private final ArrayList<String> droneCarriageType = new ArrayList<>();
+    // calling the class which stores the data temporally
+    private final DronesDataStore storeDrones = new DronesDataStore();
 
     /*
      * The asynchronous function build the API drone data
@@ -36,11 +32,12 @@ public class Drones extends Abs_APIBuilding<DronesData.ReturnDroneData> {
      * The process Async accepts the url and the CompletableFuture resultFuture
      * It recursively checks for the pagination, if it reaches null or if it is completed
     */
-    @Override
     protected void processAsync(String paginationUrl, CompletableFuture<DronesData.ReturnDroneData> resultFuture) {
         if(paginationUrl == null){
             // when no more data is available it stores the data in DronesData class
-            resultFuture.complete(new DronesData.ReturnDroneData(droneID, droneTypeURL, droneCreate, droneSerialnumber, droneCarriageWeight, droneCarriageType));
+            resultFuture.complete(new DronesData.ReturnDroneData((ArrayList<Integer>) storeDrones.getDroneID(), (ArrayList<String>) storeDrones.getDroneTypeURL(),
+                    (ArrayList<String>) storeDrones.getDroneCreate(), (ArrayList<String>) storeDrones.getDroneSerialnumber(),
+                    (ArrayList<Integer>) storeDrones.getDroneCarriageWeight(), (ArrayList<String>) storeDrones.getDroneCarriageType()));
             return;
         }
 
@@ -70,12 +67,7 @@ public class Drones extends Abs_APIBuilding<DronesData.ReturnDroneData> {
     private void storeAPIResponse(DronesData.DroneResult apiResponse) {
         if (apiResponse != null && apiResponse.getDroneResults() != null) {
             for (DronesData.Drone drone : apiResponse.getDroneResults()) {
-                droneID.add(drone.getId());
-                droneTypeURL.add(drone.getDronetype());
-                droneCreate.add(drone.getCreated());
-                droneSerialnumber.add(drone.getSerialnumber());
-                droneCarriageWeight.add(drone.getCarriage_weight());
-                droneCarriageType.add(drone.getCarriage_type());
+                storeDrones.addDrones(drone);
             }
         } else {
             // notifies the user if response is null or result into no results

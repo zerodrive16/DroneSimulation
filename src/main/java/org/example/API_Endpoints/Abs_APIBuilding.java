@@ -71,10 +71,4 @@ public abstract class Abs_APIBuilding<Generic> {
     */
     public abstract CompletableFuture<Generic> APIBuildAsync();
 
-    /*
-     * abstract function to processAsync
-     * It builds and checks for the next page (pagination)
-     * It uses the resultFuture as parameter to store the API data
-    */
-    protected abstract void processAsync(String paginationUrl, CompletableFuture<Generic> resultFuture);
 }

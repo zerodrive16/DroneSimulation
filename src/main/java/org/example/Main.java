@@ -6,7 +6,6 @@ import org.example.API_Endpoints.Drones;
 
 import org.example.GUI.GUI;
 
-import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
 public class Main {
@@ -61,35 +60,19 @@ public class Main {
             System.out.println("DroneDynamics Data processing...");
             DroneDynamics droneDynamics = new DroneDynamics();
             droneDynamics.APIBuildAsync().thenAccept(droneDynamicData -> {
-                for (Integer droneId : droneDynamicData.getDroneURL().keySet()) {
-                    System.out.println("Drone ID: " + droneId);
-                    ArrayList<String> urls = droneDynamicData.getDroneURL().get(droneId);
-                    ArrayList<String> timestamps = droneDynamicData.getDroneTimeStamp().get(droneId);
-                    ArrayList<String> speeds = droneDynamicData.getDroneSpeed().get(droneId);
-                    ArrayList<String> alignRolls = droneDynamicData.getDroneAlignRoll().get(droneId);
-                    ArrayList<String> alignPitchs = droneDynamicData.getDroneAlignPitch().get(droneId);
-                    ArrayList<String> alignYaws = droneDynamicData.getDroneAlignYaw().get(droneId);
-                    ArrayList<Double> longitude = droneDynamicData.getDroneLongitude().get(droneId);
-                    ArrayList<Double> latitude = droneDynamicData.getDroneLatitude().get(droneId);
-                    ArrayList<String> batteryStatus = droneDynamicData.getDroneBatteryStatus().get(droneId);
-                    ArrayList<String> lastSeen = droneDynamicData.getDroneLastSeen().get(droneId);
-                    ArrayList<String> status = droneDynamicData.getDroneStatus().get(droneId);
-
-                    for (int i = 0; i < urls.size(); i++) {
-                        System.out.println("Drone URL: " + urls.get(i));
-                        System.out.println("Timestamp: " + timestamps.get(i));
-                        System.out.println("Speed: " + speeds.get(i));
-                        System.out.println("Align Roll: " + alignRolls.get(i));
-                        System.out.println("Align Pitch: " + alignPitchs.get(i));
-                        System.out.println("Align Yaw: " + alignYaws.get(i));
-                        System.out.println("Longitude: " + longitude.get(i));
-                        System.out.println("Latitude: " + latitude.get(i));
-                        System.out.println("BatteryStatus: " + batteryStatus.get(i));
-                        System.out.println("Last Seen: " + lastSeen.get(i));
-                        System.out.println("Status: " + status.get(i));
-
-                        System.out.println();
-                    }
+                for (int i = 0; i < droneDynamicData.getDroneURL().size(); i++) {
+                    System.out.println("Drone URL: " + droneDynamicData.getDroneURL().get(i));
+                    System.out.println("Drone Timestamp: " + droneDynamicData.getDroneTimeStamp().get(i));
+                    System.out.println("Drone Speed: " + droneDynamicData.getDroneSpeed().get(i));
+                    System.out.println("Drone AlignRoll: " + droneDynamicData.getDroneAlignRoll().get(i));
+                    System.out.println("Drone AlignPitch: " + droneDynamicData.getDroneAlignPitch().get(i));
+                    System.out.println("Drone AlignYaw: " + droneDynamicData.getDroneAlignYaw().get(i));
+                    System.out.println("Drone Longitude: " + droneDynamicData.getDroneLongitude().get(i));
+                    System.out.println("Drone Latitude: " + droneDynamicData.getDroneLatitude().get(i));
+                    System.out.println("Drone BatteryStatus: " + droneDynamicData.getDroneBatteryStatus().get(i));
+                    System.out.println("Drone LastSeen: " + droneDynamicData.getDroneLastSeen().get(i));
+                    System.out.println("Drone Status: " + droneDynamicData.getDroneStatus().get(i));
+                    System.out.println();
                 }
             }).exceptionally(ex -> {
                 System.err.println("Error fetching API data: " + ex.getMessage());

@@ -217,11 +217,12 @@ public class GUI extends JFrame implements ActionListener {
         JPanel droneDynamicsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         //dynamic text
+        /*
         new DroneDynamics().APIBuildAsync().thenAccept(response -> {
 
             for(Integer droneId: response.getDroneTimeStamp().keySet()){
 
-                System.out.println("Drone ID: " + droneId);
+                //System.out.println("Drone ID: " + droneId);
 
                 ArrayList<String> timeStamp = response.getDroneTimeStamp().get(droneId);
                 ArrayList<String> speed = response.getDroneSpeed().get(droneId);
@@ -254,6 +255,7 @@ public class GUI extends JFrame implements ActionListener {
             }
 
         });
+         */
 
         droneDynamics.add(droneDynamicsText,BorderLayout.WEST);
         droneDynamicsPanel.add(droneDynamicsText);
