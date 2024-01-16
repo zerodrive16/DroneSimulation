@@ -13,9 +13,10 @@ import static java.lang.System.exit;
 
 
 public class ReverseGeo {
-    private static final Map<Integer, ArrayList<String>> resultLocation = new HashMap<>();
+    //private static final ArrayList<String> resultLocation = new ArrayList<>();
 
     public static void main(String[] args) {
+
 
         // Replace "YOUR_API_KEY" with your actual API key
         String apiKey = "AIzaSyA0IA-lTzhcjrSk_SfKwlxT_eGx7CtzVf4";
@@ -26,46 +27,30 @@ public class ReverseGeo {
                 .build();
 
         new DroneDynamics().APIBuildAsync().thenAccept(response ->{
-            for (Integer droneId : response.getDroneLongitude().keySet()) {
-                System.out.println("Drone ID: " + droneId);
-                ArrayList<Double> longitude = response.getDroneLongitude().get(droneId);
-                ArrayList<Double> latitude = response.getDroneLatitude().get(droneId);
-                System.out.println();
 
-                for (int i = 0; i < longitude.size(); i++) {
+            for(int i = 0; i< response.getDroneLongitude().size(); i++){
+                Double ReverseLongitude = response.getDroneLongitude().get(i);
+                Double ReverseLatitude = response.getDroneLatitude().get(i);
+                LatLng location = new LatLng(ReverseLatitude, ReverseLongitude);
+                try {
+                    // Perform reverse geocoding
+                    GeocodingResult[] results = GeocodingApi.reverseGeocode(context, location).await();
 
-                    Double ReverseLongitude = longitude.get(i);
-                    Double ReverseLatitude = latitude.get(i);
+                    // Print the formatted address
+                    if (results.length > 0) {
+                        String formattedAddress = results[0].formattedAddress;
 
-                    LatLng location = new LatLng(ReverseLatitude, ReverseLongitude);
+                        System.out.println("Reverse Geocoding Result: " + formattedAddress);
 
-                    try {
-                        // Perform reverse geocoding
-                        GeocodingResult[] results = GeocodingApi.reverseGeocode(context, location).await();
 
-                        // Print the formatted address
-                        if (results.length > 0) {
-                            String formattedAddress = results[0].formattedAddress;
-                            resultLocation.computeIfAbsent(droneId, k -> new ArrayList<>()).add(formattedAddress);
-                            System.out.println("Reverse Geocoding Result: " + resultLocation.get(droneId));
-                            //clear the context of resultLocation
-                            resultLocation.computeIfPresent(droneId, (k, v) -> {
-                                v.clear();
-                                return v;
-                            });
-                        } else {
-                            System.out.println("No results found");
-                        }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } else {
+                        System.out.println("No results found");
                     }
 
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
             }
-
-            exit(1);
         });
 
 
