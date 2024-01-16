@@ -6,14 +6,10 @@ import com.google.maps.model.LatLng;
 import org.example.API_Endpoints.DroneDynamics;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.lang.System.exit;
 
 
 public class ReverseGeo {
-    //private static final ArrayList<String> resultLocation = new ArrayList<>();
+    public static final ArrayList<String> resultLocation = new ArrayList<>();
 
     public static void main(String[] args) {
 
@@ -39,10 +35,8 @@ public class ReverseGeo {
                     // Print the formatted address
                     if (results.length > 0) {
                         String formattedAddress = results[0].formattedAddress;
-
-                        System.out.println("Reverse Geocoding Result: " + formattedAddress);
-
-
+                        resultLocation.add(formattedAddress);
+                        System.out.println("Reverse Geocoding Result: " + resultLocation.get(i));
                     } else {
                         System.out.println("No results found");
                     }
