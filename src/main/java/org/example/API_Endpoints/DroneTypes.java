@@ -2,80 +2,77 @@ package org.example.API_Endpoints;
 
 import com.google.gson.Gson;
 import org.example.API_Properties.*;
+import org.example.API_StoreData.DroneTypesStore;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
 
-import static org.example.Config.token;
+/*
+ * Defining the class DroneTypes which builds the asynchronous API request and response
+ * Extending the abstract class Abs_APIBuilding with the return of DroneTypesData.ReturnDroneTypeData
+*/
+public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypeData>{
+    // calling the class which stores the data temporally
+    private final DroneTypesStore storeDroneTypes = new DroneTypesStore();
 
-public class DroneTypes {
-    public ReturnDroneTypeData APIDroneTypes(){
-        ArrayList<String> droneManufacturer = new ArrayList<>();
-        ArrayList<String> droneTypeName = new ArrayList<>();
-        ArrayList<String> droneWeight = new ArrayList<>();
-        ArrayList<String> droneMaxSpeed = new ArrayList<>();
-        ArrayList<String> droneBatteryCapacity = new ArrayList<>();
-        ArrayList<String> droneControlRange = new ArrayList<>();
-        ArrayList<String> droneMaxCarriage = new ArrayList<>();
+    /*
+     * CompletableFuture function that builds the asynchronous API
+     * storing the asynchronous data inside resultFuture
+    */
+    @Override
+    public CompletableFuture<DroneTypesData.ReturnDroneTypeData> APIBuildAsync() {
+        CompletableFuture<DroneTypesData.ReturnDroneTypeData> resultFuture = new CompletableFuture<>();
 
-        try{
-            URL url = new URL("http://dronesim.facets-labs.com/api/dronetypes/61/?format=json");
-            HttpURLConnection con;
-            con = (HttpURLConnection) url.openConnection();
-            con.setRequestProperty("Authorization", token);
-            con.setRequestMethod("GET");
-            con.setRequestProperty("User-Agent", "XYZ");
+        /*
+         * Asynchronously fetches the Drones data and processes it upon completion
+         * calling the droneTypeURL to fetch the url of the drones
+         * futures is a list for concurrent processing of each url
+        */
+        new Drones().APIBuildAsync().thenAccept(returnData -> {
+            ArrayList<String> droneTypeURL = returnData.getDroneTypeURL();
+            ArrayList<CompletableFuture<Void>> futures = new ArrayList<>();
 
-            int responseCode = con.getResponseCode();
-            System.out.println(responseCode);
+            // loop through the Url
+            for (String temp_URL : droneTypeURL) {
+                // adding the futures of the asynchronous APi request and use the callback (lambda) to use the response
+                futures.add(APIRequestAsync(temp_URL).thenAccept(response -> {
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
+                    // Gson dependency to convert JSON response to objects
+                    Gson gson = new Gson();
+                    DroneTypesData.DroneType apiResponse = gson.fromJson(response, DroneTypesData.DroneType.class);
 
-            while((inputLine = in.readLine()) != null){
-                response.append(inputLine);
-            }
-            in.close();
-
-            Gson gson = new Gson();
-            DroneTypeResult apiResponse = gson.fromJson(response.toString(), DroneTypeResult.class);
-
-            if(apiResponse != null && apiResponse.getDroneTypeResults() != null){
-                for(DroneType droneType : apiResponse.getDroneTypeResults()){
-                    droneManufacturer.add(droneType.getManufacturer());
-                    droneTypeName.add(droneType.getTypename());
-                    droneWeight.add(droneType.getWeight());
-                    droneMaxSpeed.add(droneType.getMax_Speed());
-                    droneBatteryCapacity.add(droneType.getBattery_Capacity());
-                    droneControlRange.add(droneType.getControl_Range());
-                    droneMaxCarriage.add(droneType.getMax_Carriage());
-                }
-            } else {
-                System.err.println("Result error / Null");
+                    // storing the API data to the respective Array Lists
+                    storeAPIResponse(apiResponse);
+                }));
             }
 
+            // It waits for all asynchronous operations to complete
+            CompletableFuture<Void> chainFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+            chainFutures.thenRun(() -> {
+                // Once all asynchronous operations are complete, finish the main future and return the collected data
+                resultFuture.complete(new DroneTypesData.ReturnDroneTypeData((ArrayList<String>) storeDroneTypes.getDroneManufacturer(), (ArrayList<String>) storeDroneTypes.getDroneTypeName(),
+                        (ArrayList<Integer>) storeDroneTypes.getDroneWeight(), (ArrayList<Integer>) storeDroneTypes.getDroneMaxSpeed(), (ArrayList<Integer>) storeDroneTypes.getDroneBatteryCapacity(),
+                        (ArrayList<Integer>) storeDroneTypes.getDroneControlRange(), (ArrayList<Integer>) storeDroneTypes.getDroneMaxCarriage()));
+                // Error handling for asynchronous programming
+            }).exceptionally(ex -> {
+                resultFuture.completeExceptionally(ex);
+                return null;
+            });
+        });
 
-        } catch(MalformedURLException ex1){
-            System.err.println("MalformedURLException: " + ex1.getMessage());
-            ex1.printStackTrace();
-        } catch(ProtocolException ex2){
-            System.err.println("ProtocolException: " + ex2.getMessage());
-            ex2.printStackTrace();
-        } catch(IOException ex3){
-            System.err.println("IOException: " + ex3.getMessage());
-            ex3.printStackTrace();
-        } finally {
-            System.out.println("Process Completed!");
+        // returning the resultFuture
+        return resultFuture;
+    }
+
+    /*
+     * function accepts the already converted DroneTypes object as parameter which is the access point to fetch the API data
+     * it respectively stores them to the assigned ArrayLists with a getter method */
+    private void storeAPIResponse(DroneTypesData.DroneType apiResponse) {
+        if (apiResponse != null) {
+            storeDroneTypes.addDroneTypes(apiResponse);
+        } else {
+            // checks the apiResponse if the response is null or empty
+            System.err.println("Result error / Null");
         }
-
-        return new ReturnDroneTypeData(droneManufacturer, droneTypeName, droneWeight, droneMaxSpeed,
-                droneBatteryCapacity, droneControlRange, droneMaxCarriage);
     }
 }
