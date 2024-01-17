@@ -1,13 +1,20 @@
 package org.example.GUI;
 
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.LatLng;
 import org.example.API_Endpoints.DroneDynamics;
 import org.example.API_Endpoints.DroneTypes;
 import org.example.API_Endpoints.Drones;
 import org.example.API_Properties.DroneDynamicsData;
 import org.example.API_Properties.DroneTypesData;
 import org.example.API_Properties.DronesData;
+import org.example.ReverseGeo;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
 public class Card1 {
@@ -62,7 +69,7 @@ public class Card1 {
     }
 
     private JPanel createDronePanel(DronesData.ReturnDroneData droneData, DroneTypesData.ReturnDroneTypeData droneTypesData,
-                                    DroneDynamicsData.ReturnDroneDynamicData droneDynamicData,  int droneIndex, Color primaryColor) {
+                                    DroneDynamicsData.ReturnDroneDynamicData droneDynamicData, int droneIndex, Color primaryColor ) {
         JPanel dronePanel = new JPanel();
         dronePanel.setLayout(new BorderLayout());
         dronePanel.setBackground(primaryColor);
@@ -93,6 +100,7 @@ public class Card1 {
         infoPanel.add(createWhiteLabel("Created: " + droneData.getDroneCreate().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Status: " + droneDynamicData.getDroneStatus().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Last update: " + droneDynamicData.getDroneLastSeen().get(droneIndex)));
+
 
         dronePanel.add(droneIdLabel, BorderLayout.NORTH);
         dronePanel.add(infoPanel, BorderLayout.CENTER);
@@ -137,5 +145,7 @@ public class Card1 {
         label.setForeground(Color.WHITE);
         return label;
     }
+
+
 
 }
