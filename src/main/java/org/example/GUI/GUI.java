@@ -217,45 +217,19 @@ public class GUI extends JFrame implements ActionListener {
         JPanel droneDynamicsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         //dynamic text
-        /*
-        new DroneDynamics().APIBuildAsync().thenAccept(response -> {
-
-            for(Integer droneId: response.getDroneTimeStamp().keySet()){
-
-                //System.out.println("Drone ID: " + droneId);
-
-                ArrayList<String> timeStamp = response.getDroneTimeStamp().get(droneId);
-                ArrayList<String> speed = response.getDroneSpeed().get(droneId);
-                ArrayList<String> alignRoll = response.getDroneAlignRoll().get(droneId);
-                ArrayList<String> alignPitch = response.getDroneAlignPitch().get(droneId);
-                ArrayList<String> alignYaw = response.getDroneAlignYaw().get(droneId);
-                ArrayList<Double> droneLongitude = response.getDroneLongitude().get(droneId);
-                ArrayList<Double> droneLatitude = response.getDroneLatitude().get(droneId);
-                ArrayList<String> batteryStatus = response.getDroneBatteryStatus().get(droneId);
-                ArrayList<String> lastSeen = response.getDroneLastSeen().get(droneId);
-                ArrayList<String> status = response.getDroneStatus().get(droneId);
-
-                
-               // for(int i=0; i<timeStamp.size(); i++) {
-                    droneDynamicsText.setText("Time:  "+ timeStamp.get(0).substring(0,10) +"  "+ timeStamp.get(0).substring(11,19)+
-                            "\nSpeed:  "+ speed.get(0)+
-                            "\nAlign Roll:  "+ alignRoll.get(0)+
-                            "\nAlign Pitch:  "+ alignPitch.get(0)+
-                            "\nAlign Yaw:  "+ alignYaw.get(0)+
-                            "\nLongitude:  "+ droneLongitude.get(0)+
-                            "\nLatitude:  "+ droneLatitude.get(0)+
-                            "\nBattery Status:  "+ batteryStatus.get(0)+
-                            "\nLast Seen:  "+ lastSeen.get(0).substring(0,10) +"  "+ lastSeen.get(0).substring(11,19)+
-                            "\nStatus:  "+ status.get(0)
-
-
-                    );
-               // }
-
-            }
-
-        });
-         */
+        new DroneDynamics().APIBuildAsync().thenAccept(response -> droneDynamicsText.setText(
+                "Drone: " + response.getDroneURL().get(0) +
+                "\nTimestamp: " + response.getDroneTimeStamp().get(0) +
+                "\nSpeed: " + response.getDroneSpeed().get(0) +
+                "\nAlignRoll: " + response.getDroneAlignRoll().get(0) +
+                "\nAlignPitch: " + response.getDroneAlignPitch().get(0) +
+                "\nAlignYaw: " + response.getDroneAlignYaw().get(0) +
+                "\nLongitude: " + response.getDroneLongitude().get(0) +
+                "\nLatitude: " + response.getDroneLatitude().get(0) +
+                "\nBatteryStatus: " + response.getDroneBatteryStatus().get(0) +
+                "\nLastSeen: " + response.getDroneLastSeen().get(0) +
+                "\nStatus: " + response.getDroneStatus().get(0)
+        ));
 
         droneDynamics.add(droneDynamicsText,BorderLayout.WEST);
         droneDynamicsPanel.add(droneDynamicsText);

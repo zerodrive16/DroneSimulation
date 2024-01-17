@@ -53,6 +53,7 @@ public class DroneDynamicsData {
     public static class DroneDynamicResult {
         private List<DroneDynamic> results;
         String next;
+        private int count;
 
         public List<DroneDynamic> getResults() {
             return results;
@@ -60,6 +61,10 @@ public class DroneDynamicsData {
 
         public String getNext() {
             return next;
+        }
+
+        public int getCount() {
+            return count;
         }
     }
 

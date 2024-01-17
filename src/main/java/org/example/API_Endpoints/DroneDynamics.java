@@ -19,8 +19,7 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
             ArrayList<CompletableFuture<Void>> futures = new ArrayList<>();
 
             for (Integer id : droneIDs) {
-                String url = "http://dronesim.facets-labs.com/api/" + id + "/dynamics/?format=json";
-                futures.add(processLastPage(url));
+                futures.add(getLastDroneDynamic(id));
             }
 
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).thenRun(() -> {
@@ -39,20 +38,39 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
         return resultFuture;
     }
 
-    private CompletableFuture<Void> processLastPage(String url) {
-        return APIRequestAsync(url).thenAccept(response -> {
+    private CompletableFuture<Void> getLastDroneDynamic(Integer id) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        String initialUrl = "http://dronesim.facets-labs.com/api/" + id + "/dynamics/?format=json";
+
+        APIRequestAsync(initialUrl).thenAccept(initialResponse -> {
             Gson gson = new Gson();
-            DroneDynamicsData.DroneDynamicResult apiResponse = gson.fromJson(response, DroneDynamicsData.DroneDynamicResult.class);
-            if (apiResponse != null && !apiResponse.getResults().isEmpty()) {
-                DroneDynamicsData.DroneDynamic lastDroneDynamic = apiResponse.getResults().get(apiResponse.getResults().size() - 1);
+            DroneDynamicsData.DroneDynamicResult initialApiResponse = gson.fromJson(initialResponse, DroneDynamicsData.DroneDynamicResult.class);
 
-                //System.out.println("Last entity details: " + lastDroneDynamic);
+            if (initialApiResponse != null && initialApiResponse.getCount() > 0) {
+                int count = initialApiResponse.getCount();
+                int offset = count - 1;
+                String lastEntityUrl = "http://dronesim.facets-labs.com/api/" + id + "/dynamics/?limit=" + count + "&offset=" + offset + "&format=json";
 
-                storeAPIResponse(lastDroneDynamic);
+                APIRequestAsync(lastEntityUrl).thenAccept(lastResponse -> {
+                    DroneDynamicsData.DroneDynamicResult lastApiResponse = gson.fromJson(lastResponse, DroneDynamicsData.DroneDynamicResult.class);
+                    if (lastApiResponse != null && !lastApiResponse.getResults().isEmpty()) {
+                        DroneDynamicsData.DroneDynamic lastDroneDynamic = lastApiResponse.getResults().get(0);
+                        storeAPIResponse(lastDroneDynamic);
+                    }
+                    future.complete(null);
+                }).exceptionally(ex -> {
+                    future.completeExceptionally(ex);
+                    return null;
+                });
+            } else {
+                future.complete(null);
             }
         }).exceptionally(ex -> {
+            future.completeExceptionally(ex);
             return null;
         });
+
+        return future;
     }
 
     private void storeAPIResponse(DroneDynamicsData.DroneDynamic droneDynamic) {
