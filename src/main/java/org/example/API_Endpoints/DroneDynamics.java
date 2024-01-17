@@ -9,7 +9,9 @@ import java.util.concurrent.CompletableFuture;
 
 public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDroneDynamicData> {
 
+    // calling the class which stores the data temporally
     private final DroneDynamicsStore storeDroneDynamics = new DroneDynamicsStore();
+
 
     @Override
     public CompletableFuture<DroneDynamicsData.ReturnDroneDynamicData> APIBuildAsync() {
@@ -47,9 +49,9 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
             DroneDynamicsData.DroneDynamicResult initialApiResponse = gson.fromJson(initialResponse, DroneDynamicsData.DroneDynamicResult.class);
 
             if (initialApiResponse != null && initialApiResponse.getCount() > 0) {
-                int count = initialApiResponse.getCount();
-                int offset = count - 1;
-                String lastEntityUrl = "http://dronesim.facets-labs.com/api/" + id + "/dynamics/?limit=" + count + "&offset=" + offset + "&format=json";
+                int limit = initialApiResponse.getCount();
+                int offset = limit - 1;
+                String lastEntityUrl = "http://dronesim.facets-labs.com/api/" + id + "/dynamics/?limit=" + limit + "&offset=" + offset + "&format=json";
 
                 APIRequestAsync(lastEntityUrl).thenAccept(lastResponse -> {
                     DroneDynamicsData.DroneDynamicResult lastApiResponse = gson.fromJson(lastResponse, DroneDynamicsData.DroneDynamicResult.class);

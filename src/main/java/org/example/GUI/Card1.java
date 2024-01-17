@@ -1,56 +1,58 @@
 package org.example.GUI;
 
+import org.example.API_Endpoints.DroneDynamics;
+import org.example.API_Endpoints.DroneTypes;
 import org.example.API_Endpoints.Drones;
+import org.example.API_Properties.DroneDynamicsData;
+import org.example.API_Properties.DroneTypesData;
 import org.example.API_Properties.DronesData;
 import javax.swing.*;
 import java.awt.*;
 import java.util.concurrent.CompletableFuture;
 
 public class Card1 {
-    public void configureCard1(Color primaryColor, JPanel card1) {
-        // calling the Drones class
+    private static final int ITEMS_PER_PAGE = 10;
+    private int currentPage = 0;
+
+    public void configureCard1(Color primaryColor, JPanel card) {
         Drones dronesAPI = new Drones();
         CompletableFuture<DronesData.ReturnDroneData> futureDronesData = dronesAPI.APIBuildAsync();
 
-        futureDronesData.thenAccept(droneData -> {
-            // ensuring that it's thread safe
-            SwingUtilities.invokeLater(() -> {
-                card1.setLayout(new BorderLayout());
-                card1.removeAll();
+        DroneTypes droneTypesAPI = new DroneTypes();
+        CompletableFuture<DroneTypesData.ReturnDroneTypeData> futureDroneTypesData = droneTypesAPI.APIBuildAsync();
 
-                // Panel for the clickable drones
-                JPanel buttonsPanel = new JPanel();
-                buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
-                buttonsPanel.setBackground(primaryColor);
+        DroneDynamics droneDynamicsAPI = new DroneDynamics();
+        CompletableFuture<DroneDynamicsData.ReturnDroneDynamicData> futureDroneDynamicsData = droneDynamicsAPI.APIBuildAsync();
 
-                // Panel for the output of the drones
-                JPanel outputPanel = new JPanel(new CardLayout());
-                outputPanel.setBackground(primaryColor);
+        CompletableFuture<Void> combineFuture = CompletableFuture.allOf(
+                futureDronesData, futureDroneTypesData, futureDroneDynamicsData
+        );
 
-                // Iterate through every droneID and create a button and output for every ID
-                for (int droneIndex = 0; droneIndex < droneData.getDroneID().size(); droneIndex++) {
-                    // function for outputting the data
-                    JTextArea outputArea = createDroneOutput(droneData, droneIndex, primaryColor);
+        combineFuture.thenAccept(voidResult -> {
+            try {
+                DronesData.ReturnDroneData droneData = futureDronesData.get();
+                DroneTypesData.ReturnDroneTypeData droneTypeData = futureDroneTypesData.get();
+                DroneDynamicsData.ReturnDroneDynamicData droneDynamicData = futureDroneDynamicsData.get();
 
-                    // output the ID of drones for the list
-                    String cardName = "Drone " + droneData.getDroneID().get(droneIndex);
-                    outputPanel.add(outputArea, cardName);
-                    JButton button = createDroneButton(cardName, primaryColor, outputPanel);
-                    buttonsPanel.add(button);
-                }
+                SwingUtilities.invokeLater(() -> {
+                    card.setLayout(new FlowLayout(FlowLayout.LEFT));
+                    card.removeAll();
 
-                // Add a scrollPane to the buttonsPanel if data exceeds screen size
-                JScrollPane buttonsScrollPane = customizeScrollPane(buttonsPanel);
-                card1.add(buttonsScrollPane, BorderLayout.WEST);
+                    int startIndex = currentPage * ITEMS_PER_PAGE;
+                    int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, droneData.getDroneID().size());
 
-                // The outputPanel will contain the outputAreas and will be added to the center
-                JScrollPane outputScrollPane = customizeScrollPane(outputPanel);
-                card1.add(outputScrollPane, BorderLayout.CENTER);
+                    for (int droneIndex = startIndex; droneIndex < endIndex; droneIndex++) {
+                        JPanel dronePanel = createDronePanel(droneData, droneTypeData, droneDynamicData, droneIndex, primaryColor);
+                        card.add(dronePanel);
+                    }
 
-                // revalidate and repaint are needed if there are new updates
-                card1.revalidate();
-                card1.repaint();
-            });
+                    addPaginationControls(card, droneData.getDroneID().size());
+                    card.revalidate();
+                    card.repaint();
+                });
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }).exceptionally(ex -> {
             SwingUtilities.invokeLater(() -> {
                 ex.printStackTrace();
@@ -59,51 +61,81 @@ public class Card1 {
         });
     }
 
-    private JButton createDroneButton(String cardName, Color primaryColor, JPanel outputPanel) {
-        JButton button = new JButton(cardName);
-        button.setAlignmentX(Component.LEFT_ALIGNMENT);
-        button.setFont(new Font("Arial", Font.BOLD, 15));
-        button.setForeground(Color.WHITE);
-        button.setBackground(primaryColor);
-        button.setBorderPainted(false);
-        button.setFocusPainted(false);
+    private JPanel createDronePanel(DronesData.ReturnDroneData droneData, DroneTypesData.ReturnDroneTypeData droneTypesData,
+                                    DroneDynamicsData.ReturnDroneDynamicData droneDynamicData,  int droneIndex, Color primaryColor) {
+        JPanel dronePanel = new JPanel();
+        dronePanel.setLayout(new BorderLayout());
+        dronePanel.setBackground(primaryColor);
+        dronePanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
 
-        button.addActionListener(e -> {
-            CardLayout cardLayout = (CardLayout) (outputPanel.getLayout());
-            cardLayout.show(outputPanel, cardName);
+        JLabel droneIdLabel = new JLabel("Drone ID: " + droneData.getDroneID().get(droneIndex));
+        droneIdLabel.setForeground(Color.WHITE);
+        droneIdLabel.setHorizontalAlignment(JLabel.CENTER);
+        droneIdLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+
+        JButton viewMoreButton = new JButton("View More");
+        viewMoreButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        viewMoreButton.setFont(new Font("Arial", Font.BOLD, 12));
+        viewMoreButton.setForeground(Color.WHITE);
+        viewMoreButton.setBackground(Color.DARK_GRAY);
+        viewMoreButton.setBorderPainted(false);
+        viewMoreButton.setFocusPainted(false);
+        viewMoreButton.addActionListener(e -> {
+            // view more button addition
         });
 
-        return button;
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.setBackground(primaryColor);
+        infoPanel.add(createWhiteLabel("Manufacturer: " + droneTypesData.getDroneManufacturer().get(droneIndex)));
+        infoPanel.add(createWhiteLabel("Typename: " + droneTypesData.getDroneTypeName().get(droneIndex)));
+        infoPanel.add(createWhiteLabel("Serialnumber: " + droneData.getDroneSerialnumber().get(droneIndex)));
+        infoPanel.add(createWhiteLabel("Created: " + droneData.getDroneCreate().get(droneIndex)));
+        infoPanel.add(createWhiteLabel("Status: " + droneDynamicData.getDroneStatus().get(droneIndex)));
+        infoPanel.add(createWhiteLabel("Last update: " + droneDynamicData.getDroneLastSeen().get(droneIndex)));
+
+        dronePanel.add(droneIdLabel, BorderLayout.NORTH);
+        dronePanel.add(infoPanel, BorderLayout.CENTER);
+        dronePanel.add(viewMoreButton, BorderLayout.SOUTH);
+
+        return dronePanel;
     }
 
-    private JScrollPane customizeScrollPane(JPanel cardsPanel) {
-        JScrollPane scrollPane = new JScrollPane(cardsPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.getVerticalScrollBar().setBackground(Color.BLACK);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        scrollPane.getViewport().setBackground(Color.BLACK);
-        scrollPane.setBorder(null);
-        return scrollPane;
+    private void addPaginationControls(JPanel card, int totalItems) {
+        int totalPages = (int) Math.ceil((double) totalItems / ITEMS_PER_PAGE);
+
+        JButton prevButton = new JButton("Previous");
+        prevButton.addActionListener(e -> {
+            if (currentPage > 0) {
+                currentPage--;
+                configureCard1(card.getBackground(), card);
+            }
+        });
+
+        JButton nextButton = new JButton("Next");
+        nextButton.addActionListener(e -> {
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                configureCard1(card.getBackground(), card);
+            }
+        });
+
+        JPanel paginationPanel = new JPanel();
+        paginationPanel.setLayout(new BoxLayout(paginationPanel, BoxLayout.X_AXIS));
+        paginationPanel.add(Box.createHorizontalGlue()); // Left-align previous button
+        paginationPanel.add(prevButton);
+        paginationPanel.add(Box.createHorizontalStrut(10)); // Space between buttons
+        paginationPanel.add(nextButton);
+        paginationPanel.add(Box.createHorizontalGlue()); // Right-align next button
+
+        card.add(paginationPanel);
     }
 
-    private JTextArea createDroneOutput(DronesData.ReturnDroneData droneData, int droneIndex, Color primaryColor) {
-        JTextArea outputArea = new JTextArea();
-        outputArea.setEditable(false);
-        outputArea.setFont(new Font("Arial", Font.BOLD, 15));
-        outputArea.setForeground(Color.WHITE);
-        outputArea.setBackground(primaryColor);
 
-        // Add the drone data to the JTextArea
-        outputArea.append("Drone ID: " + droneData.getDroneID().get(droneIndex) + "\n");
-        outputArea.append("DroneType: " + droneData.getDroneTypeURL().get(droneIndex) + "\n");
-        outputArea.append("Drone Creation: " + droneData.getDroneCreate().get(droneIndex) + "\n");
-        outputArea.append("Drone Serialnumber: " + droneData.getDroneSerialnumber().get(droneIndex) + "\n");
-        outputArea.append("Drone Carriage Weight: " + droneData.getDroneCarriageWeight().get(droneIndex) + "\n");
-        outputArea.append("Drone Carriage Type: " + droneData.getDroneCarriageType().get(droneIndex) + "\n");
-
-        // Initially, we hide the outputArea, it will be made visible when the corresponding button is clicked
-        outputArea.setVisible(false);
-
-        return outputArea;
+    private JLabel createWhiteLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setForeground(Color.WHITE);
+        return label;
     }
+
 }

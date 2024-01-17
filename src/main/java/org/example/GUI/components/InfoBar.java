@@ -1,5 +1,4 @@
 package org.example.GUI.components;
 
-public class mainScreenSettings {
-
+public class InfoBar {
 }

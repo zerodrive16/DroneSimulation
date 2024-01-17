@@ -41,7 +41,7 @@ public abstract class Abs_APIBuilding<Generic> {
 
             // if it doesn't exist then make the HTTP request
             try {
-                Thread.sleep(1000);
+                //Thread.sleep(1000);
                 HttpURLConnection con;
                 con = (HttpURLConnection) new URL(url).openConnection();
                 // setting the Authorization and token, GET operation
@@ -64,8 +64,6 @@ public abstract class Abs_APIBuilding<Generic> {
                 return response.toString();
                 // exception for error handling the HTTP request
             } catch(IOException e) {
-                throw new RuntimeException(e);
-            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }, executor);

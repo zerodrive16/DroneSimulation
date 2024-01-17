@@ -3,20 +3,15 @@ package org.example.GUI;
 import org.example.API_Endpoints.DroneDynamics;
 import org.example.API_Endpoints.DroneTypes;
 import org.example.API_Endpoints.Drones;
-import org.example.API_Properties.DronesData;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.format.DateTimeFormatter;
 import java.time.*;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Flow;
+
 
 
 public class GUI extends JFrame implements ActionListener {
@@ -172,8 +167,6 @@ public class GUI extends JFrame implements ActionListener {
                     "\nType: " + response.getDroneCarriageType().get(0)
             );
         });
-
-
 
 
         droneData.add(droneDataText,BorderLayout.WEST);
