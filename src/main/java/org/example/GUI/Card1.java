@@ -6,6 +6,7 @@ import org.example.API_Endpoints.Drones;
 import org.example.API_Properties.DroneDynamicsData;
 import org.example.API_Properties.DroneTypesData;
 import org.example.API_Properties.DronesData;
+import org.example.ConvertDate;
 import org.example.ReverseGeo;
 
 import javax.swing.*;
@@ -30,8 +31,13 @@ public class Card1 {
         ReverseGeo reverseGeo = new ReverseGeo();
         CompletableFuture<ArrayList<String>> geocodingFuture = reverseGeo.performReverseGeoAsync();
 
+        ConvertDate convertDate = new ConvertDate();
+        CompletableFuture<ArrayList<String>> convertDateFuture = convertDate.performConvertDateAsync();
+        CompletableFuture<ArrayList<String>> convertLastSeenFuture = convertDate.performConvertLastSeenAsync();
+
+
         CompletableFuture<Void> combineFuture = CompletableFuture.allOf(
-                futureDronesData, futureDroneTypesData, futureDroneDynamicsData, geocodingFuture
+                futureDronesData, futureDroneTypesData, futureDroneDynamicsData, geocodingFuture, convertDateFuture
         );
 
         combineFuture.thenAccept(voidResult -> {
@@ -40,6 +46,9 @@ public class Card1 {
                 DroneTypesData.ReturnDroneTypeData droneTypeData = futureDroneTypesData.get();
                 DroneDynamicsData.ReturnDroneDynamicData droneDynamicData = futureDroneDynamicsData.get();
                 ArrayList<String> geocodingData = geocodingFuture.get();
+                ArrayList<String> convertDateData = convertDateFuture.get();
+                ArrayList<String> convertLastSeenData = convertLastSeenFuture.get();
+
 
                 SwingUtilities.invokeLater(() -> {
                     card.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -49,7 +58,7 @@ public class Card1 {
                     int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, droneData.getDroneID().size());
 
                     for (int droneIndex = startIndex; droneIndex < endIndex; droneIndex++) {
-                        JPanel dronePanel = createDronePanel(droneData, droneTypeData, droneDynamicData, droneIndex, primaryColor, geocodingData);
+                        JPanel dronePanel = createDronePanel(droneData, droneTypeData, droneDynamicData, droneIndex, primaryColor, geocodingData,convertDateData,convertLastSeenData);
                         card.add(dronePanel);
                     }
 
@@ -69,7 +78,7 @@ public class Card1 {
     }
 
     private JPanel createDronePanel(DronesData.ReturnDroneData droneData, DroneTypesData.ReturnDroneTypeData droneTypesData,
-                                    DroneDynamicsData.ReturnDroneDynamicData droneDynamicData, int droneIndex, Color primaryColor, ArrayList<String> geocodingData) {
+                                    DroneDynamicsData.ReturnDroneDynamicData droneDynamicData, int droneIndex, Color primaryColor, ArrayList<String> geocodingData,ArrayList<String> convertDateData,ArrayList<String> convertLastSeenData ) {
         JPanel dronePanel = new JPanel();
         dronePanel.setLayout(new BorderLayout());
         dronePanel.setBackground(primaryColor);
@@ -99,8 +108,9 @@ public class Card1 {
         infoPanel.add(createWhiteLabel("Serialnumber: " + droneData.getDroneSerialnumber().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Created: " + droneData.getDroneCreate().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Status: " + droneDynamicData.getDroneStatus().get(droneIndex)));
-        infoPanel.add(createWhiteLabel("Last update: " + droneDynamicData.getDroneLastSeen().get(droneIndex)));
+        infoPanel.add(createWhiteLabel("Last update: " + convertLastSeenData.get(droneIndex)));
         infoPanel.add(createWhiteLabel("Location: " + geocodingData.get(droneIndex)));
+        infoPanel.add(createWhiteLabel("Time Stamp: " + convertDateData.get(droneIndex)));
 
         dronePanel.add(droneIdLabel, BorderLayout.NORTH);
         dronePanel.add(infoPanel, BorderLayout.CENTER);

@@ -48,3 +48,4 @@ public class ReverseGeo {
         return geocodingFuture.thenApplyAsync(ignored -> resultLocation);
     }
 }
+
