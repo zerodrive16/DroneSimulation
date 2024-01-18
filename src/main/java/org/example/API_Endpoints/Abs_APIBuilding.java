@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.*;
 
 import static org.example.Config.token;
 
@@ -21,6 +22,10 @@ public abstract class Abs_APIBuilding<Generic> {
     // Executor service to manage the thread pool in asynchronous task operations
     protected static final ExecutorService executor = Executors.newFixedThreadPool(CPUCoreCount);
 
+    // creating a cache to store the APIResponses
+    private final Map<String, String> cache = new ConcurrentHashMap<>();
+
+
     /*
      * Asynchronously sends an HTTP request with GET operation to the specified URL and returns the response
      * @param url: The url to send the request to
@@ -28,7 +33,15 @@ public abstract class Abs_APIBuilding<Generic> {
     */
     protected CompletableFuture<String> APIRequestAsync(String url) {
         return CompletableFuture.supplyAsync(() -> {
+
+            // check if the response exists in the cache
+            if(cache.containsKey(url)) {
+                return cache.get(url);
+            }
+
+            // if it doesn't exist then make the HTTP request
             try {
+                //Thread.sleep(1000);
                 HttpURLConnection con;
                 con = (HttpURLConnection) new URL(url).openConnection();
                 // setting the Authorization and token, GET operation
@@ -45,7 +58,10 @@ public abstract class Abs_APIBuilding<Generic> {
                     response.append(inputLine);
                 }
                 in.close();
-                return String.valueOf(response);
+
+                // then store the API response in the cache
+                cache.put(url, response.toString());
+                return response.toString();
                 // exception for error handling the HTTP request
             } catch(IOException e) {
                 throw new RuntimeException(e);
@@ -71,10 +87,4 @@ public abstract class Abs_APIBuilding<Generic> {
     */
     public abstract CompletableFuture<Generic> APIBuildAsync();
 
-    /*
-     * abstract function to processAsync
-     * It builds and checks for the next page (pagination)
-     * It uses the resultFuture as parameter to store the API data
-    */
-    protected abstract void processAsync(String paginationUrl, CompletableFuture<Generic> resultFuture);
 }
