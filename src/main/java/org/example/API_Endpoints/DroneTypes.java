@@ -55,7 +55,7 @@ public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypeDa
                         (ArrayList<Integer>) storeDroneTypes.getDroneControlRange(), (ArrayList<Integer>) storeDroneTypes.getDroneMaxCarriage()));
                 // Error handling for asynchronous programming
             }).exceptionally(ex -> {
-                resultFuture.completeExceptionally(ex);
+                resultFuture.completeExceptionally(new RuntimeException(ex));
                 return null;
             });
         });
