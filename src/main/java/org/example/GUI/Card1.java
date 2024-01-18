@@ -31,8 +31,11 @@ public class Card1 {
         DroneDynamics droneDynamicsAPI = new DroneDynamics();
         CompletableFuture<DroneDynamicsData.ReturnDroneDynamicData> futureDroneDynamicsData = droneDynamicsAPI.APIBuildAsync();
 
+        CompletableFuture<ArrayList<String>> geocodingFuture = new ReverseGeo().performReverseGeo();
+
+
         CompletableFuture<Void> combineFuture = CompletableFuture.allOf(
-                futureDronesData, futureDroneTypesData, futureDroneDynamicsData
+                futureDronesData, futureDroneTypesData, futureDroneDynamicsData, geocodingFuture
         );
 
         combineFuture.thenAccept(voidResult -> {
@@ -100,7 +103,7 @@ public class Card1 {
         infoPanel.add(createWhiteLabel("Created: " + droneData.getDroneCreate().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Status: " + droneDynamicData.getDroneStatus().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Last update: " + droneDynamicData.getDroneLastSeen().get(droneIndex)));
-
+        infoPanel.add(createWhiteLabel("Location: " + ReverseGeo.resultLocation.get(droneIndex)));
 
         dronePanel.add(droneIdLabel, BorderLayout.NORTH);
         dronePanel.add(infoPanel, BorderLayout.CENTER);
@@ -139,13 +142,9 @@ public class Card1 {
         card.add(paginationPanel);
     }
 
-
     private JLabel createWhiteLabel(String text) {
         JLabel label = new JLabel(text);
         label.setForeground(Color.WHITE);
         return label;
     }
-
-
-
 }

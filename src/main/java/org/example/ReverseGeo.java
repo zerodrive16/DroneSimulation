@@ -6,14 +6,13 @@ import com.google.maps.model.LatLng;
 import org.example.API_Endpoints.DroneDynamics;
 
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
 
 
 public class ReverseGeo {
     public static final ArrayList<String> resultLocation = new ArrayList<>();
 
-    public ArrayList<String> performReverseGeo() {
-
-
+    public CompletableFuture<ArrayList<String>> performReverseGeo() {
         // Replace "YOUR_API_KEY" with your actual API key
         String apiKey = "AIzaSyA0IA-lTzhcjrSk_SfKwlxT_eGx7CtzVf4";
 
@@ -22,9 +21,10 @@ public class ReverseGeo {
                 .apiKey(apiKey)
                 .build();
 
-        new DroneDynamics().APIBuildAsync().thenAccept(response ->{
+        CompletableFuture<Void> geocodingFuture = new CompletableFuture<>();
 
-            for(int i = 0; i< response.getDroneLongitude().size(); i++){
+        new DroneDynamics().APIBuildAsync().thenAccept(response -> {
+            for (int i = 0; i < response.getDroneLongitude().size(); i++) {
                 Double ReverseLongitude = response.getDroneLongitude().get(i);
                 Double ReverseLatitude = response.getDroneLatitude().get(i);
                 LatLng location = new LatLng(ReverseLatitude, ReverseLongitude);
@@ -45,7 +45,10 @@ public class ReverseGeo {
                     e.printStackTrace();
                 }
             }
+            geocodingFuture.complete(null); // Signal that geocoding is complete
         });
-        return resultLocation;
+
+        // Return a CompletableFuture that signals when geocoding is complete
+        return geocodingFuture.thenApply(ignored -> resultLocation);
     }
 }
