@@ -108,11 +108,11 @@ public class Card1 {
         infoPanel.add(createWhiteLabel("Manufacturer: " + droneTypesData.getDroneManufacturer().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Typename: " + droneTypesData.getDroneTypeName().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Serialnumber: " + droneData.getDroneSerialnumber().get(droneIndex)));
-        infoPanel.add(createWhiteLabel("Created: " + convertCreateData.get(droneIndex)));
+        infoPanel.add(createWhiteLabel("Created: " + convertCreateData.get(droneIndex) + " o'clock"));
         infoPanel.add(createWhiteLabel("Status: " + droneDynamicData.getDroneStatus().get(droneIndex)));
-        infoPanel.add(createWhiteLabel("Last update: " + convertLastSeenData.get(droneIndex)));
+        infoPanel.add(createWhiteLabel("Last update: " + convertLastSeenData.get(droneIndex)+ " o'clock"));
         infoPanel.add(createWhiteLabel("Location: " + geocodingData.get(droneIndex)));
-        infoPanel.add(createWhiteLabel("Time Stamp: " + convertDateData.get(droneIndex)));
+        infoPanel.add(createWhiteLabel("Time Stamp: " + convertDateData.get(droneIndex) + " o'clock"));
 
 
         dronePanel.add(droneIdLabel, BorderLayout.NORTH);
