@@ -32,7 +32,7 @@ public class ReverseGeo {
                     // Perform reverse geocoding
                     GeocodingResult[] results = GeocodingApi.reverseGeocode(context, location).await();
 
-                    // Print the formatted address
+                    // Check if data are saved in results
                     if (results.length > 0) {
                         String formattedAddress = results[0].formattedAddress;
                         resultLocation.add(formattedAddress);
@@ -44,7 +44,7 @@ public class ReverseGeo {
                 }
             }
         });
-
+        //return value
         return geocodingFuture.thenApplyAsync(ignored -> resultLocation);
     }
 }

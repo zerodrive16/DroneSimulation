@@ -3,7 +3,6 @@ package org.example;
 
 import org.example.API_Endpoints.DroneDynamics;
 import org.example.API_Endpoints.Drones;
-import org.example.API_Properties.DronesData;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,7 +13,7 @@ public class ConvertDate {
 
     public static final ArrayList<String> resultTime =new ArrayList<>();
     public static final ArrayList<String> resultLastSeen = new ArrayList<>();
-    public static final ArrayList<String> resultCreated = new ArrayList<>();
+    public static final ArrayList<String> resultCreate = new ArrayList<>();
 
 
     public CompletableFuture<ArrayList<String>> performConvertDateAsync() {
@@ -67,10 +66,10 @@ public class ConvertDate {
         CompletableFuture<Void> convertCreateFuture = drones.APIBuildAsync().thenAcceptAsync(response -> {
             for(int i = 0; i<response.getDroneCreate().size();i++){
                 // Input date string
-                String inputLastSeen = response.getDroneCreate().get(i);
+                String inputCreate = response.getDroneCreate().get(i);
 
                 // Parse the input string to ZonedDateTime
-                ZonedDateTime zonedDateTime = ZonedDateTime.parse(inputLastSeen, DateTimeFormatter.ISO_DATE_TIME);
+                ZonedDateTime zonedDateTime = ZonedDateTime.parse(inputCreate, DateTimeFormatter.ISO_DATE_TIME);
 
                 // Create a formatter for the desired output format (with Germany locale)
                 DateTimeFormatter germanFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm").withLocale(java.util.Locale.GERMANY);
@@ -81,7 +80,7 @@ public class ConvertDate {
             }
         });
 
-        return convertCreateFuture.thenApplyAsync(ignored -> resultLastSeen);
+        return convertCreateFuture.thenApplyAsync(ignored -> resultCreate);
     }
 
 }

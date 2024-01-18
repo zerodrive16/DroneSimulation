@@ -48,6 +48,7 @@ public class Card1 {
                 ArrayList<String> geocodingData = geocodingFuture.get();
                 ArrayList<String> convertDateData = convertDateFuture.get();
                 ArrayList<String> convertLastSeenData = convertLastSeenFuture.get();
+                ArrayList<String> convertCreateData = convertDateFuture.get();
 
 
                 SwingUtilities.invokeLater(() -> {
@@ -58,7 +59,7 @@ public class Card1 {
                     int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, droneData.getDroneID().size());
 
                     for (int droneIndex = startIndex; droneIndex < endIndex; droneIndex++) {
-                        JPanel dronePanel = createDronePanel(droneData, droneTypeData, droneDynamicData, droneIndex, primaryColor, geocodingData,convertDateData,convertLastSeenData);
+                        JPanel dronePanel = createDronePanel(droneData, droneTypeData, droneDynamicData, droneIndex, primaryColor, geocodingData,convertDateData,convertLastSeenData, convertCreateData);
                         card.add(dronePanel);
                     }
 
@@ -78,7 +79,8 @@ public class Card1 {
     }
 
     private JPanel createDronePanel(DronesData.ReturnDroneData droneData, DroneTypesData.ReturnDroneTypeData droneTypesData,
-                                    DroneDynamicsData.ReturnDroneDynamicData droneDynamicData, int droneIndex, Color primaryColor, ArrayList<String> geocodingData,ArrayList<String> convertDateData,ArrayList<String> convertLastSeenData ) {
+                                    DroneDynamicsData.ReturnDroneDynamicData droneDynamicData, int droneIndex, Color primaryColor, ArrayList<String> geocodingData,
+                                    ArrayList<String> convertDateData,ArrayList<String> convertLastSeenData, ArrayList<String> convertCreateData ) {
         JPanel dronePanel = new JPanel();
         dronePanel.setLayout(new BorderLayout());
         dronePanel.setBackground(primaryColor);
@@ -106,11 +108,12 @@ public class Card1 {
         infoPanel.add(createWhiteLabel("Manufacturer: " + droneTypesData.getDroneManufacturer().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Typename: " + droneTypesData.getDroneTypeName().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Serialnumber: " + droneData.getDroneSerialnumber().get(droneIndex)));
-        infoPanel.add(createWhiteLabel("Created: " + droneData.getDroneCreate().get(droneIndex)));
+        infoPanel.add(createWhiteLabel("Created: " + convertCreateData.get(droneIndex)));
         infoPanel.add(createWhiteLabel("Status: " + droneDynamicData.getDroneStatus().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Last update: " + convertLastSeenData.get(droneIndex)));
         infoPanel.add(createWhiteLabel("Location: " + geocodingData.get(droneIndex)));
         infoPanel.add(createWhiteLabel("Time Stamp: " + convertDateData.get(droneIndex)));
+
 
         dronePanel.add(droneIdLabel, BorderLayout.NORTH);
         dronePanel.add(infoPanel, BorderLayout.CENTER);
