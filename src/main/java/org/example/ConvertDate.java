@@ -28,7 +28,7 @@ public class ConvertDate {
             ZonedDateTime zonedDateTime = ZonedDateTime.parse(inputDateString, DateTimeFormatter.ISO_DATE_TIME);
 
             // Create a formatter for the desired output format (with Germany locale)
-            DateTimeFormatter germanFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm").withLocale(java.util.Locale.GERMANY);
+            DateTimeFormatter germanFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm").withLocale(java.util.Locale.GERMANY);
 
             // Format the ZonedDateTime using the German formatter
             String formattedDate = zonedDateTime.format(germanFormatter);
@@ -50,7 +50,7 @@ public class ConvertDate {
                 ZonedDateTime zonedDateTime = ZonedDateTime.parse(inputLastSeen, DateTimeFormatter.ISO_DATE_TIME);
 
                 // Create a formatter for the desired output format (with Germany locale)
-                DateTimeFormatter germanFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm").withLocale(java.util.Locale.GERMANY);
+                DateTimeFormatter germanFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm").withLocale(java.util.Locale.GERMANY);
 
                 // Format the ZonedDateTime using the German formatter
                 String formattedLastSeen = zonedDateTime.format(germanFormatter);
@@ -72,7 +72,7 @@ public class ConvertDate {
                 ZonedDateTime zonedDateTime = ZonedDateTime.parse(inputCreate, DateTimeFormatter.ISO_DATE_TIME);
 
                 // Create a formatter for the desired output format (with Germany locale)
-                DateTimeFormatter germanFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm").withLocale(java.util.Locale.GERMANY);
+                DateTimeFormatter germanFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm").withLocale(java.util.Locale.GERMANY);
 
                 // Format the ZonedDateTime using the German formatter
                 String formattedCreate = zonedDateTime.format(germanFormatter);
