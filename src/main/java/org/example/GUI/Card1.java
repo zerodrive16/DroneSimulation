@@ -1,9 +1,5 @@
 package org.example.GUI;
 
-import com.google.maps.GeoApiContext;
-import com.google.maps.GeocodingApi;
-import com.google.maps.model.GeocodingResult;
-import com.google.maps.model.LatLng;
 import org.example.API_Endpoints.DroneDynamics;
 import org.example.API_Endpoints.DroneTypes;
 import org.example.API_Endpoints.Drones;
@@ -31,8 +27,11 @@ public class Card1 {
         DroneDynamics droneDynamicsAPI = new DroneDynamics();
         CompletableFuture<DroneDynamicsData.ReturnDroneDynamicData> futureDroneDynamicsData = droneDynamicsAPI.APIBuildAsync();
 
+        ReverseGeo reverseGeo = new ReverseGeo();
+        CompletableFuture<ArrayList<String>> geocodingFuture = reverseGeo.performReverseGeoAsync();
+
         CompletableFuture<Void> combineFuture = CompletableFuture.allOf(
-                futureDronesData, futureDroneTypesData, futureDroneDynamicsData
+                futureDronesData, futureDroneTypesData, futureDroneDynamicsData, geocodingFuture
         );
 
         combineFuture.thenAccept(voidResult -> {
@@ -40,6 +39,7 @@ public class Card1 {
                 DronesData.ReturnDroneData droneData = futureDronesData.get();
                 DroneTypesData.ReturnDroneTypeData droneTypeData = futureDroneTypesData.get();
                 DroneDynamicsData.ReturnDroneDynamicData droneDynamicData = futureDroneDynamicsData.get();
+                ArrayList<String> geocodingData = geocodingFuture.get();
 
                 SwingUtilities.invokeLater(() -> {
                     card.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -49,7 +49,7 @@ public class Card1 {
                     int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, droneData.getDroneID().size());
 
                     for (int droneIndex = startIndex; droneIndex < endIndex; droneIndex++) {
-                        JPanel dronePanel = createDronePanel(droneData, droneTypeData, droneDynamicData, droneIndex, primaryColor);
+                        JPanel dronePanel = createDronePanel(droneData, droneTypeData, droneDynamicData, droneIndex, primaryColor, geocodingData);
                         card.add(dronePanel);
                     }
 
@@ -69,7 +69,7 @@ public class Card1 {
     }
 
     private JPanel createDronePanel(DronesData.ReturnDroneData droneData, DroneTypesData.ReturnDroneTypeData droneTypesData,
-                                    DroneDynamicsData.ReturnDroneDynamicData droneDynamicData, int droneIndex, Color primaryColor ) {
+                                    DroneDynamicsData.ReturnDroneDynamicData droneDynamicData, int droneIndex, Color primaryColor, ArrayList<String> geocodingData) {
         JPanel dronePanel = new JPanel();
         dronePanel.setLayout(new BorderLayout());
         dronePanel.setBackground(primaryColor);
@@ -100,7 +100,7 @@ public class Card1 {
         infoPanel.add(createWhiteLabel("Created: " + droneData.getDroneCreate().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Status: " + droneDynamicData.getDroneStatus().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Last update: " + droneDynamicData.getDroneLastSeen().get(droneIndex)));
-
+        infoPanel.add(createWhiteLabel("Location: " + geocodingData.get(droneIndex)));
 
         dronePanel.add(droneIdLabel, BorderLayout.NORTH);
         dronePanel.add(infoPanel, BorderLayout.CENTER);
@@ -130,22 +130,18 @@ public class Card1 {
 
         JPanel paginationPanel = new JPanel();
         paginationPanel.setLayout(new BoxLayout(paginationPanel, BoxLayout.X_AXIS));
-        paginationPanel.add(Box.createHorizontalGlue()); // Left-align previous button
+        paginationPanel.add(Box.createHorizontalGlue());
         paginationPanel.add(prevButton);
-        paginationPanel.add(Box.createHorizontalStrut(10)); // Space between buttons
+        paginationPanel.add(Box.createHorizontalStrut(10));
         paginationPanel.add(nextButton);
-        paginationPanel.add(Box.createHorizontalGlue()); // Right-align next button
+        paginationPanel.add(Box.createHorizontalGlue());
 
         card.add(paginationPanel);
     }
-
 
     private JLabel createWhiteLabel(String text) {
         JLabel label = new JLabel(text);
         label.setForeground(Color.WHITE);
         return label;
     }
-
-
-
 }
