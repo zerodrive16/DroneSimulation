@@ -1,15 +1,12 @@
 package org.example.GUI;
 
-import com.google.maps.GeoApiContext;
-import com.google.maps.GeocodingApi;
-import com.google.maps.model.GeocodingResult;
-import com.google.maps.model.LatLng;
 import org.example.API_Endpoints.DroneDynamics;
 import org.example.API_Endpoints.DroneTypes;
 import org.example.API_Endpoints.Drones;
 import org.example.API_Properties.DroneDynamicsData;
 import org.example.API_Properties.DroneTypesData;
 import org.example.API_Properties.DronesData;
+import org.example.ConvertDate;
 import org.example.ReverseGeo;
 
 import javax.swing.*;
@@ -31,11 +28,16 @@ public class Card1 {
         DroneDynamics droneDynamicsAPI = new DroneDynamics();
         CompletableFuture<DroneDynamicsData.ReturnDroneDynamicData> futureDroneDynamicsData = droneDynamicsAPI.APIBuildAsync();
 
-        CompletableFuture<ArrayList<String>> geocodingFuture = new ReverseGeo().performReverseGeo();
+        ReverseGeo reverseGeo = new ReverseGeo();
+        CompletableFuture<ArrayList<String>> geocodingFuture = reverseGeo.performReverseGeoAsync();
+
+        ConvertDate convertDate = new ConvertDate();
+        CompletableFuture<ArrayList<String>> convertDateFuture = convertDate.performConvertDateAsync();
+        CompletableFuture<ArrayList<String>> convertLastSeenFuture = convertDate.performConvertLastSeenAsync();
 
 
         CompletableFuture<Void> combineFuture = CompletableFuture.allOf(
-                futureDronesData, futureDroneTypesData, futureDroneDynamicsData, geocodingFuture
+                futureDronesData, futureDroneTypesData, futureDroneDynamicsData, geocodingFuture, convertDateFuture
         );
 
         combineFuture.thenAccept(voidResult -> {
@@ -43,6 +45,11 @@ public class Card1 {
                 DronesData.ReturnDroneData droneData = futureDronesData.get();
                 DroneTypesData.ReturnDroneTypeData droneTypeData = futureDroneTypesData.get();
                 DroneDynamicsData.ReturnDroneDynamicData droneDynamicData = futureDroneDynamicsData.get();
+                ArrayList<String> geocodingData = geocodingFuture.get();
+                ArrayList<String> convertDateData = convertDateFuture.get();
+                ArrayList<String> convertLastSeenData = convertLastSeenFuture.get();
+                ArrayList<String> convertCreateData = convertDateFuture.get();
+
 
                 SwingUtilities.invokeLater(() -> {
                     card.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -52,7 +59,7 @@ public class Card1 {
                     int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, droneData.getDroneID().size());
 
                     for (int droneIndex = startIndex; droneIndex < endIndex; droneIndex++) {
-                        JPanel dronePanel = createDronePanel(droneData, droneTypeData, droneDynamicData, droneIndex, primaryColor);
+                        JPanel dronePanel = createDronePanel(droneData, droneTypeData, droneDynamicData, droneIndex, primaryColor, geocodingData,convertDateData,convertLastSeenData, convertCreateData);
                         card.add(dronePanel);
                     }
 
@@ -72,7 +79,8 @@ public class Card1 {
     }
 
     private JPanel createDronePanel(DronesData.ReturnDroneData droneData, DroneTypesData.ReturnDroneTypeData droneTypesData,
-                                    DroneDynamicsData.ReturnDroneDynamicData droneDynamicData, int droneIndex, Color primaryColor ) {
+                                    DroneDynamicsData.ReturnDroneDynamicData droneDynamicData, int droneIndex, Color primaryColor, ArrayList<String> geocodingData,
+                                    ArrayList<String> convertDateData,ArrayList<String> convertLastSeenData, ArrayList<String> convertCreateData ) {
         JPanel dronePanel = new JPanel();
         dronePanel.setLayout(new BorderLayout());
         dronePanel.setBackground(primaryColor);
@@ -100,10 +108,12 @@ public class Card1 {
         infoPanel.add(createWhiteLabel("Manufacturer: " + droneTypesData.getDroneManufacturer().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Typename: " + droneTypesData.getDroneTypeName().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Serialnumber: " + droneData.getDroneSerialnumber().get(droneIndex)));
-        infoPanel.add(createWhiteLabel("Created: " + droneData.getDroneCreate().get(droneIndex)));
+        infoPanel.add(createWhiteLabel("Created: " + convertCreateData.get(droneIndex) + " o'clock"));
         infoPanel.add(createWhiteLabel("Status: " + droneDynamicData.getDroneStatus().get(droneIndex)));
-        infoPanel.add(createWhiteLabel("Last update: " + droneDynamicData.getDroneLastSeen().get(droneIndex)));
-        infoPanel.add(createWhiteLabel("Location: " + ReverseGeo.resultLocation.get(droneIndex)));
+        infoPanel.add(createWhiteLabel("Last update: " + convertLastSeenData.get(droneIndex)+ " o'clock"));
+        infoPanel.add(createWhiteLabel("Location: " + geocodingData.get(droneIndex)));
+        infoPanel.add(createWhiteLabel("Time Stamp: " + convertDateData.get(droneIndex) + " o'clock"));
+
 
         dronePanel.add(droneIdLabel, BorderLayout.NORTH);
         dronePanel.add(infoPanel, BorderLayout.CENTER);
@@ -133,11 +143,11 @@ public class Card1 {
 
         JPanel paginationPanel = new JPanel();
         paginationPanel.setLayout(new BoxLayout(paginationPanel, BoxLayout.X_AXIS));
-        paginationPanel.add(Box.createHorizontalGlue()); // Left-align previous button
+        paginationPanel.add(Box.createHorizontalGlue());
         paginationPanel.add(prevButton);
-        paginationPanel.add(Box.createHorizontalStrut(10)); // Space between buttons
+        paginationPanel.add(Box.createHorizontalStrut(10));
         paginationPanel.add(nextButton);
-        paginationPanel.add(Box.createHorizontalGlue()); // Right-align next button
+        paginationPanel.add(Box.createHorizontalGlue());
 
         card.add(paginationPanel);
     }

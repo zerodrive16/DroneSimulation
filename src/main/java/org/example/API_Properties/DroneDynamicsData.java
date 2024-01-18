@@ -1,5 +1,7 @@
 package org.example.API_Properties;
 
+import org.example.ConvertDate;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -96,12 +98,13 @@ public class DroneDynamicsData {
             this.data_droneLastSeen = droneLastSeen;
             this.data_droneStatus = droneStatus;
         }
+
+
+
         public ArrayList<String> getDroneURL(){
             return data_droneURL;
         }
-        public ArrayList<String> getDroneTimeStamp(){
-            return data_droneTimeStamp;
-        }
+        public ArrayList<String> getDroneTimeStamp(){return data_droneTimeStamp;}
         public ArrayList<String> getDroneSpeed(){
             return data_droneSpeed;
         }
