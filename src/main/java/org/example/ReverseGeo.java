@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
 public class ReverseGeo {
-    public static final ArrayList<String> resultLocation = new ArrayList<>();
+    private static final ArrayList<String> resultLocation = new ArrayList<>();
 
     public CompletableFuture<ArrayList<String>> performReverseGeoAsync() {
         // Replace "YOUR_API_KEY" with your actual API key

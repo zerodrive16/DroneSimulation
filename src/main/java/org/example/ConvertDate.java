@@ -11,9 +11,9 @@ import java.util.concurrent.CompletableFuture;
 
 public class ConvertDate {
 
-    public static final ArrayList<String> resultTime =new ArrayList<>();
-    public static final ArrayList<String> resultLastSeen = new ArrayList<>();
-    public static final ArrayList<String> resultCreate = new ArrayList<>();
+    private static final ArrayList<String> resultTime = new ArrayList<>();
+    private static final ArrayList<String> resultLastSeen = new ArrayList<>();
+    private static final ArrayList<String> resultCreate = new ArrayList<>();
 
 
     public CompletableFuture<ArrayList<String>> performConvertDateAsync() {
@@ -61,7 +61,7 @@ public class ConvertDate {
         return convertLastSeenFuture.thenApplyAsync(ignored -> resultLastSeen);
     }
 
-    public CompletableFuture<ArrayList<String>> performConvertCreatesync() {
+    public CompletableFuture<ArrayList<String>> performConvertCreateAsync() {
         Drones drones = new Drones();
         CompletableFuture<Void> convertCreateFuture = drones.APIBuildAsync().thenAcceptAsync(response -> {
             for(int i = 0; i<response.getDroneCreate().size();i++){

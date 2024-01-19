@@ -35,7 +35,7 @@ public class DroneTypesData {
         }
     }
 
-    public static class ReturnDroneTypeData {
+    public static class ReturnDroneTypesData {
         final private ArrayList<String> data_droneManufacturer;
         final private ArrayList<String> data_droneTypeName;
         final private ArrayList<Integer> data_droneWeight;
@@ -44,7 +44,7 @@ public class DroneTypesData {
         final private ArrayList<Integer> data_droneControlRange;
         final private ArrayList<Integer> data_droneMaxCarriage;
 
-        public ReturnDroneTypeData(ArrayList<String> droneManufacturer, ArrayList<String> droneTypeName, ArrayList<Integer> droneWeight,
+        public ReturnDroneTypesData(ArrayList<String> droneManufacturer, ArrayList<String> droneTypeName, ArrayList<Integer> droneWeight,
                                    ArrayList<Integer> droneMaxSpeed, ArrayList<Integer> droneBatteryCapacity, ArrayList<Integer> droneControlRange,
                                    ArrayList<Integer> droneMaxCarriage){
             this.data_droneManufacturer = droneManufacturer;

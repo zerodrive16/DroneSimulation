@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
  * Defining the class DroneTypes which builds the asynchronous API request and response
  * Extending the abstract class Abs_APIBuilding with the return of DroneTypesData.ReturnDroneTypeData
 */
-public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypeData>{
+public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypesData>{
     // calling the class which stores the data temporally
     private final DroneTypesStore storeDroneTypes = new DroneTypesStore();
 
@@ -20,8 +20,8 @@ public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypeDa
      * storing the asynchronous data inside resultFuture
     */
     @Override
-    public CompletableFuture<DroneTypesData.ReturnDroneTypeData> APIBuildAsync() {
-        CompletableFuture<DroneTypesData.ReturnDroneTypeData> resultFuture = new CompletableFuture<>();
+    public CompletableFuture<DroneTypesData.ReturnDroneTypesData> APIBuildAsync() {
+        CompletableFuture<DroneTypesData.ReturnDroneTypesData> resultFuture = new CompletableFuture<>();
 
         /*
          * Asynchronously fetches the Drones data and processes it upon completion
@@ -50,7 +50,7 @@ public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypeDa
             CompletableFuture<Void> chainFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
             chainFutures.thenRun(() -> {
                 // Once all asynchronous operations are complete, finish the main future and return the collected data
-                resultFuture.complete(new DroneTypesData.ReturnDroneTypeData((ArrayList<String>) storeDroneTypes.getDroneManufacturer(), (ArrayList<String>) storeDroneTypes.getDroneTypeName(),
+                resultFuture.complete(new DroneTypesData.ReturnDroneTypesData((ArrayList<String>) storeDroneTypes.getDroneManufacturer(), (ArrayList<String>) storeDroneTypes.getDroneTypeName(),
                         (ArrayList<Integer>) storeDroneTypes.getDroneWeight(), (ArrayList<Integer>) storeDroneTypes.getDroneMaxSpeed(), (ArrayList<Integer>) storeDroneTypes.getDroneBatteryCapacity(),
                         (ArrayList<Integer>) storeDroneTypes.getDroneControlRange(), (ArrayList<Integer>) storeDroneTypes.getDroneMaxCarriage()));
                 // Error handling for asynchronous programming
