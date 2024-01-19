@@ -20,21 +20,21 @@ public class ConvertDate {
         DroneDynamics droneDynamics = new DroneDynamics();
         CompletableFuture<Void> convertDateFuture = droneDynamics.APIBuildAsync().thenAcceptAsync(response -> {
             for(int i = 0; i<response.getDroneTimeStamp().size();i++){
-            // Input date string
-            String inputDateString = response.getDroneTimeStamp().get(i);
-            String inputLastSeen = response.getDroneLastSeen().get(i);
+                // Input date string
+                String inputDateString = response.getDroneTimeStamp().get(i);
+                String inputLastSeen = response.getDroneLastSeen().get(i);
 
-            // Parse the input string to ZonedDateTime
-            ZonedDateTime zonedDateTime = ZonedDateTime.parse(inputDateString, DateTimeFormatter.ISO_DATE_TIME);
+                // Parse the input string to ZonedDateTime
+                ZonedDateTime zonedDateTime = ZonedDateTime.parse(inputDateString, DateTimeFormatter.ISO_DATE_TIME);
 
-            // Create a formatter for the desired output format (with Germany locale)
-            DateTimeFormatter germanFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm").withLocale(java.util.Locale.GERMANY);
+                // Create a formatter for the desired output format (with Germany locale)
+                DateTimeFormatter germanFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm").withLocale(java.util.Locale.GERMANY);
 
-            // Format the ZonedDateTime using the German formatter
-            String formattedDate = zonedDateTime.format(germanFormatter);
+                // Format the ZonedDateTime using the German formatter
+                String formattedDate = zonedDateTime.format(germanFormatter);
                 resultTime.add(formattedDate);
-        }
-            });
+            }
+        });
 
         return convertDateFuture.thenApplyAsync(ignored -> resultTime);
     }
