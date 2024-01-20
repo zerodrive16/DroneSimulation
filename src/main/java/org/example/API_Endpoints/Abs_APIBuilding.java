@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.*;
 
 import static org.example.Config.token;
@@ -41,7 +39,6 @@ public abstract class Abs_APIBuilding<Generic> {
 
             // if it doesn't exist then make the HTTP request
             try {
-                //Thread.sleep(1000);
                 HttpURLConnection con;
                 con = (HttpURLConnection) new URL(url).openConnection();
                 // setting the Authorization and token, GET operation

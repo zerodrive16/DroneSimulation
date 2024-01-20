@@ -8,7 +8,6 @@ import java.util.Map;
 
 public class DroneDynamicsData {
     public static class DroneDynamic {
-        private String drone;
         private String timestamp;
         private String speed;
         private String align_roll;
@@ -20,9 +19,6 @@ public class DroneDynamicsData {
         private String last_seen;
         private String status;
 
-        public String getDrone() {
-            return drone;
-        }
         public String getTimestamp() {
             return timestamp;
         }
@@ -54,24 +50,16 @@ public class DroneDynamicsData {
     }
     public static class DroneDynamicResult {
         private List<DroneDynamic> results;
-        String next;
-        private int count;
-
+        private Integer count;
         public List<DroneDynamic> getResults() {
             return results;
         }
-
-        public String getNext() {
-            return next;
-        }
-
-        public int getCount() {
+        public Integer getCount() {
             return count;
         }
     }
 
     public static class ReturnDroneDynamicData {
-        final private ArrayList<String> data_droneURL;
         final private ArrayList<String> data_droneTimeStamp;
         final private ArrayList<String> data_droneSpeed;
         final private ArrayList<String> data_droneAlignRoll;
@@ -82,11 +70,10 @@ public class DroneDynamicsData {
         final private ArrayList<String> data_droneBatteryStatus;
         final private ArrayList<String> data_droneLastSeen;
         final private ArrayList<String> data_droneStatus;
-        public ReturnDroneDynamicData(ArrayList<String> droneURL, ArrayList<String> droneTimestamp, ArrayList<String> droneSpeed,
+        public ReturnDroneDynamicData(ArrayList<String> droneTimestamp, ArrayList<String> droneSpeed,
                                       ArrayList<String> droneAlignRoll, ArrayList<String> droneAlignPitch, ArrayList<String> droneAlignYaw,
                                       ArrayList<Double> droneLongitude, ArrayList<Double> droneLatitude, ArrayList<String> droneBatteryStatus,
                                       ArrayList<String> droneLastSeen, ArrayList<String> droneStatus){
-            this.data_droneURL = droneURL;
             this.data_droneTimeStamp = droneTimestamp;
             this.data_droneSpeed = droneSpeed;
             this.data_droneAlignRoll = droneAlignRoll;
@@ -99,11 +86,6 @@ public class DroneDynamicsData {
             this.data_droneStatus = droneStatus;
         }
 
-
-
-        public ArrayList<String> getDroneURL(){
-            return data_droneURL;
-        }
         public ArrayList<String> getDroneTimeStamp(){return data_droneTimeStamp;}
         public ArrayList<String> getDroneSpeed(){
             return data_droneSpeed;

@@ -11,30 +11,30 @@ import java.util.concurrent.CompletableFuture;
 
 public class ConvertDate {
 
-    public static final ArrayList<String> resultTime =new ArrayList<>();
-    public static final ArrayList<String> resultLastSeen = new ArrayList<>();
-    public static final ArrayList<String> resultCreate = new ArrayList<>();
+    private static final ArrayList<String> resultTime = new ArrayList<>();
+    private static final ArrayList<String> resultLastSeen = new ArrayList<>();
+    private static final ArrayList<String> resultCreate = new ArrayList<>();
 
 
     public CompletableFuture<ArrayList<String>> performConvertDateAsync() {
         DroneDynamics droneDynamics = new DroneDynamics();
         CompletableFuture<Void> convertDateFuture = droneDynamics.APIBuildAsync().thenAcceptAsync(response -> {
             for(int i = 0; i<response.getDroneTimeStamp().size();i++){
-            // Input date string
-            String inputDateString = response.getDroneTimeStamp().get(i);
-            String inputLastSeen = response.getDroneLastSeen().get(i);
+                // Input date string
+                String inputDateString = response.getDroneTimeStamp().get(i);
+                String inputLastSeen = response.getDroneLastSeen().get(i);
 
-            // Parse the input string to ZonedDateTime
-            ZonedDateTime zonedDateTime = ZonedDateTime.parse(inputDateString, DateTimeFormatter.ISO_DATE_TIME);
+                // Parse the input string to ZonedDateTime
+                ZonedDateTime zonedDateTime = ZonedDateTime.parse(inputDateString, DateTimeFormatter.ISO_DATE_TIME);
 
-            // Create a formatter for the desired output format (with Germany locale)
-            DateTimeFormatter germanFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm").withLocale(java.util.Locale.GERMANY);
+                // Create a formatter for the desired output format (with Germany locale)
+                DateTimeFormatter germanFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm").withLocale(java.util.Locale.GERMANY);
 
-            // Format the ZonedDateTime using the German formatter
-            String formattedDate = zonedDateTime.format(germanFormatter);
+                // Format the ZonedDateTime using the German formatter
+                String formattedDate = zonedDateTime.format(germanFormatter);
                 resultTime.add(formattedDate);
-        }
-            });
+            }
+        });
 
         return convertDateFuture.thenApplyAsync(ignored -> resultTime);
     }
@@ -61,7 +61,7 @@ public class ConvertDate {
         return convertLastSeenFuture.thenApplyAsync(ignored -> resultLastSeen);
     }
 
-    public CompletableFuture<ArrayList<String>> performConvertCreatesync() {
+    public CompletableFuture<ArrayList<String>> performConvertCreateAsync() {
         Drones drones = new Drones();
         CompletableFuture<Void> convertCreateFuture = drones.APIBuildAsync().thenAcceptAsync(response -> {
             for(int i = 0; i<response.getDroneCreate().size();i++){

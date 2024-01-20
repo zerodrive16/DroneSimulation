@@ -23,7 +23,7 @@ public class Card1 {
         CompletableFuture<DronesData.ReturnDroneData> futureDronesData = dronesAPI.APIBuildAsync();
 
         DroneTypes droneTypesAPI = new DroneTypes();
-        CompletableFuture<DroneTypesData.ReturnDroneTypeData> futureDroneTypesData = droneTypesAPI.APIBuildAsync();
+        CompletableFuture<DroneTypesData.ReturnDroneTypesData> futureDroneTypesData = droneTypesAPI.APIBuildAsync();
 
         DroneDynamics droneDynamicsAPI = new DroneDynamics();
         CompletableFuture<DroneDynamicsData.ReturnDroneDynamicData> futureDroneDynamicsData = droneDynamicsAPI.APIBuildAsync();
@@ -43,7 +43,7 @@ public class Card1 {
         combineFuture.thenAccept(voidResult -> {
             try {
                 DronesData.ReturnDroneData droneData = futureDronesData.get();
-                DroneTypesData.ReturnDroneTypeData droneTypeData = futureDroneTypesData.get();
+                DroneTypesData.ReturnDroneTypesData droneTypeData = futureDroneTypesData.get();
                 DroneDynamicsData.ReturnDroneDynamicData droneDynamicData = futureDroneDynamicsData.get();
                 ArrayList<String> geocodingData = geocodingFuture.get();
                 ArrayList<String> convertDateData = convertDateFuture.get();
@@ -78,7 +78,7 @@ public class Card1 {
         });
     }
 
-    private JPanel createDronePanel(DronesData.ReturnDroneData droneData, DroneTypesData.ReturnDroneTypeData droneTypesData,
+    private JPanel createDronePanel(DronesData.ReturnDroneData droneData, DroneTypesData.ReturnDroneTypesData droneTypesData,
                                     DroneDynamicsData.ReturnDroneDynamicData droneDynamicData, int droneIndex, Color primaryColor, ArrayList<String> geocodingData,
                                     ArrayList<String> convertDateData,ArrayList<String> convertLastSeenData, ArrayList<String> convertCreateData ) {
         JPanel dronePanel = new JPanel();

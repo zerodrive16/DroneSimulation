@@ -211,8 +211,7 @@ public class GUI extends JFrame implements ActionListener {
 
         //dynamic text
         new DroneDynamics().APIBuildAsync().thenAccept(response -> droneDynamicsText.setText(
-                "Drone: " + response.getDroneURL().get(0) +
-                "\nTimestamp: " + response.getDroneTimeStamp().get(0) +
+                "Timestamp: " + response.getDroneTimeStamp().get(0) +
                 "\nSpeed: " + response.getDroneSpeed().get(0) +
                 "\nAlignRoll: " + response.getDroneAlignRoll().get(0) +
                 "\nAlignPitch: " + response.getDroneAlignPitch().get(0) +
