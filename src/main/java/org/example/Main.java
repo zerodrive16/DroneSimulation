@@ -1,13 +1,9 @@
 package org.example;
 
-import org.example.API_Properties.DroneDynamicsData;
 import org.example.GUI.GUI;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
+
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
