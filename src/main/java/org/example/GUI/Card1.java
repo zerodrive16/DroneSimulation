@@ -102,7 +102,12 @@ public class Card1 {
         infoPanel.add(createWhiteLabel("Typename: " + droneTypesData.getDroneTypeName().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Serialnumber: " + droneData.getDroneSerialnumber().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Created: " + convertCreateData.get(droneIndex) + " o'clock"));
-        infoPanel.add(createWhiteLabel("Status: " + droneDynamicData.getDroneStatus().get(droneIndex)));
+        if("ON".equals(droneDynamicData.getDroneStatus().get(droneIndex))){
+            infoPanel.add(createGreenLabel("Status: " + droneDynamicData.getDroneStatus().get(droneIndex)));
+        }
+        else{
+            infoPanel.add(createRedLabel("Status: " + droneDynamicData.getDroneStatus().get(droneIndex)));
+        }
         infoPanel.add(createWhiteLabel("Last update: " + convertLastSeenData.get(droneIndex)+ " o'clock"));
         infoPanel.add(createWhiteLabel("Location: " + geocodingData.get(droneIndex)));
         infoPanel.add(createWhiteLabel("Time Stamp: " + convertDateData.get(droneIndex) + " o'clock"));
