@@ -41,6 +41,7 @@ public class Drones extends Abs_APIBuilding<DronesData.ReturnDroneData> {
      *
      * @param paginationUrl The URL is for the current page of the API data
      * @param resultFuture The CompletableFuture to be completed with the resulted fetched data
+     * @return resultFuture It returns the finished {@link DronesData.ReturnDroneData} and stores in the Constructor {@link DronesData.ReturnDroneData}.
      */
     protected void processAsync(String paginationUrl, CompletableFuture<DronesData.ReturnDroneData> resultFuture) {
         if(paginationUrl == null){

@@ -25,16 +25,13 @@ public class Card1 {
         DroneDynamics droneDynamicsAPI = new DroneDynamics();
         CompletableFuture<DroneDynamicsData.ReturnDroneDynamicData> futureDroneDynamicsData = droneDynamicsAPI.APIBuildAsync();
 
-        ReverseGeo reverseGeo = new ReverseGeo();
-        CompletableFuture<ArrayList<String>> geocodingFuture = reverseGeo.performReverseGeoAsync();
-
         ConvertDate convertDate = new ConvertDate();
         CompletableFuture<ArrayList<String>> convertDateFuture = convertDate.performConvertDateAsync();
         CompletableFuture<ArrayList<String>> convertLastSeenFuture = convertDate.performConvertLastSeenAsync();
 
 
         CompletableFuture<Void> combineFuture = CompletableFuture.allOf(
-                futureDronesData, futureDroneTypesData, futureDroneDynamicsData, geocodingFuture, convertDateFuture
+                futureDronesData, futureDroneTypesData, futureDroneDynamicsData, convertDateFuture
         );
 
         combineFuture.thenAccept(voidResult -> {
@@ -42,23 +39,26 @@ public class Card1 {
                 DronesData.ReturnDroneData droneData = futureDronesData.get();
                 DroneTypesData.ReturnDroneTypesData droneTypeData = futureDroneTypesData.get();
                 DroneDynamicsData.ReturnDroneDynamicData droneDynamicData = futureDroneDynamicsData.get();
-                ArrayList<String> geocodingData = geocodingFuture.get();
                 ArrayList<String> convertDateData = convertDateFuture.get();
                 ArrayList<String> convertLastSeenData = convertLastSeenFuture.get();
                 ArrayList<String> convertCreateData = convertDateFuture.get();
 
+                ReverseGeo reverseGeo = new ReverseGeo();
+                CompletableFuture<ArrayList<String>> geocodingFuture = reverseGeo.performReverseGeoAsync(droneDynamicData);
 
-                SwingUtilities.invokeLater(() -> {
-                    card.setLayout(new FlowLayout(FlowLayout.LEFT));
-                    card.removeAll();
+                geocodingFuture.thenAccept(geoData -> {
+                    SwingUtilities.invokeLater(() -> {
+                        card.setLayout(new FlowLayout(FlowLayout.LEFT));
+                        card.removeAll();
 
-                    for (int droneIndex = 0; droneIndex < droneData.getDroneID().size(); droneIndex++) {
-                        JPanel dronePanel = createDronePanel(droneData, droneTypeData, droneDynamicData, droneIndex, primaryColor, geocodingData,convertDateData,convertLastSeenData, convertCreateData);
-                        card.add(dronePanel);
-                    }
+                        for (int droneIndex = 0; droneIndex < droneData.getDroneID().size(); droneIndex++) {
+                            JPanel dronePanel = createDronePanel(droneData, droneTypeData, droneDynamicData, droneIndex, primaryColor, geoData,convertDateData,convertLastSeenData, convertCreateData);
+                            card.add(dronePanel);
+                        }
 
-                    card.revalidate();
-                    card.repaint();
+                        card.revalidate();
+                        card.repaint();
+                    });
                 });
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -73,7 +73,7 @@ public class Card1 {
 
     private JPanel createDronePanel(DronesData.ReturnDroneData droneData, DroneTypesData.ReturnDroneTypesData droneTypesData,
                                     DroneDynamicsData.ReturnDroneDynamicData droneDynamicData, int droneIndex, Color primaryColor, ArrayList<String> geocodingData,
-                                    ArrayList<String> convertDateData,ArrayList<String> convertLastSeenData, ArrayList<String> convertCreateData ) {
+                                    ArrayList<String> convertDateData, ArrayList<String> convertLastSeenData, ArrayList<String> convertCreateData ) {
         JPanel dronePanel = new JPanel();
         dronePanel.setLayout(new BorderLayout());
         dronePanel.setBackground(primaryColor);

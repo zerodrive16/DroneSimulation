@@ -22,7 +22,6 @@ public class ConvertDate {
             for(int i = 0; i<response.getDroneTimeStamp().size();i++){
                 // Input date string
                 String inputDateString = response.getDroneTimeStamp().get(i);
-                String inputLastSeen = response.getDroneLastSeen().get(i);
 
                 // Parse the input string to ZonedDateTime
                 ZonedDateTime zonedDateTime = ZonedDateTime.parse(inputDateString, DateTimeFormatter.ISO_DATE_TIME);

@@ -4,7 +4,7 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
-import org.example.API_Endpoints.DroneDynamics;
+import org.example.API_Properties.DroneDynamicsData;
 
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
@@ -12,8 +12,7 @@ import java.util.concurrent.CompletableFuture;
 public class ReverseGeo {
     private static final ArrayList<String> resultLocation = new ArrayList<>();
 
-    public CompletableFuture<ArrayList<String>> performReverseGeoAsync() {
-        // Replace "YOUR_API_KEY" with your actual API key
+    public CompletableFuture<ArrayList<String>> performReverseGeoAsync(DroneDynamicsData.ReturnDroneDynamicData droneDynamicData) {
         String apiKey = "AIzaSyA0IA-lTzhcjrSk_SfKwlxT_eGx7CtzVf4";
 
         // Create a GeoApiContext with the API key
@@ -21,11 +20,10 @@ public class ReverseGeo {
                 .apiKey(apiKey)
                 .build();
 
-        DroneDynamics droneDynamics = new DroneDynamics();
-        CompletableFuture<Void> geocodingFuture = droneDynamics.APIBuildAsync().thenAcceptAsync(response -> {
-            for (int i = 0; i < response.getDroneLongitude().size(); i++) {
-                Double reverseLongitude = response.getDroneLongitude().get(i);
-                Double reverseLatitude = response.getDroneLatitude().get(i);
+        return CompletableFuture.supplyAsync(() -> {
+            for (int i = 0; i < droneDynamicData.getDroneLongitude().size(); i++) {
+                Double reverseLongitude = droneDynamicData.getDroneLongitude().get(i);
+                Double reverseLatitude = droneDynamicData.getDroneLatitude().get(i);
                 LatLng location = new LatLng(reverseLatitude, reverseLongitude);
 
                 try {
@@ -43,9 +41,9 @@ public class ReverseGeo {
                     e.printStackTrace();
                 }
             }
+            return resultLocation;
         });
-        //return value
-        return geocodingFuture.thenApplyAsync(ignored -> resultLocation);
     }
 }
+
 
