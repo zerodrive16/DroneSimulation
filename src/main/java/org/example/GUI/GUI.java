@@ -3,6 +3,7 @@ package org.example.GUI;
 import org.example.API_Endpoints.DroneDynamics;
 import org.example.API_Endpoints.DroneTypes;
 import org.example.API_Endpoints.Drones;
+import org.example.GUI.components.Abs_GUIComponents;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -11,7 +12,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.time.format.DateTimeFormatter;
 import java.time.*;
-
+import java.util.Objects;
 
 
 public class GUI extends JFrame implements ActionListener {
@@ -93,141 +94,14 @@ public class GUI extends JFrame implements ActionListener {
 //----------------------------main screen settings-------------------------------
 
     private void mainScreenSettings() {
-        //First we set the size of the main screen properly so that there won't be complications with other components
-        //But it should work without, because of the way the BorderLayout works
-        mainScreen.setPreferredSize(mainscreenSize);
 
-        //We set the main screen as the CardLayout we initialized in the beginning and add the cards
+        mainScreen.setPreferredSize(mainscreenSize);
         mainScreen.setLayout(cardLayout);
         mainScreen.add(card1, "Card1");
-        mainScreen.add(card2,"Card2");
+        configureCard1(mainScreenColor, card1);
 
-        //This function creates a DroneList with a List on the left and a text panel on the right
-        //The list is scrollable so there is no problem to show many drones. The text panel shows info
-        configureCard1(mainScreenColor, card2);
-
-
-        //The dashboard will be split in drone data and drone type on the left side
-        //and drone dynamics on the right side
-        //It's initialized as 2 BoxLayouts. The first BoxLayout is set horizontal and carries 2 Boxes
-//----------------------------card 2 dashboard-------------------------------
         card1.setBackground(mainScreenColor);
-        card2.setBackground(mainScreenColor);
-        card1.setLayout(new BoxLayout(card1, BoxLayout.X_AXIS));
-        card1.setBorder(new EmptyBorder(5,5,5,5));
 
-        //The second BoxLayout is placed inside the first Box and is set vertically with 2 Boxes
-        //This way we have exactly 3 Boxes to put our Dashboard elements into
-        JPanel leftBox = new JPanel();
-        leftBox.setBackground(mainScreenColor);
-        leftBox.setLayout(new BoxLayout(leftBox,BoxLayout.Y_AXIS));
-        leftBox.setBorder(new EmptyBorder(0,0,0,5));
-
-        //The borders have been placed to differentiate each components area easily
-        droneData.setBackground(panelColor);
-        droneType.setBackground(panelColor);
-        droneDynamics.setBackground(panelColor);
-
-        leftBox.add(droneData);
-        leftBox.add(Box.createRigidArea(new Dimension(0,5)));
-        leftBox.add(droneType);
-
-        card1.add(leftBox);
-        card1.add(droneDynamics);
-
-
-        //This is where we add content for the dashboard.
-        //We use the BorderLayout to place their contents
-        JLabel dataTitle = new JLabel("Drone Data");
-        JLabel typeTitle = new JLabel("Drone Type");
-        JLabel dynamicsTitle = new JLabel("Drone Dynamic");
-        quickSet(titleFont,Color.white,panelColor,dataTitle,typeTitle,dynamicsTitle);
-
-
-
-
-//----------------------------dashboard content-------------------------------
-        //drone data
-        droneData.setLayout(new BorderLayout());
-        droneData.add(dataTitle,BorderLayout.NORTH);
-
-        JTextPane droneDataText = new JTextPane();
-        droneDataText.setEditable(false);
-        droneDataText.setBackground(Color.WHITE);
-        JPanel droneDataPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-
-        //data text
-        new Drones().APIBuildAsync().thenAccept(response -> {
-
-            droneDataText.setText("Drone ID: " + response.getDroneID().get(0)+
-                    "\nSerial Number: " + response.getDroneSerialnumber().get(0)+
-                    "\ncreated " + response.getDroneCreate().get(0).substring(0,10) +"  "+ response.getDroneCreate().get(0).substring(12,19)+
-                    "\nWeight: " + response.getDroneCarriageWeight().get(0)+
-                    "\nType: " + response.getDroneCarriageType().get(0)
-            );
-        });
-
-
-        droneData.add(droneDataText,BorderLayout.WEST);
-        droneDataPanel.add(droneDataText);
-        droneData.add(droneDataPanel);
-
-        //drone type
-        droneType.setLayout(new BorderLayout());
-        droneType.add(typeTitle,BorderLayout.NORTH);
-
-        JTextPane droneTypeText = new JTextPane();
-        droneTypeText.setEditable(false);
-        droneTypeText.setBackground(Color.WHITE);
-        JPanel droneTypePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-
-        //type text
-        new DroneTypes().APIBuildAsync().thenAccept(response -> {
-
-            droneTypeText.setText("Type: " + response.getDroneTypeName().get(0)+
-                    "\nManufacturer: " + response.getDroneManufacturer().get(0)+
-                    "\nWeight: " + response.getDroneWeight().get(0)+
-                    "\nMax. Speed: " + response.getDroneMaxSpeed().get(0)+
-                    "\nBattery Capacity: " + response.getDroneBatteryCapacity().get(0)+
-                    "\nControl Range: " + response.getDroneControlRange().get(0)+
-                    "\nMax. Carriage: " + response.getDroneMaxCarriage().get(0)
-            );
-        });
-
-        droneType.add(droneTypeText,BorderLayout.WEST);
-        droneTypePanel.add(droneTypeText);
-        droneType.add(droneTypePanel);
-
-        //drone dynamics
-        droneDynamics.setLayout(new BorderLayout());
-        droneDynamics.add(dynamicsTitle,BorderLayout.NORTH);
-
-        JTextPane droneDynamicsText = new JTextPane();
-        droneDynamicsText.setEditable(false);
-        droneDynamicsText.setBackground(Color.WHITE);
-        JPanel droneDynamicsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-        //dynamic text
-        new DroneDynamics().APIBuildAsync().thenAccept(response -> droneDynamicsText.setText(
-                "Timestamp: " + response.getDroneTimeStamp().get(0) +
-                "\nSpeed: " + response.getDroneSpeed().get(0) +
-                "\nAlignRoll: " + response.getDroneAlignRoll().get(0) +
-                "\nAlignPitch: " + response.getDroneAlignPitch().get(0) +
-                "\nAlignYaw: " + response.getDroneAlignYaw().get(0) +
-                "\nLongitude: " + response.getDroneLongitude().get(0) +
-                "\nLatitude: " + response.getDroneLatitude().get(0) +
-                "\nBatteryStatus: " + response.getDroneBatteryStatus().get(0) +
-                "\nLastSeen: " + response.getDroneLastSeen().get(0) +
-                "\nStatus: " + response.getDroneStatus().get(0)
-        ));
-
-        droneDynamics.add(droneDynamicsText,BorderLayout.WEST);
-        droneDynamicsPanel.add(droneDynamicsText);
-        droneDynamics.add(droneDynamicsPanel);
-
-        quickSet(textFont,Color.white,panelColor,droneDataPanel,droneDataText,droneTypePanel,droneTypeText,droneDynamicsPanel,droneDynamicsText);
     }
 
     //----------------------------configureCard1-------------------------------
@@ -243,18 +117,6 @@ public class GUI extends JFrame implements ActionListener {
     private void navbarSettings() {
         navbar.setBackground(backgroundColor);
         navbar.setPreferredSize(navbarSize);
-//----------------------------dropdownButton drone list-------------------------------
-
-        JLabel droneListText = new JLabel("Drone List <ID>");
-        quickSet(titleFont,Color.white,backgroundColor,droneListText);
-        dropdownButton.add(droneListText);
-        dropdownButton.setBorder(new LineBorder(mainScreenColor));
-        dropdownButton.setBackground(backgroundColor);
-
-        navbar.add(dropdownButton,BorderLayout.WEST);
-
-
-
 
 //----------------------------tabsPanel and the tabs-------------------------------
         JPanel tabsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -323,7 +185,7 @@ public class GUI extends JFrame implements ActionListener {
             int seconds = 0;
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(refreshText.getText() == "since Last Update: 0 Seconds     ") {
+                if(Objects.equals(refreshText.getText(), "since Last Update: 0 Seconds     ")) {
                     seconds = 0;
                 }
                 seconds++;
@@ -441,7 +303,7 @@ b1.setFont(new Font(b1.getFont().getName(), Font.PLAIN, newSize));
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new GUI());
+        SwingUtilities.invokeLater(GUI::new);
     }
 
 }
