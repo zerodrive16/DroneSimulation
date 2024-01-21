@@ -28,15 +28,16 @@ JFrame frame = new JFrame();
 
     private void mainScreenSettings() {
         //mainScreen.setPreferredSize(new Dimension(width,height-(height/12)));
+        CardLayout cardLayout = new CardLayout();
         mainScreen.setLayout(cardLayout);
         configureCard1(mainScreenColor, card1);
         card1.setBackground(mainScreenColor);
 
-        JScrollPane scrollPane = new JScrollPane(card1);
+        JScrollPane scrollPane = new JScrollPane();
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        mainScreen.add(scrollPane, "Dashboard");
+        mainScreen.add(card1, "Dashboard");
     }
 
     public void configureCard1(Color mainScreenColor, JPanel card1) {
@@ -104,7 +105,10 @@ JFrame frame = new JFrame();
         infobar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         infobar.setBackground(backgroundColor);
         infobar.setPreferredSize(new Dimension(width,height/32));
-        refreshButton.setBackground(Color.WHITE);
+        JLabel refreshLabel = new JLabel(" REFRESH");
+        JButton refreshButton = new JButton();
+        refreshButton.add(refreshLabel);
+        refreshButton.setBackground(panelColor);
         refreshButton.setOpaque(true);
         refreshButton.setPreferredSize(new Dimension(width/16,(height/32)-8));
         refreshButton.setBorderPainted(false);
@@ -117,7 +121,7 @@ JFrame frame = new JFrame();
              */
         });
 
-        quickSet(textFont,Color.WHITE,backgroundColor,refreshText);
+        quickSet(textFont,Color.WHITE,backgroundColor,refreshText,refreshLabel);
         infobar.add(Box.createHorizontalGlue()); //align right side
         infobar.add(refreshText);
         infobar.add(refreshButton);
