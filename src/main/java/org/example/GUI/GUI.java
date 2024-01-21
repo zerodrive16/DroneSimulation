@@ -114,11 +114,16 @@ JFrame frame = new JFrame();
         refreshButton.setBorderPainted(false);
         refreshButton.setFocusPainted(false);
         refreshButton.addActionListener(e->{
-            refreshTimer.restart();
+            SwingUtilities.updateComponentTreeUI(frame);
+            refreshTimer.stop();
+            card1.removeAll();
+            configureCard1(mainScreenColor, card1);
             refreshText.setText("since Last Update: 0 Seconds     ");
-            /*
-            UPDATE FUNKTION
-             */
+            refreshTimer.start();
+            card1.revalidate();
+            card1.repaint();
+            frame.revalidate();
+            frame.repaint();
         });
 
         quickSet(textFont,Color.WHITE,backgroundColor,refreshText,refreshLabel);
