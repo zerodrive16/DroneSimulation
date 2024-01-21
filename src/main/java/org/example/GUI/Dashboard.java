@@ -188,8 +188,6 @@ public class Dashboard extends Abs_GUIComponents {
         box.setBackground(Color.DARK_GRAY);
         JButton exportButton = new JButton(clipboard);
         exportButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        exportButton.setFont(new Font("Arial", Font.BOLD, 12));
-        exportButton.setPreferredSize(new Dimension(50,50));
         exportButton.setForeground(Color.WHITE);
         exportButton.setBackground(Color.GRAY);
         exportButton.setOpaque(true);
