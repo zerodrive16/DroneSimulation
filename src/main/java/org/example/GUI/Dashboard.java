@@ -8,6 +8,7 @@ import org.example.API_Properties.DroneTypesData;
 import org.example.API_Properties.DronesData;
 import org.example.GUI.Utility.ConvertDate;
 import org.example.GUI.Utility.ReverseGeo;
+import org.example.GUI.Utility.StreamFiles;
 import org.example.GUI.components.Abs_GUIComponents;
 
 import javax.swing.*;
@@ -194,8 +195,8 @@ public class Dashboard extends Abs_GUIComponents {
         exportButton.setBorderPainted(false);
         exportButton.setFocusPainted(false);
         exportButton.addActionListener(e -> {
-            // export button addition
-            // here stream and files
+            StreamFiles streamFiles = new StreamFiles();
+            streamFiles.fileHandler(droneData, droneTypesData, droneDynamicData, droneIndex);
         });
 
         box.add(Box.createRigidArea(new Dimension(50, 50)));

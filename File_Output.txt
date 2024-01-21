@@ -1,0 +1,6 @@
+Drone ID: 79
+Manufacturer: Holy Stone
+TypeName: HS100
+Serialnumber: GoKa-2031-AD19BD
+Created: 2023-12-27T09:07:00.700019+01:00
+Status: ON
