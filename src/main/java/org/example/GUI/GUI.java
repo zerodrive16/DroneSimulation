@@ -114,11 +114,16 @@ JFrame frame = new JFrame();
         refreshButton.setBorderPainted(false);
         refreshButton.setFocusPainted(false);
         refreshButton.addActionListener(e->{
-            refreshTimer.restart();
+            SwingUtilities.updateComponentTreeUI(frame);
+            refreshTimer.stop();
+            card1.removeAll();
+            configureCard1(mainScreenColor, card1);
             refreshText.setText("since Last Update: 0 Seconds     ");
-            /*
-            UPDATE FUNKTION
-             */
+            refreshTimer.start();
+            card1.revalidate();
+            card1.repaint();
+            frame.revalidate();
+            frame.repaint();
         });
 
         quickSet(textFont,Color.WHITE,backgroundColor,refreshText,refreshLabel);
@@ -138,10 +143,11 @@ JFrame frame = new JFrame();
         frame.setLocation(100,100);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(width,height);
+        frame.setLocationRelativeTo(frame);
         frame.setVisible(true);
         frame.setExtendedState(frame.getExtendedState() | Frame.ICONIFIED); // minimize window
         frame.setBackground(mainScreenColor);
-        frame.setMinimumSize(new Dimension(1280,720));
+        frame.setMinimumSize(new Dimension(1024,720));
 
         frame.addComponentListener(new ComponentAdapter() {
             //----------------------------code for resizing the window-------------------------------

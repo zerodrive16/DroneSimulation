@@ -8,14 +8,17 @@ import org.example.API_Properties.DroneTypesData;
 import org.example.API_Properties.DronesData;
 import org.example.GUI.Utility.ConvertDate;
 import org.example.GUI.Utility.ReverseGeo;
+import org.example.GUI.Utility.StreamFiles;
+import org.example.GUI.components.Abs_GUIComponents;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public class Dashboard {
+public class Dashboard extends Abs_GUIComponents {
     private int currentPage = 1;
     private static final int ITEMS_PER_PAGE = 10;
     public void configureCard1(Color primaryColor, JPanel card) {
@@ -106,16 +109,19 @@ public class Dashboard {
         nextButton.setOpaque(true);
         nextButton.setBorderPainted(false);
         nextButton.setFocusPainted(false);
+
+        JPanel paginationPanel = new JPanel();
+        paginationPanel.setBackground(Color.WHITE);
+        paginationPanel.add(prevButton);
+        JLabel paginationLabel = new JLabel("Page " + currentPage + " of " + totalPages);
+        paginationPanel.add(paginationLabel);
+        paginationPanel.add(nextButton);
+
         prevButton.addActionListener(e -> {
             if (currentPage > 1) {
                 currentPage--;
                 displayPage(card, droneData, droneTypeData, droneDynamicData, primaryColor, geoData, convertCreateData, convertLastSeenData);
-
-                JPanel paginationPanel = new JPanel();
-                paginationPanel.add(prevButton);
-                paginationPanel.add(new JLabel("Page " + currentPage + " of " + totalPages));
-                paginationPanel.add(nextButton);
-
+                paginationLabel.setText("Page " + currentPage + " of " + totalPages);
                 card.add(paginationPanel, BorderLayout.SOUTH);
             }
         });
@@ -123,23 +129,10 @@ public class Dashboard {
             if (currentPage < totalPages) {
                 currentPage++;
                 displayPage(card, droneData, droneTypeData, droneDynamicData, primaryColor, geoData, convertCreateData, convertLastSeenData);
-
-                JPanel paginationPanel = new JPanel();
-                paginationPanel.add(prevButton);
-                paginationPanel.add(new JLabel("Page " + currentPage + " of " + totalPages));
-                paginationPanel.add(nextButton);
-
+                paginationLabel.setText("Page " + currentPage + " of " + totalPages);
                 card.add(paginationPanel, BorderLayout.SOUTH);
             }
         });
-
-        JPanel paginationPanel = new JPanel();
-        paginationPanel.setBackground(primaryColor);
-        paginationPanel.add(prevButton);
-        JLabel paginationLabel = new JLabel("Page " + currentPage + " of " + totalPages);
-        paginationPanel.add(paginationLabel);
-        paginationPanel.add(nextButton);
-
         card.add(paginationPanel, BorderLayout.SOUTH);
     }
 
@@ -191,6 +184,26 @@ public class Dashboard {
             // view more button addition
         });
 
+        JPanel box = new JPanel();
+        box.setLayout(new BoxLayout(box,BoxLayout.X_AXIS));
+        box.setBackground(Color.DARK_GRAY);
+        JButton exportButton = new JButton(clipboard);
+        exportButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        exportButton.setForeground(Color.WHITE);
+        exportButton.setBackground(Color.GRAY);
+        exportButton.setOpaque(true);
+        exportButton.setBorderPainted(false);
+        exportButton.setFocusPainted(false);
+        exportButton.addActionListener(e -> {
+            StreamFiles streamFiles = new StreamFiles();
+            streamFiles.fileHandler(droneData, droneTypesData, droneDynamicData, droneIndex);
+        });
+
+        box.add(Box.createRigidArea(new Dimension(50, 50)));
+        box.add(droneIdLabel);
+        box.add(Box.createHorizontalGlue());
+        box.add(exportButton);
+
 
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
@@ -210,8 +223,7 @@ public class Dashboard {
         infoPanel.add(createWhiteLabel("Last update: " + convertLastSeenData.get(droneIndex)+ " o'clock"));
         infoPanel.add(createWhiteLabel("Location: " + geocodingData.get(droneIndex)));
 
-
-        dronePanel.add(droneIdLabel, BorderLayout.NORTH);
+        dronePanel.add(box,BorderLayout.NORTH);
         dronePanel.add(infoPanel, BorderLayout.CENTER);
         dronePanel.add(viewMoreButton, BorderLayout.SOUTH);
 
