@@ -143,6 +143,7 @@ JFrame frame = new JFrame();
         frame.setLocation(100,100);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(width,height);
+        frame.setLocationRelativeTo(frame);
         frame.setVisible(true);
         frame.setExtendedState(frame.getExtendedState() | Frame.ICONIFIED); // minimize window
         frame.setBackground(mainScreenColor);
