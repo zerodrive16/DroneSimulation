@@ -33,7 +33,6 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).thenRun(() -> {
                 DroneDynamicsData.ReturnDroneDynamicData data = new DroneDynamicsData.ReturnDroneDynamicData(
                         storeDroneDynamics.getDroneTimestamp(), storeDroneDynamics.getDroneSpeed(),
-                        storeDroneDynamics.getDroneAlignRoll(), storeDroneDynamics.getDroneAlignPitch(), storeDroneDynamics.getDroneAlignYaw(),
                         storeDroneDynamics.getDroneLongitude(), storeDroneDynamics.getDroneLatitude(), storeDroneDynamics.getDroneBatteryStatus(),
                         storeDroneDynamics.getDroneLastSeen(), storeDroneDynamics.getDroneStatus()
                 );

@@ -1,77 +1,74 @@
 package org.example.API_Endpoints;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import org.example.API_Properties.*;
 import org.example.API_StoreData.DroneTypesStore;
 
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
-/*
+/**
  * Defining the class DroneTypes which builds the asynchronous API request and response
- * Extending the abstract class Abs_APIBuilding with the return of DroneTypesData.ReturnDroneTypeData
+ * Extending the abstract class {@link Abs_APIBuilding} with a return type of {@link DroneTypesData.ReturnDroneTypesData}.
 */
 public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypesData>{
-    // calling the class which stores the data temporally
     private final DroneTypesStore storeDroneTypes = new DroneTypesStore();
 
-    /*
-     * CompletableFuture function that builds the asynchronous API
-     * storing the asynchronous data inside resultFuture
+    /**
+     * resultFuture stores the async data temporarily
+     * Builds, process and executes the API call and fetch drone types data.
+     * It takes the Drone URL and iterates through each URL to get the corresponding drone type data.
+     * Data fetched and use storeAPIResponse function to store  in {@link DroneTypesStore}.
+     * @return CompletableFuture which resolves to {@link DroneTypesData.ReturnDroneTypesData} on successful completion.
     */
     @Override
     public CompletableFuture<DroneTypesData.ReturnDroneTypesData> APIBuildAsync() {
         CompletableFuture<DroneTypesData.ReturnDroneTypesData> resultFuture = new CompletableFuture<>();
 
-        /*
-         * Asynchronously fetches the Drones data and processes it upon completion
-         * calling the droneTypeURL to fetch the url of the drones
-         * futures is a list for concurrent processing of each url
-        */
         new Drones().APIBuildAsync().thenAccept(returnData -> {
             ArrayList<String> droneTypeURL = returnData.getDroneTypeURL();
-            ArrayList<CompletableFuture<Void>> futures = new ArrayList<>();
+            if(!droneTypeURL.isEmpty()) {
+                ArrayList<CompletableFuture<Void>> futures = new ArrayList<>();
 
-            // loop through the Url
-            for (String temp_URL : droneTypeURL) {
-                // adding the futures of the asynchronous APi request and use the callback (lambda) to use the response
-                futures.add(APIRequestAsync(temp_URL).thenAccept(response -> {
+                for (String temp_URL : droneTypeURL) {
+                    futures.add(APIRequestAsync(temp_URL).thenAccept(response -> {
+                        try {
+                            Gson gson = new Gson();
+                            DroneTypesData.DroneType apiResponse = gson.fromJson(response, DroneTypesData.DroneType.class);
 
-                    // Gson dependency to convert JSON response to objects
-                    Gson gson = new Gson();
-                    DroneTypesData.DroneType apiResponse = gson.fromJson(response, DroneTypesData.DroneType.class);
+                            storeAPIResponse(apiResponse);
+                        } catch(JsonSyntaxException ex) {
+                            System.err.println("JSON format error");
+                            resultFuture.completeExceptionally(ex);
+                        }
+                    }));
+                }
 
-                    // storing the API data to the respective Array Lists
-                    storeAPIResponse(apiResponse);
-                }));
-            }
-
-            // It waits for all asynchronous operations to complete
-            CompletableFuture<Void> chainFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
-            chainFutures.thenRun(() -> {
-                // Once all asynchronous operations are complete, finish the main future and return the collected data
-                resultFuture.complete(new DroneTypesData.ReturnDroneTypesData((ArrayList<String>) storeDroneTypes.getDroneManufacturer(), (ArrayList<String>) storeDroneTypes.getDroneTypeName(),
+                CompletableFuture<Void> chainFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+                chainFutures.thenRun(() -> resultFuture.complete(
+                        new DroneTypesData.ReturnDroneTypesData((ArrayList<String>) storeDroneTypes.getDroneManufacturer(), (ArrayList<String>) storeDroneTypes.getDroneTypeName(),
                         (ArrayList<Integer>) storeDroneTypes.getDroneWeight(), (ArrayList<Integer>) storeDroneTypes.getDroneMaxSpeed(), (ArrayList<Integer>) storeDroneTypes.getDroneBatteryCapacity(),
-                        (ArrayList<Integer>) storeDroneTypes.getDroneControlRange(), (ArrayList<Integer>) storeDroneTypes.getDroneMaxCarriage()));
-                // Error handling for asynchronous programming
-            }).exceptionally(ex -> {
-                resultFuture.completeExceptionally(new RuntimeException(ex));
-                return null;
-            });
+                        (ArrayList<Integer>) storeDroneTypes.getDroneControlRange(), (ArrayList<Integer>) storeDroneTypes.getDroneMaxCarriage()))).exceptionally(ex -> {
+                    resultFuture.completeExceptionally(new RuntimeException(ex));
+                    return null;
+                });
+            } else {
+                System.err.println("Drone URL is empty!");
+            }
         });
-
-        // returning the resultFuture
         return resultFuture;
     }
 
-    /*
-     * function accepts the already converted DroneTypes object as parameter which is the access point to fetch the API data
-     * it respectively stores them to the assigned ArrayLists with a getter method */
+    /**
+     * Stores the fetched API response in {@link DroneTypesStore}.
+     *
+     * @param apiResponse The response object containing the drone types data.
+     */
     private void storeAPIResponse(DroneTypesData.DroneType apiResponse) {
         if (apiResponse != null) {
             storeDroneTypes.addDroneTypes(apiResponse);
         } else {
-            // checks the apiResponse if the response is null or empty
             System.err.println("Result error / Null");
         }
     }
