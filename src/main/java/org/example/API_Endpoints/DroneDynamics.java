@@ -1,5 +1,6 @@
 package org.example.API_Endpoints;
 
+import com.google.gson.JsonSyntaxException;
 import org.example.API_Properties.DroneDynamicsData;
 import com.google.gson.Gson;
 import org.example.API_StoreData.DroneDynamicsStore;
@@ -7,15 +8,19 @@ import org.example.API_StoreData.DroneDynamicsStore;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
+/**
+* The DroneDynamic class handles the async building of the drone dynamic api call
+* It extends the Abs_APIBuilding of the generic type {@link DroneDynamicsData.ReturnDroneDynamicData} which is the returned data
+*/
 public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDroneDynamicData> {
 
-    // calling the class which stores the data temporally
     private final DroneDynamicsStore storeDroneDynamics = new DroneDynamicsStore();
 
-    /*
-     * building the API call and define the CompletableFuture library
-     * call Drones endpoint and get the callback of the id
-     * also define the resultFuture and futures which store the data temporarily
+    /**
+     * function builds the API request. It calls the {@link Drones} class to fetch the droneID
+     * Later it iterates through every single id to get every entry of droneDynamics
+     *
+     * @return {@link DroneDynamicsData.ReturnDroneDynamicData} to the Constructor and store the data there
     */
     @Override
     public CompletableFuture<DroneDynamicsData.ReturnDroneDynamicData> APIBuildAsync() {
@@ -24,19 +29,16 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
             ArrayList<Integer> droneIDs = returnData.getDroneID();
             ArrayList<CompletableFuture<Void>> futures = new ArrayList<>();
 
-            // iterating through every id
             for (Integer id : droneIDs) {
                 futures.add(getLastDroneDynamic(id));
             }
 
-            // once everything is done return the data to the constructor in storeDroneDynamics
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).thenRun(() -> {
                 DroneDynamicsData.ReturnDroneDynamicData data = new DroneDynamicsData.ReturnDroneDynamicData(
                         storeDroneDynamics.getDroneTimestamp(), storeDroneDynamics.getDroneSpeed(),
                         storeDroneDynamics.getDroneLongitude(), storeDroneDynamics.getDroneLatitude(), storeDroneDynamics.getDroneBatteryStatus(),
                         storeDroneDynamics.getDroneLastSeen(), storeDroneDynamics.getDroneStatus()
                 );
-                // complete async
                 resultFuture.complete(data);
             }).exceptionally(ex -> {
                 resultFuture.completeExceptionally(ex);
@@ -46,47 +48,45 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
         return resultFuture;
     }
 
-    /*
-     * the function gets the last entry of each drone dynamic id
-     * it has the initialURL which has the output of all entries in id
-     * then it does the API request and convert it to java objects
+    /**
+     * It initializes the URL with the id and does the API call
+     * Then it gets the Count of all entries in drone dynamic.
+     * The Count specialize the limit and offset which gives us the last entry of the current drone dynamic id
+     * Then it calls the storeAPIResponse to store the data
+     *
+     * @param id gives us the current id of the iteration
     */
     private CompletableFuture<Void> getLastDroneDynamic(Integer id) {
         CompletableFuture<Void> future = new CompletableFuture<>();
         String initialUrl = "http://dronesim.facets-labs.com/api/" + id + "/dynamics/?format=json";
 
         APIRequestAsync(initialUrl).thenAccept(initialResponse -> {
-            Gson gson = new Gson();
-            DroneDynamicsData.DroneDynamicResult initialApiResponse = gson.fromJson(initialResponse, DroneDynamicsData.DroneDynamicResult.class);
+            try {
+                Gson gson = new Gson();
+                DroneDynamicsData.DroneDynamicResult initialApiResponse = gson.fromJson(initialResponse, DroneDynamicsData.DroneDynamicResult.class);
 
-            /*
-             * this part in particular gives us the count of the entries in the id
-             * it then uses the count as limit and -1 for the offset
-             * it limits the output and redirect us to the last entry of drone dynamic id */
-            if (initialApiResponse != null && initialApiResponse.getCount() > 0) {
-                int limit = initialApiResponse.getCount();
-                int offset = limit - 1;
-                String lastEntityUrl = "http://dronesim.facets-labs.com/api/" + id + "/dynamics/?limit=" + limit + "&offset=" + offset + "&format=json";
+                if (initialApiResponse != null && initialApiResponse.getCount() > 0) {
+                    int limit = initialApiResponse.getCount();
+                    int offset = limit - 1;
+                    String lastEntityUrl = "http://dronesim.facets-labs.com/api/" + id + "/dynamics/?limit=" + limit + "&offset=" + offset + "&format=json";
 
-                /*
-                 * once again the API call is called
-                 * it retrieves the last entry and calls teh storeAPIResponse
-                 * the storeAPIResponse stores all the data of the last entry
-                */
-                APIRequestAsync(lastEntityUrl).thenAccept(lastResponse -> {
-                    DroneDynamicsData.DroneDynamicResult lastApiResponse = gson.fromJson(lastResponse, DroneDynamicsData.DroneDynamicResult.class);
-                    if (lastApiResponse != null && !lastApiResponse.getResults().isEmpty()) {
-                        DroneDynamicsData.DroneDynamic lastDroneDynamic = lastApiResponse.getResults().get(0);
-                        storeAPIResponse(lastDroneDynamic);
-                    }
-                    // completes the operation
+                    APIRequestAsync(lastEntityUrl).thenAccept(lastResponse -> {
+                        DroneDynamicsData.DroneDynamicResult lastApiResponse = gson.fromJson(lastResponse, DroneDynamicsData.DroneDynamicResult.class);
+                        if (lastApiResponse != null && !lastApiResponse.getResults().isEmpty()) {
+                            DroneDynamicsData.DroneDynamic lastDroneDynamic = lastApiResponse.getResults().get(0);
+                            storeAPIResponse(lastDroneDynamic);
+                        }
+                        future.complete(null);
+                    }).exceptionally(ex -> {
+                        future.completeExceptionally(ex);
+                        return null;
+                    });
+                } else {
                     future.complete(null);
-                }).exceptionally(ex -> {
-                    future.completeExceptionally(ex);
-                    return null;
-                });
-            } else {
-                future.complete(null);
+                }
+            } catch(JsonSyntaxException ex) {
+                System.err.println("JSON error!");
+                future.completeExceptionally(ex);
             }
         }).exceptionally(ex -> {
             future.completeExceptionally(ex);
@@ -96,6 +96,12 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
         return future;
     }
 
+    /**
+     * Stores the last drone dynamic entry
+     * it then stores it in the temporarily assigned list of storeAPIResponse
+     *
+     * @param droneDynamic it takes the elements {@link DroneDynamicsData.DroneDynamic} with a getter
+     */
     private void storeAPIResponse(DroneDynamicsData.DroneDynamic droneDynamic) {
         if (droneDynamic != null) {
             storeDroneDynamics.addDroneDynamics(droneDynamic);

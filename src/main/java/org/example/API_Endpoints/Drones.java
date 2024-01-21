@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 /**
  * The Drones class handles the asynchronous building of drone data fetched from an API.
- * It extends the Abs_APIBuilding of the generic type DronesData.ReturnDroneData which is returns the data
+ * It extends the Abs_APIBuilding of the generic type {@link DronesData.ReturnDroneData} which is the returned data
  */
 public class Drones extends Abs_APIBuilding<DronesData.ReturnDroneData> {
     private static final Logger logger = Logger.getLogger(Drones.class.getName());
