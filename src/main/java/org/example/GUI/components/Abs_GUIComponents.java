@@ -21,6 +21,4 @@ public abstract class Abs_GUIComponents {
     public ImageIcon clipboard = new ImageIcon("../img/CopyClipboard.png");
     public int width = 1600;
     public int height = 900;
-    public double aspectRatio = (double) width/height;
-
 }
