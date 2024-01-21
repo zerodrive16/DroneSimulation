@@ -1,10 +1,7 @@
 package org.example.API_Properties;
 
-import org.example.ConvertDate;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class DroneDynamicsData {
     public static class DroneDynamic {

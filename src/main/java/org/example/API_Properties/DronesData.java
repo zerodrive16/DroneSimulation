@@ -9,7 +9,8 @@ import java.util.List;
 public class DronesData {
 
     /**
-     * Represents a single drone's data.
+     * function represents the variables which are used to fetch the API data
+     * It uses the getter method to fetch the data from the webserver
      */
     public static class Drone {
         private Integer id;
@@ -29,19 +30,20 @@ public class DronesData {
     }
 
     /**
-     * Represents the result of a drone API request.
+     * function takes the results which is the list of data to be fetched
+     * it uses next to get the pagination
+     * getters are used to get the data and the pagination
      */
     public static class DroneResult {
         private List<Drone> results;
         private String next;
 
-        // Getters for the DroneResult class properties
         public List<Drone> getDroneResults() { return results; }
         public String getNext() { return next; }
     }
 
     /**
-     * Class to return drone data after processing.
+     * the lists are used to store the fetched API data
      */
     public static class ReturnDroneData {
         final private ArrayList<Integer> data_droneID;
@@ -52,7 +54,7 @@ public class DronesData {
         final private ArrayList<String> data_droneCarriageType;
 
         /**
-         * Constructs a ReturnDroneData object.
+         * After the asynchronous API call is done, it saves all the fetched data inside the Constructor and later assign it
          *
          * @param droneID List of drone IDs.
          * @param droneTypeURL List of drone type URLs.
@@ -71,7 +73,7 @@ public class DronesData {
             this.data_droneCarriageType = droneCarriageType;
         }
 
-        // Getters for the ReturnDroneData class properties
+        // Getters are used to output the data outside its class
         public ArrayList<Integer> getDroneID() { return data_droneID; }
         public ArrayList<String> getDroneTypeURL() { return data_droneType; }
         public ArrayList<String> getDroneCreate() { return data_droneCreate; }

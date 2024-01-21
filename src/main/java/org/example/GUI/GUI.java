@@ -1,13 +1,9 @@
 package org.example.GUI;
 
-import org.example.API_Endpoints.DroneDynamics;
-import org.example.API_Endpoints.DroneTypes;
-import org.example.API_Endpoints.Drones;
 import org.example.GUI.components.Abs_GUIComponents;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +15,6 @@ public class GUI extends Abs_GUIComponents implements ActionListener{
 JFrame frame = new JFrame();
 
     public GUI(){
-
         initUI();
         windowSettings();
     }
@@ -45,7 +40,7 @@ JFrame frame = new JFrame();
 
 
     public void configureCard1(Color mainScreenColor, JPanel card1) {
-        Card1 card = new Card1();
+        Dashboard card = new Dashboard();
         card.configureCard1(mainScreenColor, card1);
     }
 
@@ -159,6 +154,7 @@ JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(width,height);
         frame.setVisible(true);
+        frame.setExtendedState(frame.getExtendedState() | Frame.ICONIFIED); // minimize window
         frame.setBackground(mainScreenColor);
         frame.setMinimumSize(new Dimension(1024,576));
 
