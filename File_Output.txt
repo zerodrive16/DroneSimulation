@@ -1,6 +1,6 @@
-Drone ID: 84
-Manufacturer: Blade
-TypeName: Chroma Camera Drone
-Serialnumber: AlAA-2025-8FE834
-Created: 2023-12-27T09:07:00.718589+01:00
+Drone ID: 73
+Manufacturer: Hubsan
+TypeName: X4 H107D
+Serialnumber: HuX4-2028-208EA8
+Created: 2023-12-27T09:07:00.686755+01:00
 Status: ON
