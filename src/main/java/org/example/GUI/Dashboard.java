@@ -16,6 +16,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class Dashboard {
+    private int currentPage = 1;
+    private static final int ITEMS_PER_PAGE = 10;
     public void configureCard1(Color primaryColor, JPanel card) {
         Drones dronesAPI = new Drones();
         CompletableFuture<DronesData.ReturnDroneData> futureDronesData = dronesAPI.APIBuildAsync();
@@ -61,10 +63,15 @@ public class Dashboard {
 
                         card.revalidate();
                         card.repaint();
+
+                        displayPage(card, droneData, droneTypeData, droneDynamicData, primaryColor, geoData, convertCreateData, convertLastSeenData);
+                        addPaginationControls(card, droneData, droneTypeData, droneDynamicData, primaryColor, geoData, convertCreateData, convertLastSeenData);
+
                     } catch(InterruptedException | ExecutionException ex) {
                         ex.printStackTrace();
                     }
                 }));
+
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -73,6 +80,91 @@ public class Dashboard {
             return null;
         });
     }
+    private void addPaginationControls(JPanel card,
+                                       DronesData.ReturnDroneData droneData,
+                                       DroneTypesData.ReturnDroneTypesData droneTypeData,
+                                       DroneDynamicsData.ReturnDroneDynamicData droneDynamicData,
+                                       Color primaryColor,
+                                       ArrayList<String> geoData,
+                                       ArrayList<String> convertCreateData,
+                                       ArrayList<String> convertLastSeenData) {
+        int totalItems = droneData.getDroneID().size();
+        int totalPages = (int) Math.ceil((double) totalItems / ITEMS_PER_PAGE);
+
+        JButton prevButton = new JButton("Previous");
+        prevButton.setFont(new Font("Arial", Font.BOLD, 12));
+        prevButton.setForeground(Color.WHITE);
+        prevButton.setBackground(Color.DARK_GRAY);
+        prevButton.setOpaque(true);
+        prevButton.setBorderPainted(false);
+        prevButton.setFocusPainted(false);
+
+        JButton nextButton = new JButton("Next");
+        nextButton.setFont(new Font("Arial", Font.BOLD, 12));
+        nextButton.setForeground(Color.WHITE);
+        nextButton.setBackground(Color.DARK_GRAY);
+        nextButton.setOpaque(true);
+        nextButton.setBorderPainted(false);
+        nextButton.setFocusPainted(false);
+        prevButton.addActionListener(e -> {
+            if (currentPage > 1) {
+                currentPage--;
+                displayPage(card, droneData, droneTypeData, droneDynamicData, primaryColor, geoData, convertCreateData, convertLastSeenData);
+
+                JPanel paginationPanel = new JPanel();
+                paginationPanel.add(prevButton);
+                paginationPanel.add(new JLabel("Page " + currentPage + " of " + totalPages));
+                paginationPanel.add(nextButton);
+
+                card.add(paginationPanel, BorderLayout.SOUTH);
+            }
+        });
+        nextButton.addActionListener(e -> {
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayPage(card, droneData, droneTypeData, droneDynamicData, primaryColor, geoData, convertCreateData, convertLastSeenData);
+
+                JPanel paginationPanel = new JPanel();
+                paginationPanel.add(prevButton);
+                paginationPanel.add(new JLabel("Page " + currentPage + " of " + totalPages));
+                paginationPanel.add(nextButton);
+
+                card.add(paginationPanel, BorderLayout.SOUTH);
+            }
+        });
+
+        JPanel paginationPanel = new JPanel();
+        paginationPanel.setBackground(primaryColor);
+        paginationPanel.add(prevButton);
+        JLabel paginationLabel = new JLabel("Page " + currentPage + " of " + totalPages);
+        paginationPanel.add(paginationLabel);
+        paginationPanel.add(nextButton);
+
+        card.add(paginationPanel, BorderLayout.SOUTH);
+    }
+
+    private void displayPage(JPanel card,
+                             DronesData.ReturnDroneData droneData,
+                             DroneTypesData.ReturnDroneTypesData droneTypeData,
+                             DroneDynamicsData.ReturnDroneDynamicData droneDynamicData,
+                             Color primaryColor,
+                             ArrayList<String> geoData,
+                             ArrayList<String> convertCreateData,
+                             ArrayList<String> convertLastSeenData) {
+        int startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, droneData.getDroneID().size());
+
+        card.removeAll();
+        for (int i = startIndex; i < endIndex; i++) {
+            JPanel dronePanel = createDronePanel(droneData, droneTypeData, droneDynamicData, i, primaryColor, geoData, convertCreateData, convertLastSeenData);
+            card.add(dronePanel);
+        }
+        card.revalidate();
+        card.repaint();
+    }
+
+
+    //----------------------------------
 
     private JPanel createDronePanel(DronesData.ReturnDroneData droneData, DroneTypesData.ReturnDroneTypesData droneTypesData,
                                     DroneDynamicsData.ReturnDroneDynamicData droneDynamicData, int droneIndex, Color primaryColor, ArrayList<String> geocodingData,
