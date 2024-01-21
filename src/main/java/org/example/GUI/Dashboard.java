@@ -132,14 +132,6 @@ public class Dashboard {
                 card.add(paginationPanel, BorderLayout.SOUTH);
             }
         });
-
-        JPanel paginationPanel = new JPanel();
-        paginationPanel.setBackground(primaryColor);
-        paginationPanel.add(prevButton);
-        JLabel paginationLabel = new JLabel("Page " + currentPage + " of " + totalPages);
-        paginationPanel.add(paginationLabel);
-        paginationPanel.add(nextButton);
-
         card.add(paginationPanel, BorderLayout.SOUTH);
     }
 
