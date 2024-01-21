@@ -92,6 +92,7 @@ public class Dashboard {
         viewMoreButton.setFont(new Font("Arial", Font.BOLD, 12));
         viewMoreButton.setForeground(Color.WHITE);
         viewMoreButton.setBackground(Color.DARK_GRAY);
+        viewMoreButton.setOpaque(true);
         viewMoreButton.setBorderPainted(false);
         viewMoreButton.setFocusPainted(false);
         viewMoreButton.addActionListener(e -> {

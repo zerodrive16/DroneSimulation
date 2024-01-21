@@ -105,6 +105,7 @@ JFrame frame = new JFrame();
         infobar.setBackground(backgroundColor);
         infobar.setPreferredSize(new Dimension(width,height/32));
         refreshButton.setBackground(Color.WHITE);
+        refreshButton.setOpaque(true);
         refreshButton.setPreferredSize(new Dimension(width/16,(height/32)-8));
         refreshButton.setBorderPainted(false);
         refreshButton.setFocusPainted(false);
@@ -136,7 +137,7 @@ JFrame frame = new JFrame();
         frame.setVisible(true);
         frame.setExtendedState(frame.getExtendedState() | Frame.ICONIFIED); // minimize window
         frame.setBackground(mainScreenColor);
-        frame.setMinimumSize(new Dimension(1440,810));
+        frame.setMinimumSize(new Dimension(1280,720));
 
         frame.addComponentListener(new ComponentAdapter() {
             //----------------------------code for resizing the window-------------------------------
