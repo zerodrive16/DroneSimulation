@@ -8,6 +8,7 @@ import org.example.API_Properties.DroneTypesData;
 import org.example.API_Properties.DronesData;
 import org.example.GUI.Utility.ConvertDate;
 import org.example.GUI.Utility.ReverseGeo;
+import org.example.GUI.components.Abs_GUIComponents;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public class Dashboard {
+public class Dashboard extends Abs_GUIComponents {
     private int currentPage = 1;
     private static final int ITEMS_PER_PAGE = 10;
     public void configureCard1(Color primaryColor, JPanel card) {
