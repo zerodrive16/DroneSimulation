@@ -141,7 +141,7 @@ JFrame frame = new JFrame();
         frame.setVisible(true);
         frame.setExtendedState(frame.getExtendedState() | Frame.ICONIFIED); // minimize window
         frame.setBackground(mainScreenColor);
-        frame.setMinimumSize(new Dimension(1280,720));
+        frame.setMinimumSize(new Dimension(1024,720));
 
         frame.addComponentListener(new ComponentAdapter() {
             //----------------------------code for resizing the window-------------------------------
