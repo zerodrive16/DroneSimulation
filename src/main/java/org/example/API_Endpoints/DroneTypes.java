@@ -7,12 +7,15 @@ import org.example.API_StoreData.DroneTypesStore;
 
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Defining the class DroneTypes which builds the asynchronous API request and response
  * Extending the abstract class {@link Abs_APIBuilding} with a return type of {@link DroneTypesData.ReturnDroneTypesData}.
 */
 public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypesData>{
+    private static final Logger logger = Logger.getLogger(DroneTypes.class.getName());
     private final DroneTypesStore storeDroneTypes = new DroneTypesStore();
 
     /**
@@ -39,22 +42,25 @@ public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypesD
 
                             storeAPIResponse(apiResponse);
                         } catch(JsonSyntaxException ex) {
-                            System.err.println("JSON format error");
+                            logger.log(Level.SEVERE, "Fatal error in JSON conversion!", ex);
                             resultFuture.completeExceptionally(ex);
                         }
                     }));
                 }
 
                 CompletableFuture<Void> chainFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+                logger.info("Pagination has reached 0, Complete the resultFuture with its data.");
                 chainFutures.thenRun(() -> resultFuture.complete(
                         new DroneTypesData.ReturnDroneTypesData((ArrayList<String>) storeDroneTypes.getDroneManufacturer(), (ArrayList<String>) storeDroneTypes.getDroneTypeName(),
                         (ArrayList<Integer>) storeDroneTypes.getDroneWeight(), (ArrayList<Integer>) storeDroneTypes.getDroneMaxSpeed(), (ArrayList<Integer>) storeDroneTypes.getDroneBatteryCapacity(),
-                        (ArrayList<Integer>) storeDroneTypes.getDroneControlRange(), (ArrayList<Integer>) storeDroneTypes.getDroneMaxCarriage()))).exceptionally(ex -> {
+                        (ArrayList<Integer>) storeDroneTypes.getDroneControlRange(), (ArrayList<Integer>) storeDroneTypes.getDroneMaxCarriage())
+                )).exceptionally(ex -> {
                     resultFuture.completeExceptionally(new RuntimeException(ex));
                     return null;
                 });
             } else {
-                System.err.println("Drone URL is empty!");
+                logger.log(Level.WARNING, "DroneTypeURL is empty!");
+                resultFuture.completeExceptionally(new IllegalStateException("DroneTypeURL is empty"));
             }
         });
         return resultFuture;
@@ -69,7 +75,7 @@ public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypesD
         if (apiResponse != null) {
             storeDroneTypes.addDroneTypes(apiResponse);
         } else {
-            System.err.println("Result error / Null");
+            logger.log(Level.WARNING, "apiResponse is null!");
         }
     }
 }
