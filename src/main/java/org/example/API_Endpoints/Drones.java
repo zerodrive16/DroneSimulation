@@ -89,7 +89,6 @@ public class Drones extends Abs_APIBuilding<DronesData.ReturnDroneData> {
             for (DronesData.Drone drone : apiResponse.getDroneResults()) {
                 storeDrones.addDrones(drone);
             }
-            logger.info("Data successfully fetched and stored");
         } else {
             logger.log(Level.WARNING, "Result error / result null!");
         }

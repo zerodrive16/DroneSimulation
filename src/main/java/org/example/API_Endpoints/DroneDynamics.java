@@ -7,6 +7,8 @@ import org.example.API_StoreData.DroneDynamicsStore;
 
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
 * The DroneDynamic class handles the async building of the drone dynamic api call
@@ -14,6 +16,7 @@ import java.util.concurrent.CompletableFuture;
 */
 public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDroneDynamicData> {
 
+    private static final Logger logger = Logger.getLogger(DroneDynamics.class.getName());
     private final DroneDynamicsStore storeDroneDynamics = new DroneDynamicsStore();
 
     /**
@@ -27,23 +30,28 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
         CompletableFuture<DroneDynamicsData.ReturnDroneDynamicData> resultFuture = new CompletableFuture<>();
         new Drones().APIBuildAsync().thenAccept(returnData -> {
             ArrayList<Integer> droneIDs = returnData.getDroneID();
-            ArrayList<CompletableFuture<Void>> futures = new ArrayList<>();
+            if(!droneIDs.isEmpty()) {
+                ArrayList<CompletableFuture<Void>> futures = new ArrayList<>();
 
-            for (Integer id : droneIDs) {
-                futures.add(getLastDroneDynamic(id));
+                for (Integer id : droneIDs) {
+                    futures.add(getLastDroneDynamic(id));
+                }
+
+                CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).thenRun(() -> {
+                    DroneDynamicsData.ReturnDroneDynamicData data = new DroneDynamicsData.ReturnDroneDynamicData(
+                            storeDroneDynamics.getDroneTimestamp(), storeDroneDynamics.getDroneSpeed(),
+                            storeDroneDynamics.getDroneLongitude(), storeDroneDynamics.getDroneLatitude(), storeDroneDynamics.getDroneBatteryStatus(),
+                            storeDroneDynamics.getDroneLastSeen(), storeDroneDynamics.getDroneStatus()
+                    );
+                    resultFuture.complete(data);
+                }).exceptionally(ex -> {
+                    resultFuture.completeExceptionally(ex);
+                    return null;
+                });
+            } else {
+                logger.log(Level.SEVERE,"DroneID is empty!");
+                resultFuture.completeExceptionally(new IllegalStateException("DroneID is empty!"));
             }
-
-            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).thenRun(() -> {
-                DroneDynamicsData.ReturnDroneDynamicData data = new DroneDynamicsData.ReturnDroneDynamicData(
-                        storeDroneDynamics.getDroneTimestamp(), storeDroneDynamics.getDroneSpeed(),
-                        storeDroneDynamics.getDroneLongitude(), storeDroneDynamics.getDroneLatitude(), storeDroneDynamics.getDroneBatteryStatus(),
-                        storeDroneDynamics.getDroneLastSeen(), storeDroneDynamics.getDroneStatus()
-                );
-                resultFuture.complete(data);
-            }).exceptionally(ex -> {
-                resultFuture.completeExceptionally(ex);
-                return null;
-            });
         });
         return resultFuture;
     }
@@ -78,6 +86,7 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
                         }
                         future.complete(null);
                     }).exceptionally(ex -> {
+                        logger.log(Level.SEVERE, "Error in asynchronous processing!", ex);
                         future.completeExceptionally(ex);
                         return null;
                     });
@@ -85,10 +94,11 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
                     future.complete(null);
                 }
             } catch(JsonSyntaxException ex) {
-                System.err.println("JSON error!");
-                future.completeExceptionally(ex);
+                logger.log(Level.SEVERE, "Fatal error in JSON conversion!", ex);
+                throw new RuntimeException("Error in JSON conversion");
             }
         }).exceptionally(ex -> {
+            logger.log(Level.SEVERE, "Error in asynchronous processing!", ex);
             future.completeExceptionally(ex);
             return null;
         });
@@ -105,6 +115,9 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
     private void storeAPIResponse(DroneDynamicsData.DroneDynamic droneDynamic) {
         if (droneDynamic != null) {
             storeDroneDynamics.addDroneDynamics(droneDynamic);
+        } else {
+            logger.log(Level.WARNING, "droneDynamic is null!");
+            throw new NullPointerException("DroneDynamic is null!");
         }
     }
 }
