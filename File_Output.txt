@@ -1,6 +1,6 @@
-Drone ID: 95
-Manufacturer: Blade
-TypeName: Chroma Camera Drone
-Serialnumber: BlCh-2023-D1E287
-Created: 2023-12-27T09:07:00.744204+01:00
+Drone ID: 80
+Manufacturer: GoPro
+TypeName: Karma
+Serialnumber: PoD8-2031-B53F1D
+Created: 2023-12-27T09:07:00.701950+01:00
 Status: ON
