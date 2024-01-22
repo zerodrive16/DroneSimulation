@@ -1,75 +1,85 @@
-package org.example;
+package org.example.GUI.Utility;
+
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
+import com.google.maps.model.AddressComponent;
+import com.google.maps.model.AddressComponentType;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
-import org.example.API_Endpoints.DroneDynamics;
+import org.example.API_Properties.DroneDynamicsData;
+import org.example.Config;
+
 
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-
+/**
+ * Utility class for performing asynchronous reverse geocoding using the Google Maps API.
+ */
 public class ReverseGeo {
-    public static final ArrayList<String> resultLocation = new ArrayList<>();
 
-    public static void main(String[] args) {
+    private static final Logger logger = Logger.getLogger(ReverseGeo.class.getName());
 
+    /**
+     * Asynchronously performs reverse geocoding for drone locations.
+     *
+     * @param droneDynamicData The drone dynamic data containing latitude and longitude information.
+     * @return A CompletableFuture that resolves to an ArrayList of formatted location results.
+     */
+    public CompletableFuture<ArrayList<String>> performReverseGeoAsync(DroneDynamicsData.ReturnDroneDynamicData droneDynamicData) {
+        // Get the API key for Google Maps
+        String apiKey = Config.geoToken;
 
-        // Replace "YOUR_API_KEY" with your actual API key
-        String apiKey = "AIzaSyA0IA-lTzhcjrSk_SfKwlxT_eGx7CtzVf4";
+        return CompletableFuture.supplyAsync(() -> {
+            // Initialize the list to store location results
+            ArrayList<String> localResultLocation = new ArrayList<>();
 
-        // Create a GeoApiContext with the API key
-        GeoApiContext context = new GeoApiContext.Builder()
-                .apiKey(apiKey)
-                .build();
+            try {
+                // Create a GeoApiContext with the API key
+                GeoApiContext context = new GeoApiContext.Builder()
+                        .apiKey(apiKey)
+                        .build();
 
-        new DroneDynamics().APIBuildAsync().thenAccept(response ->{
+                // Iterate through drone locations
+                for (int i = 0; i < droneDynamicData.getDroneLongitude().size(); i++) {
+                    try {
+                        // Get latitude and longitude of the drone location
+                        Double reverseLongitude = droneDynamicData.getDroneLongitude().get(i);
+                        Double reverseLatitude = droneDynamicData.getDroneLatitude().get(i);
+                        LatLng location = new LatLng(reverseLatitude, reverseLongitude);
 
-            for(int i = 0; i< response.getDroneLongitude().size(); i++){
-                Double ReverseLongitude = response.getDroneLongitude().get(i);
-                Double ReverseLatitude = response.getDroneLatitude().get(i);
-                LatLng location = new LatLng(ReverseLatitude, ReverseLongitude);
-                try {
-                    // Perform reverse geocoding
-                    GeocodingResult[] results = GeocodingApi.reverseGeocode(context, location).await();
+                        // Perform reverse geocoding
+                        GeocodingResult[] results = GeocodingApi.reverseGeocode(context, location).await();
 
-                    // Print the formatted address
-                    if (results.length > 0) {
-                        String formattedAddress = results[0].formattedAddress;
-                        resultLocation.add(formattedAddress);
-                        System.out.println("Reverse Geocoding Result: " + resultLocation.get(i));
-                    } else {
-                        System.out.println("No results found");
+                        // Check if data are saved in results
+                        if (results.length > 0) {
+                            // Extract postal code and city from geocoding results
+                            String postalCode = "";
+                            String city = "";
+                            for (AddressComponent component : results[0].addressComponents) {
+                                if (component.types[0] == AddressComponentType.POSTAL_CODE) {
+                                    postalCode = component.longName;
+                                } else if (component.types[0] == AddressComponentType.LOCALITY) {
+                                    city = component.longName;
+                                }
+                            }
+                            localResultLocation.add(postalCode + ", " + city);
+                        } else {
+                            logger.warning("No results found for location at index " + i);
+                        }
+                    } catch (Exception e) {
+                        // Log the exception and continue to the next location
+                        logger.log(Level.SEVERE, "Exception during reverse geocoding for location at index " + i, e);
                     }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+            } catch (Exception e) {
+                // Log the exception during GeoApiContext creation
+                logger.log(Level.SEVERE, "Exception during GeoApiContext creation", e);
             }
+
+            return localResultLocation;
         });
-
-
-        // Define the latitude and longitude
-        //double latitude = 37.7749; // Replace with your desired latitude
-        //double longitude = -122.4194; // Replace with your desired longitude
-
-        // Create a LatLng object
-        /*
-        LatLng location = new LatLng(latitude, longitude);
-
-        try {
-            // Perform reverse geocoding
-            GeocodingResult[] results = GeocodingApi.reverseGeocode(context, location).await();
-
-            // Print the formatted address
-            if (results.length > 0) {
-                String formattedAddress = results[0].formattedAddress;
-                System.out.println("Reverse Geocoding Result: " + formattedAddress);
-            } else {
-                System.out.println("No results found");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } */
     }
 }
