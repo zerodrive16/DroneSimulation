@@ -21,7 +21,6 @@ import static org.example.GUI.components.pagination.displayPage;
 
 public class CallAPIData {
     public void fetchAPIData(Color primaryColor, JPanel card, JPanel card2) {
-        //System.out.println("call configureCard1");
         Drones dronesAPI = new Drones();
         CompletableFuture<DronesData.ReturnDroneData> futureDronesData = dronesAPI.APIBuildAsync();
 

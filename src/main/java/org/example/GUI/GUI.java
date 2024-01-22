@@ -41,7 +41,7 @@ public class GUI extends Abs_GUIComponents{
         windowSettings();
     }
 
-    public void initUI() {
+    private void initUI() {
         frame.add(navbar.getNavbar(), BorderLayout.NORTH);
         frame.add(mainscreen.getMainScreen(),BorderLayout.CENTER);
         frame.add(infobar.getInfobar(), BorderLayout.SOUTH);

@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.*;
+import java.util.logging.Logger;
 
 import static org.example.Config.token;
 
@@ -15,6 +16,8 @@ import static org.example.Config.token;
  * It has a generic type, which can be used in subclasses to define the specific datatype or object
 */
 public abstract class Abs_APIBuilding<Generic> {
+
+    private static final Logger logger = Logger.getLogger(Abs_APIBuilding.class.getName());
     // number of available CPU cores to optimise the executor thread pool
     protected static final int CPUCoreCount = Runtime.getRuntime().availableProcessors();
     // Executor service to manage the thread pool in asynchronous task operations
