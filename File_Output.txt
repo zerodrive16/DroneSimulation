@@ -1,6 +1,17 @@
-Drone ID: 71
-Manufacturer: Snaptain
-TypeName: S5C
-Serialnumber: HoHS-2024-F26CA5
-Created: 2023-12-27T09:07:00.678852+01:00
-Status: ON
+Drone ID: 			73
+Manufacturer: 		Hubsan
+TypeName: 			X4 H107D
+Serialnumber: 		HuX4-2028-208EA8
+Created: 			27.12.2023 09:07
+Carriage Type: 		ACT
+Location: 			60329, Frankfurt am Main
+Battery: 			0%
+Battery Capacity: 	380kW
+Weight: 			50g
+Max. Carriage: 		50g
+Carriage Weight: 	27g
+Speed: 				0km/h
+Max. Speed: 		32km/h
+Control Range: 		200m
+Status: 			OF
+Last update: 		27.12.2023 09:02
