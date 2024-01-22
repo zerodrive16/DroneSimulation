@@ -1,17 +1,17 @@
-Drone ID: 			93
-Manufacturer: 		Contixo
-TypeName: 			F24 Pro
-Serialnumber: 		HoHS-2030-68CDB8
-Created: 			27.12.2023 09:07Uhr
+Drone ID: 			73
+Manufacturer: 		Snaptain
+TypeName: 			S5C
+Serialnumber: 		HuX4-2028-208EA8
+Created: 			27.12.2023 09:07 Uhr
 Carriage Type: 		ACT
-Location: 			65203, Wiesbaden
-Battery: 			140%
-Battery Capacity: 	2500kW
-Weight: 			520g
-Max. Carriage: 		250g
-Carriage Weight: 	267g
-Speed: 				31km/h
-Max. Speed: 		60km/h
-Control Range: 		1200m
-Status: 			ON
-Last update: 		27.12.2023 09:07Uhr
+Location: 			60329, Frankfurt am Main
+Battery: 			0%
+Battery Capacity: 	550kW
+Weight: 			120g
+Max. Carriage: 		80g
+Carriage Weight: 	27g
+Speed: 				0km/h
+Max. Speed: 		40km/h
+Control Range: 		150m
+Status: 			OF
+Last update: 		27.12.2023 09:02Uhr
