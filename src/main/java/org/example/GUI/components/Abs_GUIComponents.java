@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public abstract class Abs_GUIComponents {
-    public Color mainScreenColor = new Color(44,44,44); //dark Gray
+    static public Color mainScreenColor = new Color(44,44,44); //dark Gray
     public Color backgroundColor = new Color(22,22,22); //even darker Gray
     public Color panelColor = new Color(66,66,66); //light Gray
     public Color greytabColor = new Color(32,32,32); // darkest Gray

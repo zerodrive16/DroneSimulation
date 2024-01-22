@@ -19,13 +19,16 @@ public class StreamFiles {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
 
-            writer.write("Drone ID: " + droneData.getDroneID().get(droneIndex));
+            // calculate battery percentage
+            int batteryPercentage = (int) (100 * (Double.parseDouble(droneDynamicData.getDroneBatteryStatus().get(droneIndex)) / droneTypesData.getDroneBatteryCapacity().get(droneIndex)));
+
+            writer.write("Drone ID: \t\t\t" + droneData.getDroneID().get(droneIndex));
             writer.newLine();
-            writer.write("Manufacturer: " + droneTypesData.getDroneManufacturer().get(droneIndex));
+            writer.write("Manufacturer: \t\t" + droneTypesData.getDroneManufacturer().get(droneIndex));
             writer.newLine();
-            writer.write("TypeName: " + droneTypesData.getDroneTypeName().get(droneIndex));
+            writer.write("TypeName: \t\t\t" + droneTypesData.getDroneTypeName().get(droneIndex));
             writer.newLine();
-            writer.write("Serialnumber: " + droneData.getDroneSerialnumber().get(droneIndex));
+            writer.write("Serialnumber: \t\t" + droneData.getDroneSerialnumber().get(droneIndex));
             writer.newLine();
             writer.write("Created: \t\t\t" + convertCreateData.get(droneIndex) + "Uhr");
             writer.newLine();
