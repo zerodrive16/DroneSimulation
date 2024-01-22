@@ -30,7 +30,7 @@ public class StreamFiles {
             writer.newLine();
             writer.write("Serialnumber: \t\t" + droneData.getDroneSerialnumber().get(droneIndex));
             writer.newLine();
-            writer.write("Created: \t\t\t" + convertCreateData.get(droneIndex) + "Uhr");
+            writer.write("Created: \t\t\t" + convertCreateData.get(droneIndex) + " Uhr");
             writer.newLine();
             writer.write("Carriage Type: \t\t" + droneData.getDroneCarriageType().get(droneIndex));
             writer.newLine();

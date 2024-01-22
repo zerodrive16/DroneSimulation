@@ -55,6 +55,7 @@ public class InfoBar extends Abs_GUIComponents{
         });
 
         quickSet(textFont,Color.WHITE,backgroundColor,refreshText,refreshLabel);
+        infobar.add()
         infobar.add(Box.createHorizontalGlue()); //align right side
         infobar.add(refreshText);
         infobar.add(refreshButton);
