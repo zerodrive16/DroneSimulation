@@ -259,19 +259,19 @@ public class Dashboard extends Abs_GUIComponents {
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setBackground(primaryColor);
-        infoPanel.add(createWhiteLabel("Manufacturer: \t" + droneTypesData.getDroneManufacturer().get(droneIndex)));
-        infoPanel.add(createWhiteLabel("Typename: \t" + droneTypesData.getDroneTypeName().get(droneIndex)));
-        infoPanel.add(createWhiteLabel("Serialnumber: \t" + droneData.getDroneSerialnumber().get(droneIndex)));
-        infoPanel.add(createWhiteLabel("Created: \t" + convertCreateData.get(droneIndex) + " Uhr"));
+        infoPanel.add(createWhiteLabel("Manufacturer: " + droneTypesData.getDroneManufacturer().get(droneIndex)));
+        infoPanel.add(createWhiteLabel("Typename: " + droneTypesData.getDroneTypeName().get(droneIndex)));
+        infoPanel.add(createWhiteLabel("Serialnumber: " + droneData.getDroneSerialnumber().get(droneIndex)));
+        infoPanel.add(createWhiteLabel("Created: " + convertCreateData.get(droneIndex) + " Uhr"));
         String labelText;
         if("ON".equals(droneDynamicData.getDroneStatus().get(droneIndex))){
-            labelText = "<html><font color='white'>Status: \t</font><font color='green'>" + droneDynamicData.getDroneStatus().get(droneIndex) + "</font></html>";
+            labelText = "<html><font color='white'>Status: </font><font color='green'>" + droneDynamicData.getDroneStatus().get(droneIndex) + "</font></html>";
         }
         else {
-            labelText = "<html><font color='white'>Status: \t</font><font color='red'>" + droneDynamicData.getDroneStatus().get(droneIndex) + "</font></html>";
+            labelText = "<html><font color='white'>Status: </font><font color='red'>" + droneDynamicData.getDroneStatus().get(droneIndex) + "</font></html>";
         }
         infoPanel.add(new JLabel(labelText));
-        infoPanel.add(createWhiteLabel("Last update: \t" + convertLastSeenData.get(droneIndex)+ " Uhr"));
+        infoPanel.add(createWhiteLabel("Last update: " + convertLastSeenData.get(droneIndex)+ " Uhr"));
 
         dronePanel.add(box,BorderLayout.NORTH);
         dronePanel.add(infoPanel, BorderLayout.CENTER);
