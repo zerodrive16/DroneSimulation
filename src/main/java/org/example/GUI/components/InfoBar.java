@@ -1,4 +1,5 @@
 package org.example.GUI.components;
 
-public class InfoBar {
+public class InfoBar extends Abs_GUIComponents{
+
 }

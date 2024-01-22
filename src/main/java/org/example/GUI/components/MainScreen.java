@@ -1,4 +1,4 @@
 package org.example.GUI.components;
 
-public class MainScreen {
+public class MainScreen extends Abs_GUIComponents{
 }

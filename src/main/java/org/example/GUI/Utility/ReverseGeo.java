@@ -9,55 +9,76 @@ import com.google.maps.model.LatLng;
 import org.example.API_Properties.DroneDynamicsData;
 import org.example.Config;
 
+
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+/**
+ * Utility class for performing asynchronous reverse geocoding using the Google Maps API.
+ */
 public class ReverseGeo {
 
-    /**
-     * @param droneDynamicData from {@link DroneDynamicsData.ReturnDroneDynamicData} which takes the fetched API data
-     * @return localResultLocation It returns the conversion of longitude and latitude to addresses in lists
-     * */
+    private static final Logger logger = Logger.getLogger(ReverseGeo.class.getName());
 
+    /**
+     * Asynchronously performs reverse geocoding for drone locations.
+     *
+     * @param droneDynamicData The drone dynamic data containing latitude and longitude information.
+     * @return A CompletableFuture that resolves to an ArrayList of formatted location results.
+     */
     public CompletableFuture<ArrayList<String>> performReverseGeoAsync(DroneDynamicsData.ReturnDroneDynamicData droneDynamicData) {
+        // Get the API key for Google Maps
         String apiKey = Config.geoToken;
 
-        // Create a GeoApiContext with the API key
-        GeoApiContext context = new GeoApiContext.Builder()
-                .apiKey(apiKey)
-                .build();
-
         return CompletableFuture.supplyAsync(() -> {
+            // Initialize the list to store location results
             ArrayList<String> localResultLocation = new ArrayList<>();
 
-            for (int i = 0; i < droneDynamicData.getDroneLongitude().size(); i++) {
-                Double reverseLongitude = droneDynamicData.getDroneLongitude().get(i);
-                Double reverseLatitude = droneDynamicData.getDroneLatitude().get(i);
-                LatLng location = new LatLng(reverseLatitude, reverseLongitude);
+            try {
+                // Create a GeoApiContext with the API key
+                GeoApiContext context = new GeoApiContext.Builder()
+                        .apiKey(apiKey)
+                        .build();
 
-                try {
-                    // Perform reverse geocoding
-                    GeocodingResult[] results = GeocodingApi.reverseGeocode(context, location).await();
+                // Iterate through drone locations
+                for (int i = 0; i < droneDynamicData.getDroneLongitude().size(); i++) {
+                    try {
+                        // Get latitude and longitude of the drone location
+                        Double reverseLongitude = droneDynamicData.getDroneLongitude().get(i);
+                        Double reverseLatitude = droneDynamicData.getDroneLatitude().get(i);
+                        LatLng location = new LatLng(reverseLatitude, reverseLongitude);
 
-                    // Check if data are saved in results
-                    if (results.length > 0) {
-                        String postalCode = "";
-                        String city = "";
-                        for (AddressComponent component : results[0].addressComponents) {
-                            if (component.types[0] == AddressComponentType.POSTAL_CODE) {
-                                postalCode = component.longName;
-                            } else if (component.types[0] == AddressComponentType.LOCALITY) {
-                                city = component.longName;
+                        // Perform reverse geocoding
+                        GeocodingResult[] results = GeocodingApi.reverseGeocode(context, location).await();
+
+                        // Check if data are saved in results
+                        if (results.length > 0) {
+                            // Extract postal code and city from geocoding results
+                            String postalCode = "";
+                            String city = "";
+                            for (AddressComponent component : results[0].addressComponents) {
+                                if (component.types[0] == AddressComponentType.POSTAL_CODE) {
+                                    postalCode = component.longName;
+                                } else if (component.types[0] == AddressComponentType.LOCALITY) {
+                                    city = component.longName;
+                                }
                             }
+                            localResultLocation.add(postalCode + ", " + city);
+                        } else {
+                            logger.warning("No results found for location at index " + i);
                         }
-                        localResultLocation.add(postalCode + ", " + city);
-                    } else {
-                        System.err.println("No results found");
+                    } catch (Exception e) {
+                        // Log the exception and continue to the next location
+                        logger.log(Level.SEVERE, "Exception during reverse geocoding for location at index " + i, e);
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+            } catch (Exception e) {
+                // Log the exception during GeoApiContext creation
+                logger.log(Level.SEVERE, "Exception during GeoApiContext creation", e);
             }
+
             return localResultLocation;
         });
     }

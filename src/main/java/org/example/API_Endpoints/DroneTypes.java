@@ -51,9 +51,9 @@ public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypesD
                 CompletableFuture<Void> chainFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
                 logger.info("Pagination has reached 0, Complete the resultFuture with its data.");
                 chainFutures.thenRun(() -> resultFuture.complete(
-                        new DroneTypesData.ReturnDroneTypesData((ArrayList<String>) storeDroneTypes.getDroneManufacturer(), (ArrayList<String>) storeDroneTypes.getDroneTypeName(),
-                        (ArrayList<Integer>) storeDroneTypes.getDroneWeight(), (ArrayList<Integer>) storeDroneTypes.getDroneMaxSpeed(), (ArrayList<Integer>) storeDroneTypes.getDroneBatteryCapacity(),
-                        (ArrayList<Integer>) storeDroneTypes.getDroneControlRange(), (ArrayList<Integer>) storeDroneTypes.getDroneMaxCarriage())
+                        new DroneTypesData.ReturnDroneTypesData(storeDroneTypes.getDroneManufacturer(), storeDroneTypes.getDroneTypeName(),
+                        storeDroneTypes.getDroneWeight(), storeDroneTypes.getDroneMaxSpeed(), storeDroneTypes.getDroneBatteryCapacity(),
+                        storeDroneTypes.getDroneControlRange(), storeDroneTypes.getDroneMaxCarriage())
                 )).exceptionally(ex -> {
                     resultFuture.completeExceptionally(new RuntimeException(ex));
                     return null;

@@ -46,9 +46,9 @@ public class Drones extends Abs_APIBuilding<DronesData.ReturnDroneData> {
     protected void processAsync(String paginationUrl, CompletableFuture<DronesData.ReturnDroneData> resultFuture) {
         if(paginationUrl == null){
             logger.info("Pagination has reached 0, Complete the resultFuture with its data.");
-            resultFuture.complete(new DronesData.ReturnDroneData((ArrayList<Integer>) storeDrones.getDroneID(), (ArrayList<String>) storeDrones.getDroneTypeURL(),
-                    (ArrayList<String>) storeDrones.getDroneCreate(), (ArrayList<String>) storeDrones.getDroneSerialnumber(),
-                    (ArrayList<Integer>) storeDrones.getDroneCarriageWeight(), (ArrayList<String>) storeDrones.getDroneCarriageType()));
+            resultFuture.complete(new DronesData.ReturnDroneData(storeDrones.getDroneID(), storeDrones.getDroneTypeURL(),
+                    storeDrones.getDroneCreate(), storeDrones.getDroneSerialnumber(),
+                    storeDrones.getDroneCarriageWeight(), storeDrones.getDroneCarriageType()));
             return;
         }
 

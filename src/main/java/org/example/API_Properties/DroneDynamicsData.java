@@ -5,7 +5,6 @@ import java.util.List;
 
 public class DroneDynamicsData {
     public static class DroneDynamic {
-        private String timestamp;
         private String speed;
         private Double longitude;
         private Double latitude;
@@ -13,9 +12,6 @@ public class DroneDynamicsData {
         private String last_seen;
         private String status;
 
-        public String getTimestamp() {
-            return timestamp;
-        }
         public String getSpeed() {
             return speed;
         }
@@ -45,17 +41,15 @@ public class DroneDynamicsData {
     }
 
     public static class ReturnDroneDynamicData {
-        final private ArrayList<String> data_droneTimeStamp;
         final private ArrayList<String> data_droneSpeed;
         final private ArrayList<Double> data_droneLongitude;
         final private ArrayList<Double> data_droneLatitude;
         final private ArrayList<String> data_droneBatteryStatus;
         final private ArrayList<String> data_droneLastSeen;
         final private ArrayList<String> data_droneStatus;
-        public ReturnDroneDynamicData(ArrayList<String> droneTimestamp, ArrayList<String> droneSpeed, ArrayList<Double> droneLongitude,
+        public ReturnDroneDynamicData(ArrayList<String> droneSpeed, ArrayList<Double> droneLongitude,
                                       ArrayList<Double> droneLatitude, ArrayList<String> droneBatteryStatus,
                                       ArrayList<String> droneLastSeen, ArrayList<String> droneStatus){
-            this.data_droneTimeStamp = droneTimestamp;
             this.data_droneSpeed = droneSpeed;
             this.data_droneLongitude = droneLongitude;
             this.data_droneLatitude = droneLatitude;
@@ -64,7 +58,6 @@ public class DroneDynamicsData {
             this.data_droneStatus = droneStatus;
         }
 
-        public ArrayList<String> getDroneTimeStamp(){return data_droneTimeStamp;}
         public ArrayList<String> getDroneSpeed(){
             return data_droneSpeed;
         }
