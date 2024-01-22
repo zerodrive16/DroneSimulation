@@ -17,6 +17,8 @@ public class InfoBar extends Abs_GUIComponents{
 
     public InfoBar(JFrame frame) {
         JLabel refreshText = new JLabel("since Last Update: X Seconds     ");
+        JLabel groupText = new JLabel(" This program was made by Group15");
+
         Timer refreshTimer = new Timer(1000, new ActionListener() {
             int seconds = 0;
             @Override
@@ -54,8 +56,8 @@ public class InfoBar extends Abs_GUIComponents{
             frame.repaint();
         });
 
-        quickSet(textFont,Color.WHITE,backgroundColor,refreshText,refreshLabel);
-        infobar.add()
+        quickSet(textFont,Color.WHITE,backgroundColor,refreshText,refreshLabel,groupText);
+        infobar.add(groupText);
         infobar.add(Box.createHorizontalGlue()); //align right side
         infobar.add(refreshText);
         infobar.add(refreshButton);
