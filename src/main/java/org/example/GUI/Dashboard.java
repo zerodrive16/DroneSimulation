@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutionException;
 public class Dashboard extends Abs_GUIComponents {
     private int currentPage = 1;
     private static final int ITEMS_PER_PAGE = 10;
-    public void configureCard1(Color primaryColor, JPanel card) {
+    public void configureCard1(Color primaryColor, JPanel card, JPanel card2) {
         Drones dronesAPI = new Drones();
         CompletableFuture<DronesData.ReturnDroneData> futureDronesData = dronesAPI.APIBuildAsync();
 
@@ -68,7 +68,7 @@ public class Dashboard extends Abs_GUIComponents {
                         card.repaint();
 
                         displayPage(card, droneData, droneTypeData, droneDynamicData, primaryColor, geoData, convertCreateData, convertLastSeenData);
-                        addPaginationControls(card, droneData, droneTypeData, droneDynamicData, primaryColor, geoData, convertCreateData, convertLastSeenData);
+                        addPaginationControls(card, card2, droneData, droneTypeData, droneDynamicData, primaryColor, geoData, convertCreateData, convertLastSeenData);
 
                     } catch(InterruptedException | ExecutionException ex) {
                         ex.printStackTrace();
@@ -84,6 +84,7 @@ public class Dashboard extends Abs_GUIComponents {
         });
     }
     private void addPaginationControls(JPanel card,
+                                       JPanel card2,
                                        DronesData.ReturnDroneData droneData,
                                        DroneTypesData.ReturnDroneTypesData droneTypeData,
                                        DroneDynamicsData.ReturnDroneDynamicData droneDynamicData,
@@ -122,7 +123,7 @@ public class Dashboard extends Abs_GUIComponents {
                 currentPage--;
                 displayPage(card, droneData, droneTypeData, droneDynamicData, primaryColor, geoData, convertCreateData, convertLastSeenData);
                 paginationLabel.setText("Page " + currentPage + " of " + totalPages);
-                card.add(paginationPanel, BorderLayout.SOUTH);
+                card2.add(paginationPanel);
             }
         });
         nextButton.addActionListener(e -> {
@@ -130,10 +131,10 @@ public class Dashboard extends Abs_GUIComponents {
                 currentPage++;
                 displayPage(card, droneData, droneTypeData, droneDynamicData, primaryColor, geoData, convertCreateData, convertLastSeenData);
                 paginationLabel.setText("Page " + currentPage + " of " + totalPages);
-                card.add(paginationPanel, BorderLayout.SOUTH);
+                card2.add(paginationPanel);
             }
         });
-        card.add(paginationPanel, BorderLayout.SOUTH);
+        card2.add(paginationPanel);
     }
 
     private void displayPage(JPanel card,
@@ -189,8 +190,7 @@ public class Dashboard extends Abs_GUIComponents {
         box.setBackground(Color.DARK_GRAY);
         JButton exportButton = new JButton(clipboard);
         exportButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        exportButton.setForeground(Color.WHITE);
-        exportButton.setBackground(Color.GRAY);
+        exportButton.setBackground(Color.WHITE);
         exportButton.setOpaque(true);
         exportButton.setBorderPainted(false);
         exportButton.setFocusPainted(false);

@@ -30,19 +30,29 @@ JFrame frame = new JFrame();
         //mainScreen.setPreferredSize(new Dimension(width,height-(height/12)));
         CardLayout cardLayout = new CardLayout();
         mainScreen.setLayout(cardLayout);
-        configureCard1(mainScreenColor, card1);
-        card1.setBackground(mainScreenColor);
+
+        splitScreen.setLayout(new BoxLayout(splitScreen, BoxLayout.Y_AXIS));
+        mainScreen.add(splitScreen, "Dashboard");
 
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        mainScreen.add(card1, "Dashboard");
+        configureCard1(mainScreenColor, topPanel, bottomPanel);
+
+        topPanel.setPreferredSize(new Dimension(Short.MAX_VALUE, (int) (height * 0.96)));
+        topPanel.setBackground(mainScreenColor);
+        splitScreen.add(topPanel);
+
+        bottomPanel.setPreferredSize(new Dimension(Short.MAX_VALUE, (int) (height * 0.04)));
+        bottomPanel.setBackground(mainScreenColor);
+        splitScreen.add(bottomPanel);
+
     }
 
-    public void configureCard1(Color mainScreenColor, JPanel card1) {
+    public void configureCard1(Color mainScreenColor, JPanel topPanel, JPanel bottomPanel) {
         Dashboard card = new Dashboard();
-        card.configureCard1(mainScreenColor, card1);
+        card.configureCard1(mainScreenColor, topPanel, bottomPanel);
     }
 
     private void navbarSettings() {
@@ -116,12 +126,13 @@ JFrame frame = new JFrame();
         refreshButton.addActionListener(e->{
             SwingUtilities.updateComponentTreeUI(frame);
             refreshTimer.stop();
-            card1.removeAll();
-            configureCard1(mainScreenColor, card1);
+            topPanel.removeAll();
+            bottomPanel.removeAll();
+            configureCard1(mainScreenColor, topPanel, bottomPanel);
             refreshText.setText("since Last Update: 0 Seconds     ");
             refreshTimer.start();
-            card1.revalidate();
-            card1.repaint();
+            splitScreen.revalidate();
+            splitScreen.repaint();
             frame.revalidate();
             frame.repaint();
         });
@@ -154,7 +165,7 @@ JFrame frame = new JFrame();
             public void componentResized(ComponentEvent e) {
             width = frame.getWidth();
             height = frame.getHeight();
-            card1.setPreferredSize(new Dimension(width,height*(1600/width)));
+            //splitScreen.setPreferredSize(new Dimension(width,height*(1600/width)));
             }
         });
 
