@@ -1,15 +1,15 @@
-Drone ID: 			73
+Drone ID: 			72
 Manufacturer: 		Snaptain
 TypeName: 			S5C
-Serialnumber: 		HuX4-2028-208EA8
+Serialnumber: 		SnS5-2030-360F05
 Created: 			27.12.2023 09:07 Uhr
 Carriage Type: 		ACT
-Location: 			60329, Frankfurt am Main
+Location: 			65203, Wiesbaden
 Battery: 			0%
 Battery Capacity: 	550kW
 Weight: 			120g
 Max. Carriage: 		80g
-Carriage Weight: 	27g
+Carriage Weight: 	73g
 Speed: 				0km/h
 Max. Speed: 		40km/h
 Control Range: 		150m

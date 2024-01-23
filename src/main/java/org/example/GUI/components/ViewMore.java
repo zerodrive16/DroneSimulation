@@ -37,7 +37,8 @@ public class ViewMore {
         int batteryPercentage = (int) (100 * (Double.parseDouble(droneDynamicData.getDroneBatteryStatus().get(droneIndex)) / droneTypesData.getDroneBatteryCapacity().get(droneIndex)));
 
         // retrieve display additional information for the selected drone
-        String additionalInfo = "Manufacturer: \t\t" + droneTypesData.getDroneManufacturer().get(droneIndex) + "\n"
+        String additionalInfo = "Drone ID: \t\t" + droneData.getDroneID().get(droneIndex) + "\n"
+                + "Manufacturer: \t\t" + droneTypesData.getDroneManufacturer().get(droneIndex) + "\n"
                 + "Typename: \t\t" + droneTypesData.getDroneTypeName().get(droneIndex) + "\n"
                 + "Serialnumber: \t\t" + droneData.getDroneSerialnumber().get(droneIndex) + "\n"
                 + "Created: \t\t" + convertCreateData.get(droneIndex) + " Uhr\n"
