@@ -1,17 +1,17 @@
-Drone ID: 			79
-Manufacturer: 		Potensic
-TypeName: 			D80
-Serialnumber: 		GoKa-2031-AD19BD
+Drone ID: 			72
+Manufacturer: 		Holy Stone
+TypeName: 			HS100
+Serialnumber: 		SnS5-2030-360F05
 Created: 			27.12.2023 09:07 Uhr
-Carriage Type: 		SEN
-Location: 			65203, Wiesbaden
-Battery: 			182%
-Battery Capacity: 	2800kW
-Weight: 			450g
-Max. Carriage: 		200g
-Carriage Weight: 	22g
-Speed: 				13km/h
-Max. Speed: 		50km/h
-Control Range: 		800m
+Carriage Type: 		ACT
+Location: 			60323, Frankfurt am Main
+Battery: 			100%
+Battery Capacity: 	3500kW
+Weight: 			700g
+Max. Carriage: 		500g
+Carriage Weight: 	73g
+Speed: 				24km/h
+Max. Speed: 		45km/h
+Control Range: 		500m
 Status: 			ON
 Last update: 		27.12.2023 09:07Uhr
