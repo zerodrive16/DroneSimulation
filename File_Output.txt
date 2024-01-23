@@ -1,17 +1,17 @@
-Drone ID: 			72
-Manufacturer: 		Snaptain
-TypeName: 			S5C
-Serialnumber: 		SnS5-2030-360F05
+Drone ID: 			80
+Manufacturer: 		GoPro
+TypeName: 			Karma
+Serialnumber: 		PoD8-2031-B53F1D
 Created: 			27.12.2023 09:07 Uhr
-Carriage Type: 		ACT
-Location: 			65203, Wiesbaden
-Battery: 			0%
-Battery Capacity: 	550kW
-Weight: 			120g
-Max. Carriage: 		80g
-Carriage Weight: 	73g
-Speed: 				0km/h
-Max. Speed: 		40km/h
-Control Range: 		150m
-Status: 			OF
-Last update: 		27.12.2023 09:02Uhr
+Carriage Type: 		SEN
+Location: 			60311, Frankfurt am Main
+Battery: 			54%
+Battery Capacity: 	5100kW
+Weight: 			1000g
+Max. Carriage: 		400g
+Carriage Weight: 	44g
+Speed: 				43km/h
+Max. Speed: 		56km/h
+Control Range: 		1500m
+Status: 			ON
+Last update: 		27.12.2023 09:07Uhr
