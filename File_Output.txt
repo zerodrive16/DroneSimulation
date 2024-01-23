@@ -1,17 +1,17 @@
-Drone ID: 			80
-Manufacturer: 		GoPro
-TypeName: 			Karma
-Serialnumber: 		PoD8-2031-B53F1D
+Drone ID: 			79
+Manufacturer: 		Potensic
+TypeName: 			D80
+Serialnumber: 		GoKa-2031-AD19BD
 Created: 			27.12.2023 09:07 Uhr
 Carriage Type: 		SEN
-Location: 			60311, Frankfurt am Main
-Battery: 			54%
-Battery Capacity: 	5100kW
-Weight: 			1000g
-Max. Carriage: 		400g
-Carriage Weight: 	44g
-Speed: 				43km/h
-Max. Speed: 		56km/h
-Control Range: 		1500m
+Location: 			65203, Wiesbaden
+Battery: 			182%
+Battery Capacity: 	2800kW
+Weight: 			450g
+Max. Carriage: 		200g
+Carriage Weight: 	22g
+Speed: 				13km/h
+Max. Speed: 		50km/h
+Control Range: 		800m
 Status: 			ON
 Last update: 		27.12.2023 09:07Uhr
