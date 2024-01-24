@@ -1,17 +1,17 @@
-Drone ID: 			72
-Manufacturer: 		Holy Stone
-TypeName: 			HS100
-Serialnumber: 		SnS5-2030-360F05
+Drone ID: 			92
+Manufacturer: 		Syma
+TypeName: 			X5C
+Serialnumber: 		CoF2-2027-F774B7
 Created: 			27.12.2023 09:07 Uhr
 Carriage Type: 		ACT
-Location: 			60323, Frankfurt am Main
-Battery: 			100%
-Battery Capacity: 	3500kW
-Weight: 			700g
-Max. Carriage: 		500g
-Carriage Weight: 	73g
-Speed: 				24km/h
-Max. Speed: 		45km/h
-Control Range: 		500m
+Location: 			60313, Frankfurt am Main
+Battery: 			500%
+Battery Capacity: 	500kW
+Weight: 			102g
+Max. Carriage: 		70g
+Carriage Weight: 	228g
+Speed: 				54km/h
+Max. Speed: 		40km/h
+Control Range: 		150m
 Status: 			ON
 Last update: 		27.12.2023 09:07Uhr

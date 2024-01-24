@@ -16,8 +16,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static org.example.GUI.components.Dashboard.createDronePanel;
-import static org.example.GUI.components.pagination.addPaginationControls;
-import static org.example.GUI.components.pagination.displayPage;
+import static org.example.GUI.components.Pagination.addPaginationControls;
+import static org.example.GUI.components.Pagination.displayPage;
 
 public class CallAPIData {
     public void fetchAPIData(Color primaryColor, JPanel card, JPanel card2) {

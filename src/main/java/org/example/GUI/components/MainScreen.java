@@ -6,15 +6,15 @@ import static org.example.GUI.GUI.createDashboard;
 
 public class MainScreen extends Abs_GUIComponents{
 
-    private JPanel mainScreen = new JPanel();
-    protected JPanel bottomPanel = new JPanel();
-    protected JPanel topPanel = new JPanel();
-    public JPanel splitScreen = new JPanel();
+    private final JPanel mainScreen = new JPanel();
+    private final JPanel bottomPanel = new JPanel();
+    private final JPanel topPanel = new JPanel();
 
     public MainScreen() {
         CardLayout cardLayout = new CardLayout();
         mainScreen.setLayout(cardLayout);
 
+        JPanel splitScreen = new JPanel();
         splitScreen.setLayout(new BoxLayout(splitScreen, BoxLayout.Y_AXIS));
         mainScreen.add(splitScreen, "Dashboard");
 

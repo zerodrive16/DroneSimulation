@@ -11,10 +11,10 @@ import java.awt.event.*;
 
 public class GUI extends Abs_GUIComponents{
 
-    JFrame frame = new JFrame();
-    static MainScreen mainscreen = new MainScreen();
-    InfoBar infobar = new InfoBar(frame);
-    NavBar navbar = new NavBar();
+    private final JFrame frame = new JFrame();
+    private static final MainScreen mainscreen = new MainScreen();
+    private final InfoBar infobar = new InfoBar(frame);
+    private final NavBar navbar = new NavBar();
 
     public void windowSettings(){
         frame.setTitle("Drone Simulation");

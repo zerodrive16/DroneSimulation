@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import static org.example.GUI.components.Dashboard.createDronePanel;
 
-public class pagination {
+public class Pagination {
 
     private static int currentPage = 1;
     private static final int ITEMS_PER_PAGE = 10;
