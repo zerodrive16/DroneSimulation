@@ -23,22 +23,22 @@ public class DronesDataStore {
         droneCarriageType.add(drone.getCarriage_type());
     }
 
-    public List<Integer> getDroneID() {
+    public ArrayList<Integer> getDroneID() {
         return droneID;
     }
-    public List<String> getDroneTypeURL() {
+    public ArrayList<String> getDroneTypeURL() {
         return droneTypeURL;
     }
-    public List<String> getDroneCreate() {
+    public ArrayList<String> getDroneCreate() {
         return droneCreate;
     }
-    public List<String> getDroneSerialnumber() {
+    public ArrayList<String> getDroneSerialnumber() {
         return droneSerialnumber;
     }
-    public List<Integer> getDroneCarriageWeight() {
+    public ArrayList<Integer> getDroneCarriageWeight() {
         return droneCarriageWeight;
     }
-    public List<String> getDroneCarriageType() {
+    public ArrayList<String> getDroneCarriageType() {
         return droneCarriageType;
     }
 }

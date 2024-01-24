@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 
 public class DroneDynamicsStore {
-    private final ArrayList<String> droneTimestamp = new ArrayList<>();
     private final ArrayList<String> droneSpeed = new ArrayList<>();
     private final ArrayList<Double> droneLongitude = new ArrayList<>();
     private final ArrayList<Double> droneLatitude = new ArrayList<>();
@@ -15,7 +14,6 @@ public class DroneDynamicsStore {
     private final ArrayList<String> droneStatus = new ArrayList<>();
 
     public void addDroneDynamics(DroneDynamicsData.DroneDynamic droneDynamic) {
-        droneTimestamp.add(droneDynamic.getTimestamp());
         droneSpeed.add(droneDynamic.getSpeed());
         droneLongitude.add(droneDynamic.getLongitude());
         droneLatitude.add(droneDynamic.getLatitude());
@@ -24,9 +22,6 @@ public class DroneDynamicsStore {
         droneStatus.add(droneDynamic.getStatus());
     }
 
-    public ArrayList<String> getDroneTimestamp() {
-        return droneTimestamp;
-    }
     public ArrayList<String> getDroneSpeed() {
         return droneSpeed;
     }

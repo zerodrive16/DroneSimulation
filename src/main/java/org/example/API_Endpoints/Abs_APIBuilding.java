@@ -7,14 +7,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.*;
+import java.util.logging.Logger;
 
 import static org.example.Config.token;
 
-/*
+/**
  * The abstract class defines the templates that can be used in subclasses
  * It has a generic type, which can be used in subclasses to define the specific datatype or object
 */
 public abstract class Abs_APIBuilding<Generic> {
+
+    private static final Logger logger = Logger.getLogger(Abs_APIBuilding.class.getName());
     // number of available CPU cores to optimise the executor thread pool
     protected static final int CPUCoreCount = Runtime.getRuntime().availableProcessors();
     // Executor service to manage the thread pool in asynchronous task operations
@@ -24,10 +27,10 @@ public abstract class Abs_APIBuilding<Generic> {
     private final Map<String, String> cache = new ConcurrentHashMap<>();
 
 
-    /*
+    /**
      * Asynchronously sends an HTTP request with GET operation to the specified URL and returns the response
      * @param url: The url to send the request to
-     * @return: It's a CompletableFuture that , when complete, will convert the response as a String value
+     * @return response It's a CompletableFuture that , when complete, will convert the response as a String value
     */
     protected CompletableFuture<String> APIRequestAsync(String url) {
         return CompletableFuture.supplyAsync(() -> {
@@ -66,7 +69,7 @@ public abstract class Abs_APIBuilding<Generic> {
         }, executor);
     }
 
-    /*
+    /**
      * Retrieves the authorization token for the API request
      * It checks if the token is either empty or null
      * @throw it throws the IllegalStateException
@@ -78,7 +81,7 @@ public abstract class Abs_APIBuilding<Generic> {
         return token;
     }
 
-    /*
+    /**
      * Abstract function to build the asynchronous API subclass
      * @return it returns the CompletableFuture resultFuture
     */

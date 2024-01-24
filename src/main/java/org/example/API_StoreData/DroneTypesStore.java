@@ -26,25 +26,25 @@ public class DroneTypesStore {
         droneMaxCarriage.add(droneType.getMax_Carriage());
     }
 
-    public List<String> getDroneManufacturer() {
+    public ArrayList<String> getDroneManufacturer() {
         return droneManufacturer;
     }
-    public List<String> getDroneTypeName() {
+    public ArrayList<String> getDroneTypeName() {
         return droneTypeName;
     }
-    public List<Integer> getDroneWeight() {
+    public ArrayList<Integer> getDroneWeight() {
         return droneWeight;
     }
-    public List<Integer> getDroneMaxSpeed() {
+    public ArrayList<Integer> getDroneMaxSpeed() {
         return droneMaxSpeed;
     }
-    public List<Integer> getDroneBatteryCapacity() {
+    public ArrayList<Integer> getDroneBatteryCapacity() {
         return droneBatteryCapacity;
     }
-    public List<Integer> getDroneControlRange() {
+    public ArrayList<Integer> getDroneControlRange() {
         return droneControlRange;
     }
-    public List<Integer> getDroneMaxCarriage() {
+    public ArrayList<Integer> getDroneMaxCarriage() {
         return droneMaxCarriage;
     }
 }

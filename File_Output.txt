@@ -1,6 +1,17 @@
-Drone ID: 73
-Manufacturer: Hubsan
-TypeName: X4 H107D
-Serialnumber: HuX4-2028-208EA8
-Created: 2023-12-27T09:07:00.686755+01:00
-Status: ON
+Drone ID: 			92
+Manufacturer: 		Syma
+TypeName: 			X5C
+Serialnumber: 		CoF2-2027-F774B7
+Created: 			27.12.2023 09:07 Uhr
+Carriage Type: 		ACT
+Location: 			60313, Frankfurt am Main
+Battery: 			500%
+Battery Capacity: 	500kW
+Weight: 			102g
+Max. Carriage: 		70g
+Carriage Weight: 	228g
+Speed: 				54km/h
+Max. Speed: 		40km/h
+Control Range: 		150m
+Status: 			ON
+Last update: 		27.12.2023 09:07Uhr
