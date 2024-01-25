@@ -3,15 +3,24 @@ package org.example.API_Properties;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class representing the data structure for drone dynamics information.
+ */
 public class DroneDynamicsData {
     public static class DroneDynamic {
-        private String speed;
-        private Double longitude;
-        private Double latitude;
-        private String battery_status;
-        private String last_seen;
-        private String status;
+        // variables which represent the elements inside the result array
 
+        String speed;
+        Double longitude;
+        Double latitude;
+        String battery_status;
+        String last_seen;
+        String status;
+
+        public DroneDynamic() {
+        }
+
+        // getters to fetch the API data
         public String getSpeed() {
             return speed;
         }
@@ -29,9 +38,14 @@ public class DroneDynamicsData {
         }
         public String getStatus() { return status; }
     }
+    /**
+     * this function takes the List of the results
+     * it also takes the count which identifies how many entries exists
+     * it uses the getter to retrieve the information
+     */
     public static class DroneDynamicResult {
-        private List<DroneDynamic> results;
-        private Integer count;
+        List<DroneDynamic> results;
+        Integer count;
         public List<DroneDynamic> getResults() {
             return results;
         }
@@ -47,6 +61,17 @@ public class DroneDynamicsData {
         final private ArrayList<String> data_droneBatteryStatus;
         final private ArrayList<String> data_droneLastSeen;
         final private ArrayList<String> data_droneStatus;
+
+        /**
+         * After the asynchronous API call is done, it saves all the fetched data inside the Constructor and later assign it
+         *
+         * @param droneSpeed         List of drone speeds as Strings.
+         * @param droneLongitude     List of drone longitudes as Doubles.
+         * @param droneLatitude      List of drone latitudes as Doubles.
+         * @param droneBatteryStatus List of drone battery statuses as Strings.
+         * @param droneLastSeen      List of last seen timestamps as Strings.
+         * @param droneStatus        List of drone statuses as Strings.
+         */
         public ReturnDroneDynamicData(ArrayList<String> droneSpeed, ArrayList<Double> droneLongitude,
                                       ArrayList<Double> droneLatitude, ArrayList<String> droneBatteryStatus,
                                       ArrayList<String> droneLastSeen, ArrayList<String> droneStatus){
@@ -58,6 +83,7 @@ public class DroneDynamicsData {
             this.data_droneStatus = droneStatus;
         }
 
+        // getters to output the data
         public ArrayList<String> getDroneSpeed(){
             return data_droneSpeed;
         }

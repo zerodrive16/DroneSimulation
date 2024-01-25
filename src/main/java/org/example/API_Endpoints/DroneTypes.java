@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 */
 public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypesData>{
     private static final Logger logger = Logger.getLogger(DroneTypes.class.getName());
+    // storing the drone types fetched data temporarily
     private final DroneTypesStore storeDroneTypes = new DroneTypesStore();
 
     /**
@@ -29,14 +30,18 @@ public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypesD
     public CompletableFuture<DroneTypesData.ReturnDroneTypesData> APIBuildAsync() {
         CompletableFuture<DroneTypesData.ReturnDroneTypesData> resultFuture = new CompletableFuture<>();
 
+        // calling the drones class with the URL
         new Drones().APIBuildAsync().thenAccept(returnData -> {
             ArrayList<String> droneTypeURL = returnData.getDroneTypeURL();
             if(!droneTypeURL.isEmpty()) {
                 ArrayList<CompletableFuture<Void>> futures = new ArrayList<>();
 
+                // iterating through every droneTypeURL to get the data to the corresponding drone id
                 for (String temp_URL : droneTypeURL) {
+                    // doing the API call and store the result to futures
                     futures.add(APIRequestAsync(temp_URL).thenAccept(response -> {
                         try {
+                            // converting json format to java object
                             Gson gson = new Gson();
                             DroneTypesData.DroneType apiResponse = gson.fromJson(response, DroneTypesData.DroneType.class);
 
@@ -50,6 +55,7 @@ public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypesD
 
                 CompletableFuture<Void> chainFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
                 logger.info("Pagination has reached 0, Complete the resultFuture with its data.");
+                // completing the operation and store data to the constructor
                 chainFutures.thenRun(() -> resultFuture.complete(
                         new DroneTypesData.ReturnDroneTypesData(storeDroneTypes.getDroneManufacturer(), storeDroneTypes.getDroneTypeName(),
                         storeDroneTypes.getDroneWeight(), storeDroneTypes.getDroneMaxSpeed(), storeDroneTypes.getDroneBatteryCapacity(),

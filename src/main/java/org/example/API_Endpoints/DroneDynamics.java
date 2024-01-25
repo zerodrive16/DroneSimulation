@@ -15,8 +15,8 @@ import java.util.logging.Logger;
 * It extends the Abs_APIBuilding of the generic type {@link DroneDynamicsData.ReturnDroneDynamicData} which is the returned data
 */
 public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDroneDynamicData> {
-
     private static final Logger logger = Logger.getLogger(DroneDynamics.class.getName());
+    // storing the drone dynamics fetched data temporarily
     private final DroneDynamicsStore storeDroneDynamics = new DroneDynamicsStore();
 
     /**
@@ -28,15 +28,19 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
     @Override
     public CompletableFuture<DroneDynamicsData.ReturnDroneDynamicData> APIBuildAsync() {
         CompletableFuture<DroneDynamicsData.ReturnDroneDynamicData> resultFuture = new CompletableFuture<>();
+
+        // calling the drones class for the droneID
         new Drones().APIBuildAsync().thenAccept(returnData -> {
             ArrayList<Integer> droneIDs = returnData.getDroneID();
             if(!droneIDs.isEmpty()) {
                 ArrayList<CompletableFuture<Void>> futures = new ArrayList<>();
 
+                // iterating through each drone id
                 for (Integer id : droneIDs) {
                     futures.add(getLastDroneDynamic(id));
                 }
 
+                // once all data from drone dynamics have been fetched return to the constructor
                 CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).thenRun(() -> {
                     DroneDynamicsData.ReturnDroneDynamicData data = new DroneDynamicsData.ReturnDroneDynamicData(
                             storeDroneDynamics.getDroneSpeed(), storeDroneDynamics.getDroneLongitude(),
@@ -68,22 +72,29 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
         CompletableFuture<Void> future = new CompletableFuture<>();
         String initialUrl = "http://dronesim.facets-labs.com/api/" + id + "/dynamics/?format=json";
 
+        // doing the first API request with the initialURL
         APIRequestAsync(initialUrl).thenAccept(initialResponse -> {
             try {
+                // converting the json format to java objects
                 Gson gson = new Gson();
                 DroneDynamicsData.DroneDynamicResult initialApiResponse = gson.fromJson(initialResponse, DroneDynamicsData.DroneDynamicResult.class);
 
                 if (initialApiResponse != null && initialApiResponse.getCount() > 0) {
+                    // calculating the last entry of the drone dynamics with using getCount()
                     int limit = initialApiResponse.getCount();
                     int offset = limit - 1;
-                    String lastEntityUrl = "http://dronesim.facets-labs.com/api/" + id + "/dynamics/?limit=" + limit + "&offset=" + offset + "&format=json";
+                    String lastEntryUrl = "http://dronesim.facets-labs.com/api/" + id + "/dynamics/?limit=" + limit + "&offset=" + offset + "&format=json";
 
-                    APIRequestAsync(lastEntityUrl).thenAccept(lastResponse -> {
+                    // doing the API request for the last entry with lastResponse as lambda function
+                    APIRequestAsync(lastEntryUrl).thenAccept(lastResponse -> {
+                        // converting json format to java object
                         DroneDynamicsData.DroneDynamicResult lastApiResponse = gson.fromJson(lastResponse, DroneDynamicsData.DroneDynamicResult.class);
                         if (lastApiResponse != null && !lastApiResponse.getResults().isEmpty()) {
+                            // getting the last entry and call the storeAPIResponse
                             DroneDynamicsData.DroneDynamic lastDroneDynamic = lastApiResponse.getResults().get(0);
                             storeAPIResponse(lastDroneDynamic);
                         }
+                        // completing the future
                         future.complete(null);
                     }).exceptionally(ex -> {
                         logger.log(Level.SEVERE, "Error in asynchronous processing!", ex);

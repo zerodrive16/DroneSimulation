@@ -4,8 +4,12 @@ import org.example.API_Properties.DroneDynamicsData;
 
 import java.util.ArrayList;
 
-
+/**
+ *  class represents the fetched API data
+ *  it stores the data temporarily for the DroneDynamics
+ */
 public class DroneDynamicsStore {
+    // storing the data inside the List
     private final ArrayList<String> droneSpeed = new ArrayList<>();
     private final ArrayList<Double> droneLongitude = new ArrayList<>();
     private final ArrayList<Double> droneLatitude = new ArrayList<>();
@@ -13,6 +17,11 @@ public class DroneDynamicsStore {
     private final ArrayList<String> droneLastSeen = new ArrayList<>();
     private final ArrayList<String> droneStatus = new ArrayList<>();
 
+    /**
+     * calling the function to store the drone dynamics data
+     *
+     * @param droneDynamic it takes the parameter as access point to the getters
+     */
     public void addDroneDynamics(DroneDynamicsData.DroneDynamic droneDynamic) {
         droneSpeed.add(droneDynamic.getSpeed());
         droneLongitude.add(droneDynamic.getLongitude());
@@ -22,6 +31,7 @@ public class DroneDynamicsStore {
         droneStatus.add(droneDynamic.getStatus());
     }
 
+    // getters to get the fetched API data
     public ArrayList<String> getDroneSpeed() {
         return droneSpeed;
     }

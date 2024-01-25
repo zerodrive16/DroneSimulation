@@ -3,10 +3,13 @@ package org.example.API_StoreData;
 import org.example.API_Properties.DronesData;
 
 import java.util.ArrayList;
-import java.util.List;
 
+/**
+ *  class represents the fetched API data
+ *  it stores the data temporarily for the Drones
+ */
 public class DronesDataStore {
-    // ArrayLists to store the API fetch data temporarily
+    // storing the data inside the List
     private final ArrayList<Integer> droneID = new ArrayList<>();
     private final ArrayList<String> droneTypeURL = new ArrayList<>();
     private final ArrayList<String> droneCreate = new ArrayList<>();
@@ -14,21 +17,25 @@ public class DronesDataStore {
     private final ArrayList<Integer> droneCarriageWeight = new ArrayList<>();
     private final ArrayList<String> droneCarriageType = new ArrayList<>();
 
+    /**
+     * calling the function to store the drones data
+     *
+     * @param drone it takes the parameter as access point to the getters
+     */
     public void addDrones(DronesData.Drone drone) {
         droneID.add(drone.getId());
-        droneTypeURL.add(drone.getDronetype());
+        droneTypeURL.add(drone.getDroneType());
         droneCreate.add(drone.getCreated());
         droneSerialnumber.add(drone.getSerialnumber());
         droneCarriageWeight.add(drone.getCarriage_weight());
         droneCarriageType.add(drone.getCarriage_type());
     }
 
+    // getters to get the fetched API data
     public ArrayList<Integer> getDroneID() {
         return droneID;
     }
-    public ArrayList<String> getDroneTypeURL() {
-        return droneTypeURL;
-    }
+    public ArrayList<String> getDroneTypeURL() { return droneTypeURL; }
     public ArrayList<String> getDroneCreate() {
         return droneCreate;
     }

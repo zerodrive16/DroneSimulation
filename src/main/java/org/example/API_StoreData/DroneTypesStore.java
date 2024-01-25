@@ -1,13 +1,15 @@
 package org.example.API_StoreData;
 
 import org.example.API_Properties.DroneTypesData;
-import org.example.API_Properties.DronesData;
 
 import java.util.ArrayList;
-import java.util.List;
 
+/**
+ *  class represents the fetched API data
+ *  it stores the data temporarily for the Drone types
+ */
 public class DroneTypesStore {
-    // declaring ArrayLists which store the REST API data temporarily
+    // storing the data inside the List
     private final ArrayList<String> droneManufacturer = new ArrayList<>();
     private final ArrayList<String> droneTypeName = new ArrayList<>();
     private final ArrayList<Integer> droneWeight = new ArrayList<>();
@@ -16,6 +18,11 @@ public class DroneTypesStore {
     private final ArrayList<Integer> droneControlRange = new ArrayList<>();
     private final ArrayList<Integer> droneMaxCarriage = new ArrayList<>();
 
+    /**
+     * calling the function to store the drones data
+     *
+     * @param droneType it takes the parameter as access point to the getters
+     */
     public void addDroneTypes(DroneTypesData.DroneType droneType) {
         droneManufacturer.add(droneType.getManufacturer());
         droneTypeName.add(droneType.getTypename());
@@ -26,12 +33,9 @@ public class DroneTypesStore {
         droneMaxCarriage.add(droneType.getMax_Carriage());
     }
 
-    public ArrayList<String> getDroneManufacturer() {
-        return droneManufacturer;
-    }
-    public ArrayList<String> getDroneTypeName() {
-        return droneTypeName;
-    }
+    // getters to get the fetched API data
+    public ArrayList<String> getDroneManufacturer() { return droneManufacturer; }
+    public ArrayList<String> getDroneTypeName() { return droneTypeName; }
     public ArrayList<Integer> getDroneWeight() {
         return droneWeight;
     }

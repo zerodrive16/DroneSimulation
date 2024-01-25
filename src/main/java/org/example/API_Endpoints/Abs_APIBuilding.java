@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static org.example.Config.token;
@@ -49,6 +50,7 @@ public abstract class Abs_APIBuilding<Generic> {
                 con.setRequestMethod("GET");
                 con.setRequestProperty("User-Agent", "XYZ");
 
+                // reading from input stream reader
                 BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 String inputLine;
                 StringBuilder response = new StringBuilder();
@@ -63,8 +65,9 @@ public abstract class Abs_APIBuilding<Generic> {
                 cache.put(url, response.toString());
                 return response.toString();
                 // exception for error handling the HTTP request
-            } catch(IOException e) {
-                throw new RuntimeException(e);
+            } catch(IOException ex) {
+                logger.log(Level.SEVERE, "Error in API call!", ex);
+                throw new RuntimeException(ex);
             }
         }, executor);
     }
@@ -72,11 +75,11 @@ public abstract class Abs_APIBuilding<Generic> {
     /**
      * Retrieves the authorization token for the API request
      * It checks if the token is either empty or null
-     * @throw it throws the IllegalStateException
     */
-    protected String retrieveToken(){
-        if(token == null || token.isEmpty()){
-            throw new IllegalStateException("Token is either null or empty");
+    protected String retrieveToken() {
+        if (token == null || token.isEmpty()) {
+            logger.log(Level.WARNING, "Token is null or empty. Please provide a valid token.");
+            throw new IllegalArgumentException("Token is null or empty. Please provide a valid token.");
         }
         return token;
     }

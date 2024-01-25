@@ -1,17 +1,17 @@
 Drone ID: 			77
-Manufacturer: 		PowerVision
-TypeName: 			PowerEgg X
+Manufacturer: 		Potensic
+TypeName: 			D80
 Serialnumber: 		PoPo-2031-94D838
 Created: 			27.12.2023 09:07 Uhr
 Carriage Type: 		ACT
 Location: 			60323, Frankfurt am Main
-Battery: 			100%
-Battery Capacity: 	5000kW
-Weight: 			2100g
-Max. Carriage: 		500g
+Battery: 			178%
+Battery Capacity: 	2800kW
+Weight: 			450g
+Max. Carriage: 		200g
 Carriage Weight: 	429g
 Speed: 				57km/h
-Max. Speed: 		64km/h
-Control Range: 		3500m
+Max. Speed: 		50km/h
+Control Range: 		800m
 Status: 			ON
 Last update: 		27.12.2023 09:07Uhr
