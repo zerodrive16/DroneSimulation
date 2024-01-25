@@ -1,17 +1,17 @@
-Drone ID: 			92
-Manufacturer: 		Syma
-TypeName: 			X5C
-Serialnumber: 		CoF2-2027-F774B7
+Drone ID: 			77
+Manufacturer: 		PowerVision
+TypeName: 			PowerEgg X
+Serialnumber: 		PoPo-2031-94D838
 Created: 			27.12.2023 09:07 Uhr
 Carriage Type: 		ACT
-Location: 			60313, Frankfurt am Main
-Battery: 			500%
-Battery Capacity: 	500kW
-Weight: 			102g
-Max. Carriage: 		70g
-Carriage Weight: 	228g
-Speed: 				54km/h
-Max. Speed: 		40km/h
-Control Range: 		150m
+Location: 			60323, Frankfurt am Main
+Battery: 			100%
+Battery Capacity: 	5000kW
+Weight: 			2100g
+Max. Carriage: 		500g
+Carriage Weight: 	429g
+Speed: 				57km/h
+Max. Speed: 		64km/h
+Control Range: 		3500m
 Status: 			ON
 Last update: 		27.12.2023 09:07Uhr
