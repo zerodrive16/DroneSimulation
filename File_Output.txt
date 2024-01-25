@@ -1,17 +1,17 @@
 Drone ID: 			77
-Manufacturer: 		Potensic
-TypeName: 			D80
+Manufacturer: 		Holy Stone
+TypeName: 			HS100
 Serialnumber: 		PoPo-2031-94D838
 Created: 			27.12.2023 09:07 Uhr
 Carriage Type: 		ACT
 Location: 			60323, Frankfurt am Main
-Battery: 			178%
-Battery Capacity: 	2800kW
-Weight: 			450g
-Max. Carriage: 		200g
+Battery: 			142%
+Battery Capacity: 	3500kW
+Weight: 			700g
+Max. Carriage: 		500g
 Carriage Weight: 	429g
 Speed: 				57km/h
-Max. Speed: 		50km/h
-Control Range: 		800m
+Max. Speed: 		45km/h
+Control Range: 		500m
 Status: 			ON
 Last update: 		27.12.2023 09:07Uhr

@@ -49,6 +49,7 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
                     );
                     resultFuture.complete(data);
                 }).exceptionally(ex -> {
+                    logger.log(Level.SEVERE, "Error in Async process!", ex);
                     resultFuture.completeExceptionally(ex);
                     return null;
                 });
