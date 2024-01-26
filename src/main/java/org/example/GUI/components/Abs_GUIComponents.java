@@ -3,6 +3,9 @@ package org.example.GUI.components;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * This abstract class sets the color and font for InfoBar, MainScreen, NavBar and the frame.
+ */
 public abstract class Abs_GUIComponents {
     static protected Color mainScreenColor = new Color(44,44,44); //dark Gray
     protected Color backgroundColor = new Color(22,22,22); //even darker Gray

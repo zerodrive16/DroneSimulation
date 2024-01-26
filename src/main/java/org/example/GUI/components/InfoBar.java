@@ -10,11 +10,19 @@ import java.util.Objects;
 
 import static org.example.GUI.GUI.createDashboard;
 import static org.example.GUI.GUI.quickSet;
-
+/**
+ * The InfoBar class represents the information bar displayed at the top of the GUI.
+ * It includes a refresh timer, a label showing time since last update, and a group information label.
+ */
 public class InfoBar extends Abs_GUIComponents{
 
     private JPanel infobar = new JPanel();
 
+    /**
+     * Constructs an InfoBar object.
+     *
+     * @param frame The main JFrame of the application.
+     */
     public InfoBar(JFrame frame) {
         JLabel refreshText = new JLabel("since Last Update: X Seconds     ");
         JLabel groupText = new JLabel(" This program was made by Group15");
@@ -62,6 +70,12 @@ public class InfoBar extends Abs_GUIComponents{
         infobar.add(refreshText);
         infobar.add(refreshButton);
     }
+
+    /**
+     * Gets the JPanel representing the infobar.
+     *
+     * @return The JPanel representing the infobar.
+     */
     public JPanel getInfobar(){
         return infobar;
     }

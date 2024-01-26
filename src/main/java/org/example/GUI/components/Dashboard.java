@@ -11,10 +11,26 @@ import java.awt.*;
 import java.util.ArrayList;
 
 
-import static org.example.GUI.components.ViewMore.showMoreInformation;
+import static org.example.GUI.components.ViewMore.viewMoreInformation;
 
 
 public class Dashboard extends Abs_GUIComponents {
+    /**
+     * Creates a JPanel representing a drone with detailed information.
+     * This panel includes drone ID, manufacturer, typename, serial number, creation date, status,
+     * and last update time. It also provides buttons for viewing more information
+     * and exporting the data.
+     *
+     * @param droneData          The data object containing drone information.
+     * @param droneTypesData     The data object containing drone type information.
+     * @param droneDynamicData   The data object containing drone dynamic information.
+     * @param droneIndex         The index of the drone in the data lists.
+     * @param primaryColor       The primary color used for UI components.
+     * @param geocodingData      The geocoding data for location information.
+     * @param convertCreateData  The converted creation date data.
+     * @param convertLastSeenData The converted last seen date data.
+     * @return A JPanel representing the drone with detailed information.
+     */
     static public JPanel createDronePanel(DronesData.ReturnDroneData droneData, DroneTypesData.ReturnDroneTypesData droneTypesData,
                                     DroneDynamicsData.ReturnDroneDynamicData droneDynamicData, int droneIndex, Color primaryColor, ArrayList<String> geocodingData,
                                     ArrayList<String> convertCreateData, ArrayList<String> convertLastSeenData) {
@@ -37,7 +53,7 @@ public class Dashboard extends Abs_GUIComponents {
         viewMoreButton.setBorderPainted(false);
         viewMoreButton.setFocusPainted(false);
         viewMoreButton.addActionListener(e -> {
-            showMoreInformation(droneIndex,droneData,droneTypesData,droneDynamicData,geocodingData, convertCreateData, convertLastSeenData);
+            viewMoreInformation(droneIndex,droneData,droneTypesData,droneDynamicData,geocodingData, convertCreateData, convertLastSeenData);
         });
 
         JPanel box = new JPanel();
@@ -84,6 +100,11 @@ public class Dashboard extends Abs_GUIComponents {
         return dronePanel;
     }
 
+    /**
+     * This function creates a white label.
+     * @param  text String
+     * @return Text in JLabel form
+     */
     static private JLabel createWhiteLabel(String text) {
         JLabel label = new JLabel(text);
         label.setForeground(Color.WHITE);
