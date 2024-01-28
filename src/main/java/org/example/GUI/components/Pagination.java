@@ -20,11 +20,11 @@ public class Pagination {
     private static final int ITEMS_PER_PAGE = 10;
 
     /**
-     * Adds pagination controls to the specified card panel via buttons at the buttom of the screen.
+     * Adds pagination controls to the specified topPanel panel via buttons at the buttom of the screen.
      * It also displays the current page number. Pressing one of the two buttons will call the displayPage function.
      *
-     * @param card               The JPanel where the paginated data will be displayed.
-     * @param card2              The JPanel used for pagination controls.
+     * @param topPanel               The JPanel where the paginated data will be displayed.
+     * @param bottomPanel              The JPanel used for pagination controls.
      * @param droneData          The data object containing drone information.
      * @param droneTypeData      The data object containing drone type information.
      * @param droneDynamicData   The data object containing drone dynamic information.
@@ -33,8 +33,8 @@ public class Pagination {
      * @param convertCreateData  The converted creation date data.
      * @param convertLastSeenData The converted last seen date data.
      */
-    static protected void addPaginationControls(JPanel card,
-                                       JPanel card2,
+    static protected void addPaginationControls(JPanel topPanel,
+                                       JPanel bottomPanel,
                                        DronesData.ReturnDroneData droneData,
                                        DroneTypesData.ReturnDroneTypesData droneTypeData,
                                        DroneDynamicsData.ReturnDroneDynamicData droneDynamicData,
@@ -42,9 +42,11 @@ public class Pagination {
                                        ArrayList<String> geoData,
                                        ArrayList<String> convertCreateData,
                                        ArrayList<String> convertLastSeenData) {
+        // calculations for displaying a certain number of drones per page
         int totalItems = droneData.getDroneID().size();
         int totalPages = (int) Math.ceil((double) totalItems / ITEMS_PER_PAGE);
 
+        // Create JButtons and JPanel for the pagination controls
         JButton prevButton = new JButton("Previous");
         prevButton.setFont(new Font("Arial", Font.BOLD, 12));
         prevButton.setForeground(Color.WHITE);
@@ -68,30 +70,31 @@ public class Pagination {
         paginationPanel.add(paginationLabel);
         paginationPanel.add(nextButton);
 
+        // Function of pagination controls
         prevButton.addActionListener(e -> {
             if (currentPage > 1) {
                 currentPage--;
-                displayPage(card, droneData, droneTypeData, droneDynamicData, primaryColor, geoData, convertCreateData, convertLastSeenData);
+                displayPage(topPanel, droneData, droneTypeData, droneDynamicData, primaryColor, geoData, convertCreateData, convertLastSeenData);
                 paginationLabel.setText("Page " + currentPage + " of " + totalPages);
-                card2.add(paginationPanel,BorderLayout.SOUTH);
+                bottomPanel.add(paginationPanel,BorderLayout.SOUTH);
             }
         });
         nextButton.addActionListener(e -> {
             if (currentPage < totalPages) {
                 currentPage++;
-                displayPage(card, droneData, droneTypeData, droneDynamicData, primaryColor, geoData, convertCreateData, convertLastSeenData);
+                displayPage(topPanel, droneData, droneTypeData, droneDynamicData, primaryColor, geoData, convertCreateData, convertLastSeenData);
                 paginationLabel.setText("Page " + currentPage + " of " + totalPages);
-                card2.add(paginationPanel,BorderLayout.SOUTH);
+                bottomPanel.add(paginationPanel,BorderLayout.SOUTH);
             }
         });
-        card2.add(paginationPanel,BorderLayout.SOUTH);
+        bottomPanel.add(paginationPanel,BorderLayout.SOUTH);
     }
 
     /**
-     * Displays the specified page of data on the card panel.
+     * Displays the specified page of data on the topPanel panel.
      * First all elements of the page are removed and then calls createDronePanel to display current data.
      *
-     * @param card               The JPanel where the data will be displayed.
+     * @param topPanel               The JPanel where the data will be displayed.
      * @param droneData          The data object containing drone information.
      * @param droneTypeData      The data object containing drone type information.
      * @param droneDynamicData   The data object containing drone dynamic information.
@@ -100,7 +103,7 @@ public class Pagination {
      * @param convertCreateData  The converted creation date data.
      * @param convertLastSeenData The converted last seen date data.
      */
-    static protected void displayPage(JPanel card,
+    static protected void displayPage(JPanel topPanel,
                              DronesData.ReturnDroneData droneData,
                              DroneTypesData.ReturnDroneTypesData droneTypeData,
                              DroneDynamicsData.ReturnDroneDynamicData droneDynamicData,
@@ -111,12 +114,12 @@ public class Pagination {
         int startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
         int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, droneData.getDroneID().size());
 
-        card.removeAll();
+        topPanel.removeAll();
         for (int i = startIndex; i < endIndex; i++) {
             JPanel dronePanel = createDronePanel(droneData, droneTypeData, droneDynamicData, i, primaryColor, geoData, convertCreateData, convertLastSeenData);
-            card.add(dronePanel);
+            topPanel.add(dronePanel);
         }
-        card.revalidate();
-        card.repaint();
+        topPanel.revalidate();
+        topPanel.repaint();
     }
 }

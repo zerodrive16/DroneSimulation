@@ -28,11 +28,11 @@ public class CallAPIData {
     /**
      * Fetches data from multiple asynchronous API calls and updates the UI components accordingly.
      *
-     * @param primaryColor The primary color used for UI components.
-     * @param card         The JPanel where the drone data will be displayed.
-     * @param card2        The JPanel used for pagination controls.
+     * @param mainColor The primary color used for UI components.
+     * @param topPanel         The JPanel where the drone data will be displayed.
+     * @param bottomPanel        The JPanel used for pagination controls.
      */
-    public void fetchAPIData(Color primaryColor, JPanel card, JPanel card2) {
+    public void fetchAPIData(Color mainColor, JPanel topPanel, JPanel bottomPanel) {
         Drones dronesAPI = new Drones();
         CompletableFuture<DronesData.ReturnDroneData> futureDronesData = dronesAPI.APIBuildAsync();
 
@@ -67,19 +67,19 @@ public class CallAPIData {
                         ArrayList<String> convertCreateData = futureConvertCreate.get();
                         ArrayList<String> convertLastSeenData = futureConvertLastSeen.get();
 
-                        card.setLayout(new FlowLayout(FlowLayout.LEFT));
-                        card.removeAll();
+                        topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+                        topPanel.removeAll();
 
                         for (int droneIndex = 0; droneIndex < droneData.getDroneID().size(); droneIndex++) {
-                            JPanel dronePanel = createDronePanel(droneData, droneTypeData, droneDynamicData, droneIndex, primaryColor, geoData, convertCreateData, convertLastSeenData);
-                            card.add(dronePanel);
+                            JPanel dronePanel = createDronePanel(droneData, droneTypeData, droneDynamicData, droneIndex, mainColor, geoData, convertCreateData, convertLastSeenData);
+                            topPanel.add(dronePanel);
                         }
 
-                        card.revalidate();
-                        card.repaint();
+                        topPanel.revalidate();
+                        topPanel.repaint();
 
-                        displayPage(card, droneData, droneTypeData, droneDynamicData, primaryColor, geoData, convertCreateData, convertLastSeenData);
-                        addPaginationControls(card, card2, droneData, droneTypeData, droneDynamicData, primaryColor, geoData, convertCreateData, convertLastSeenData);
+                        displayPage(topPanel, droneData, droneTypeData, droneDynamicData, mainColor, geoData, convertCreateData, convertLastSeenData);
+                        addPaginationControls(topPanel, bottomPanel, droneData, droneTypeData, droneDynamicData, mainColor, geoData, convertCreateData, convertLastSeenData);
 
                     } catch(InterruptedException | ExecutionException ex) {
                         ex.printStackTrace();

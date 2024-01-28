@@ -25,30 +25,33 @@ public class Dashboard extends Abs_GUIComponents {
      * @param droneTypesData     The data object containing drone type information.
      * @param droneDynamicData   The data object containing drone dynamic information.
      * @param droneIndex         The index of the drone in the data lists.
-     * @param primaryColor       The primary color used for UI components.
+     * @param mainColor       The primary color used for UI components.
      * @param geocodingData      The geocoding data for location information.
      * @param convertCreateData  The converted creation date data.
      * @param convertLastSeenData The converted last seen date data.
      * @return A JPanel representing the drone with detailed information.
      */
     static public JPanel createDronePanel(DronesData.ReturnDroneData droneData, DroneTypesData.ReturnDroneTypesData droneTypesData,
-                                    DroneDynamicsData.ReturnDroneDynamicData droneDynamicData, int droneIndex, Color primaryColor, ArrayList<String> geocodingData,
+                                    DroneDynamicsData.ReturnDroneDynamicData droneDynamicData, int droneIndex, Color mainColor, ArrayList<String> geocodingData,
                                     ArrayList<String> convertCreateData, ArrayList<String> convertLastSeenData) {
+        // Create a new JPanel for displaying drone information
         JPanel dronePanel = new JPanel();
         dronePanel.setLayout(new BorderLayout());
-        dronePanel.setBackground(primaryColor);
+        dronePanel.setBackground(mainColor);
         dronePanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
 
+        // Create a new Drone ID Jlabel
         JLabel droneIdLabel = new JLabel("Drone ID: " + droneData.getDroneID().get(droneIndex));
         droneIdLabel.setForeground(Color.WHITE);
         droneIdLabel.setHorizontalAlignment(JLabel.CENTER);
         droneIdLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
+        // Create a new viewMoreButton that calls viewMoreInformation when clicked
         JButton viewMoreButton = new JButton("View More");
         viewMoreButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         viewMoreButton.setFont(new Font("Arial", Font.BOLD, 12));
         viewMoreButton.setForeground(Color.WHITE);
-        viewMoreButton.setBackground(Color.DARK_GRAY);
+        viewMoreButton.setBackground(Abs_GUIComponents.buttonColor);
         viewMoreButton.setOpaque(true);
         viewMoreButton.setBorderPainted(false);
         viewMoreButton.setFocusPainted(false);
@@ -56,6 +59,7 @@ public class Dashboard extends Abs_GUIComponents {
             viewMoreInformation(droneIndex,droneData,droneTypesData,droneDynamicData,geocodingData, convertCreateData, convertLastSeenData);
         });
 
+        // Create a new JPanel and JButton to add an exportButton next to the Drone ID
         JPanel box = new JPanel();
         box.setLayout(new BoxLayout(box,BoxLayout.X_AXIS));
         box.setBackground(Color.DARK_GRAY);
@@ -69,16 +73,16 @@ public class Dashboard extends Abs_GUIComponents {
             StreamFiles streamFiles = new StreamFiles();
             streamFiles.fileHandler(droneData, droneTypesData, droneDynamicData, droneIndex, geocodingData, convertCreateData, convertLastSeenData);
         });
-
+        
         box.add(Box.createRigidArea(new Dimension(50, 50)));
         box.add(droneIdLabel);
         box.add(Box.createHorizontalGlue());
         box.add(exportButton);
 
-
+        // Create a new JPanel for displaying drone information
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.setBackground(primaryColor);
+        infoPanel.setBackground(mainColor);
         infoPanel.add(createWhiteLabel("Manufacturer: " + droneTypesData.getDroneManufacturer().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Typename: " + droneTypesData.getDroneTypeName().get(droneIndex)));
         infoPanel.add(createWhiteLabel("Serialnumber: " + droneData.getDroneSerialnumber().get(droneIndex)));

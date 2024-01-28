@@ -38,7 +38,7 @@ public class ViewMore {
         additionalInfoFrame.setLocationRelativeTo(null);
         additionalInfoFrame.setSize(600, 500);
         additionalInfoFrame.setLayout(new BorderLayout());
-        additionalInfoFrame.setBackground(Abs_GUIComponents.mainScreenColor);
+        additionalInfoFrame.setBackground(Abs_GUIComponents.mainColor);
 
         // Create a JTextArea to show additional information
         JTextArea additionalInfoTextArea = new JTextArea();
@@ -47,7 +47,7 @@ public class ViewMore {
         Font font = new Font("Arial", Font.BOLD, 12);
         additionalInfoTextArea.setFont(font);
         additionalInfoTextArea.setForeground(Color.WHITE);
-        additionalInfoTextArea.setBackground(Abs_GUIComponents.mainScreenColor);
+        additionalInfoTextArea.setBackground(Abs_GUIComponents.mainColor);
 
         //additional calculations
         int batteryPercentage = (int) (100 * (Double.parseDouble(droneDynamicData.getDroneBatteryStatus().get(droneIndex)) / droneTypesData.getDroneBatteryCapacity().get(droneIndex)));

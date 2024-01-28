@@ -28,14 +28,14 @@ public class MainScreen extends Abs_GUIComponents{
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        createDashboard(mainScreenColor, topPanel, bottomPanel);
+        createDashboard(mainColor, topPanel, bottomPanel);
 
         topPanel.setPreferredSize(new Dimension(Short.MAX_VALUE, (int) (height * 0.96)));
-        topPanel.setBackground(mainScreenColor);
+        topPanel.setBackground(mainColor);
         splitScreen.add(topPanel);
 
         bottomPanel.setPreferredSize(new Dimension(Short.MAX_VALUE, (int) (height * 0.04)));
-        bottomPanel.setBackground(mainScreenColor);
+        bottomPanel.setBackground(mainColor);
         splitScreen.add(bottomPanel);
 
     }

@@ -27,6 +27,7 @@ public class InfoBar extends Abs_GUIComponents{
         JLabel refreshText = new JLabel("since Last Update: X Seconds     ");
         JLabel groupText = new JLabel(" This program was made by Group15");
 
+        //Timer keeps track of last click on update button.
         Timer refreshTimer = new Timer(1000, new ActionListener() {
             int seconds = 0;
             @Override
@@ -47,17 +48,19 @@ public class InfoBar extends Abs_GUIComponents{
         JLabel refreshLabel = new JLabel(" REFRESH");
         JButton refreshButton = new JButton();
         refreshButton.add(refreshLabel);
-        refreshButton.setBackground(panelColor);
+        refreshButton.setBackground(buttonColor);
         refreshButton.setOpaque(true);
         refreshButton.setPreferredSize(new Dimension(width/16,(height/32)-8));
         refreshButton.setBorderPainted(false);
         refreshButton.setFocusPainted(false);
+
+        //Function to update the data.
         refreshButton.addActionListener(e->{
             SwingUtilities.updateComponentTreeUI(frame);
             refreshTimer.stop();
             GUI.getTopPanel().removeAll();
             GUI.getBottomPanel().removeAll();
-            createDashboard(mainScreenColor, GUI.getTopPanel(), GUI.getBottomPanel());
+            createDashboard(mainColor, GUI.getTopPanel(), GUI.getBottomPanel());
             refreshText.setText("since Last Update: 0 Seconds     ");
             refreshTimer.start();
             frame.revalidate();

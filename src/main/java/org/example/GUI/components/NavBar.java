@@ -25,17 +25,16 @@ public class NavBar extends Abs_GUIComponents{
     public NavBar() {
             navbar.setBackground(backgroundColor);
             navbar.setPreferredSize(new Dimension(width,(height/12)));
-            JLabel dashboardLabel = new JLabel(" Dashboard");
+            JLabel dashboardLabel = new JLabel(" Drone Dashboard");
             navbar.add(dashboardLabel,BorderLayout.WEST);
 
             JPanel tabsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             tabsPanel.setBackground(backgroundColor);
             tabsPanel.setPreferredSize(new Dimension((width/4)-10,(height/18)-10));
-            tab1.setBackground(mainScreenColor);
+            tab1.setBackground(mainColor);
             tab1.setPreferredSize(new Dimension((width/4)-10,(height/18)-10));
             tabsPanel.add(tab1);
             navbar.add(tabsPanel,BorderLayout.SOUTH);
-
 
             JTextArea time = new JTextArea("HH:mm"+"      "+"dd.MM.yyyy");
             time.setEditable(false);
@@ -43,6 +42,7 @@ public class NavBar extends Abs_GUIComponents{
 
             navbar.add(time,BorderLayout.EAST);
 
+            //Function for displaying time and date. It updates by comparison.
             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
             DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
             Timer timeAndDate = new Timer(1000, new ActionListener(){

@@ -47,7 +47,7 @@ public class GUI extends Abs_GUIComponents{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(width,height);
         frame.setLocationRelativeTo(null);
-        frame.setBackground(mainScreenColor);
+        frame.setBackground(mainColor);
         frame.setMinimumSize(new Dimension(1024,720));
         frame.setVisible(true);
 
