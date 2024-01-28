@@ -10,11 +10,29 @@ import java.util.ArrayList;
 
 import static org.example.GUI.components.Dashboard.createDronePanel;
 
+/**
+ * The Pagination class provides methods for adding pagination controls and displaying paginated data.
+ * It helps in navigating through large datasets by displaying a limited number of items per page.
+ */
 public class Pagination {
 
     private static int currentPage = 1;
     private static final int ITEMS_PER_PAGE = 10;
 
+    /**
+     * Adds pagination controls to the specified card panel via buttons at the buttom of the screen.
+     * It also displays the current page number. Pressing one of the two buttons will call the displayPage function.
+     *
+     * @param card               The JPanel where the paginated data will be displayed.
+     * @param card2              The JPanel used for pagination controls.
+     * @param droneData          The data object containing drone information.
+     * @param droneTypeData      The data object containing drone type information.
+     * @param droneDynamicData   The data object containing drone dynamic information.
+     * @param primaryColor       The primary color used for UI components.
+     * @param geoData            The geocoding data for location information.
+     * @param convertCreateData  The converted creation date data.
+     * @param convertLastSeenData The converted last seen date data.
+     */
     static protected void addPaginationControls(JPanel card,
                                        JPanel card2,
                                        DronesData.ReturnDroneData droneData,
@@ -69,6 +87,19 @@ public class Pagination {
         card2.add(paginationPanel,BorderLayout.SOUTH);
     }
 
+    /**
+     * Displays the specified page of data on the card panel.
+     * First all elements of the page are removed and then calls createDronePanel to display current data.
+     *
+     * @param card               The JPanel where the data will be displayed.
+     * @param droneData          The data object containing drone information.
+     * @param droneTypeData      The data object containing drone type information.
+     * @param droneDynamicData   The data object containing drone dynamic information.
+     * @param primaryColor       The primary color used for UI components.
+     * @param geoData            The geocoding data for location information.
+     * @param convertCreateData  The converted creation date data.
+     * @param convertLastSeenData The converted last seen date data.
+     */
     static protected void displayPage(JPanel card,
                              DronesData.ReturnDroneData droneData,
                              DroneTypesData.ReturnDroneTypesData droneTypeData,

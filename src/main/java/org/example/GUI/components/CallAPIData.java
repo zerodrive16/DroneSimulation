@@ -18,8 +18,20 @@ import java.util.concurrent.ExecutionException;
 import static org.example.GUI.components.Dashboard.createDronePanel;
 import static org.example.GUI.components.Pagination.addPaginationControls;
 import static org.example.GUI.components.Pagination.displayPage;
-
+/**
+ * The CallAPIData class fetches data from multiple asynchronous API calls and updates the UI components accordingly.
+ * It fetches drone data, drone types data, and drone dynamics data asynchronously from their respective APIs.
+ * When successful, it performs reverse geocoding to obtain location information, converts date formats,
+ * and updates the UI components with the fetched data.
+ */
 public class CallAPIData {
+    /**
+     * Fetches data from multiple asynchronous API calls and updates the UI components accordingly.
+     *
+     * @param primaryColor The primary color used for UI components.
+     * @param card         The JPanel where the drone data will be displayed.
+     * @param card2        The JPanel used for pagination controls.
+     */
     public void fetchAPIData(Color primaryColor, JPanel card, JPanel card2) {
         Drones dronesAPI = new Drones();
         CompletableFuture<DronesData.ReturnDroneData> futureDronesData = dronesAPI.APIBuildAsync();

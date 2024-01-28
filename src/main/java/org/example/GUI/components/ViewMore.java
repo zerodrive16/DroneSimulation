@@ -8,9 +8,25 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * The ViewMore class provides a method for displaying additional information about a selected drone.
+ * It creates a dialog window with detailed information about the selected drone,
+ * including its ID, manufacturer, typename, serial number, location, battery status, weight, speed, etc.
+ */
 public class ViewMore {
 
-    static protected void showMoreInformation(int droneIndex, DronesData.ReturnDroneData droneData,
+    /**
+     * Displays additional information about a selected drone in a dialog window.
+     *
+     * @param droneIndex        The index of the selected drone in the data lists.
+     * @param droneData         The data object containing drone information.
+     * @param droneTypesData    The data object containing drone type information.
+     * @param droneDynamicData  The data object containing drone dynamic information.
+     * @param geocodingData     The geocoding data for location information.
+     * @param convertCreateData The converted creation date data.
+     * @param convertLastSeenData The converted last seen date data.
+     */
+    static protected void viewMoreInformation(int droneIndex, DronesData.ReturnDroneData droneData,
                                             DroneTypesData.ReturnDroneTypesData droneTypesData,
                                             DroneDynamicsData.ReturnDroneDynamicData droneDynamicData,
                                             ArrayList<String> geocodingData, ArrayList<String> convertCreateData,

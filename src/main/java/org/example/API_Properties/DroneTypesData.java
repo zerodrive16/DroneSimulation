@@ -2,22 +2,21 @@ package org.example.API_Properties;
 
 import java.util.ArrayList;
 
+/**
+ * Class representing the data structure for drone types information.
+ */
 public class DroneTypesData {
     public static class DroneType {
-        /**
-         * variables which are useful later to fetch the API data
-         */
-        private String manufacturer;
-        private String typename;
-        private Integer weight;
-        private Integer max_speed;
-        private Integer battery_capacity;
-        private Integer control_range;
-        private Integer max_carriage;
+        // variables which represent the elements inside the result array
+        String manufacturer;
+        String typename;
+        Integer weight;
+        Integer max_speed;
+        Integer battery_capacity;
+        Integer control_range;
+        Integer max_carriage;
 
-        /**
-         * Getters to fetch the API data
-         */
+        // getters to fetch the API data
         public String getManufacturer(){
             return manufacturer;
         }
@@ -78,9 +77,8 @@ public class DroneTypesData {
             this.data_droneMaxCarriage = droneMaxCarriage;
         }
 
-        /**
-         * Getters to output the data outside its class
-         */
+
+        // getters to output the data
         public ArrayList<String> getDroneManufacturer(){
             return data_droneManufacturer;
         }

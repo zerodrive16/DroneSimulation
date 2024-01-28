@@ -10,10 +10,18 @@ import java.time.format.DateTimeFormatter;
 
 import static org.example.GUI.GUI.quickSet;
 
+
+/**
+ * The NavBar class represents the navigation bar at the top of the GUI.
+ * It includes elements such as dashboard label and a clock displaying current time and date.
+ */
 public class NavBar extends Abs_GUIComponents{
     private JPanel navbar = new JPanel(new BorderLayout());
     private JPanel tab1 = new JPanel();
 
+    /**
+     * Constructs a NavBar object.
+     */
     public NavBar() {
             navbar.setBackground(backgroundColor);
             navbar.setPreferredSize(new Dimension(width,(height/12)));
@@ -55,6 +63,11 @@ public class NavBar extends Abs_GUIComponents{
             timeAndDate.start();
     }
 
+    /**
+     * Getter function for accessing the navbar from other classes.
+     *
+     * @return The JPanel representing the navbar.
+     */
     public JPanel getNavbar(){
         return navbar;
     }

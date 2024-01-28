@@ -5,7 +5,6 @@ import com.google.gson.JsonSyntaxException;
 import org.example.API_Properties.DronesData;
 import org.example.API_StoreData.DronesDataStore;
 
-import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,6 +15,7 @@ import java.util.logging.Logger;
  */
 public class Drones extends Abs_APIBuilding<DronesData.ReturnDroneData> {
     private static final Logger logger = Logger.getLogger(Drones.class.getName());
+    // storing the drones fetched data temporarily
     private final DronesDataStore storeDrones = new DronesDataStore();
 
     /**
@@ -38,27 +38,32 @@ public class Drones extends Abs_APIBuilding<DronesData.ReturnDroneData> {
      * Processes API data asynchronously
      * With each operation, it stores the data in storeAPIResponse function
      * Then it recursively handles the pagination, and checks if data is available or not
+     * resultFuture It returns the finished {@link DronesData.ReturnDroneData} and stores in the Constructor {@link DronesData.ReturnDroneData}.
      *
      * @param paginationUrl The URL is for the current page of the API data
      * @param resultFuture The CompletableFuture to be completed with the resulted fetched data
-     * @return resultFuture It returns the finished {@link DronesData.ReturnDroneData} and stores in the Constructor {@link DronesData.ReturnDroneData}.
      */
     protected void processAsync(String paginationUrl, CompletableFuture<DronesData.ReturnDroneData> resultFuture) {
         if(paginationUrl == null){
             logger.info("Pagination has reached 0, Complete the resultFuture with its data.");
+            // finishing the resultFuture async operation
             resultFuture.complete(new DronesData.ReturnDroneData(storeDrones.getDroneID(), storeDrones.getDroneTypeURL(),
                     storeDrones.getDroneCreate(), storeDrones.getDroneSerialnumber(),
                     storeDrones.getDroneCarriageWeight(), storeDrones.getDroneCarriageType()));
             return;
         }
 
+        // doing an API call with the URL
         APIRequestAsync(paginationUrl).thenAccept(response -> {
             try {
+                // converting json format to java objects
                 Gson gson = new Gson();
                 DronesData.DroneResult apiResponse = gson.fromJson(response, DronesData.DroneResult.class);
 
                 if(apiResponse != null) {
+                    // storing the entries
                     storeAPIResponse(apiResponse);
+                    // recursive the function
                     processAsync(apiResponse.getNext(), resultFuture);
                 } else {
                     logger.log(Level.WARNING, "API response is null!");

@@ -1,16 +1,16 @@
-Drone ID: 			92
+Drone ID: 			93
 Manufacturer: 		Syma
 TypeName: 			X5C
-Serialnumber: 		CoF2-2027-F774B7
+Serialnumber: 		HoHS-2030-68CDB8
 Created: 			27.12.2023 09:07 Uhr
 Carriage Type: 		ACT
-Location: 			60313, Frankfurt am Main
-Battery: 			500%
+Location: 			65203, Wiesbaden
+Battery: 			700%
 Battery Capacity: 	500kW
 Weight: 			102g
 Max. Carriage: 		70g
-Carriage Weight: 	228g
-Speed: 				54km/h
+Carriage Weight: 	267g
+Speed: 				31km/h
 Max. Speed: 		40km/h
 Control Range: 		150m
 Status: 			ON

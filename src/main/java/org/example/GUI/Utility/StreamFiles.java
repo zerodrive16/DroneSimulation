@@ -61,15 +61,5 @@ public class StreamFiles {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Failed to export data", "Export Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        /*
-        File file = new File(path);
-        boolean result = file.setReadOnly();
-        if(result) {
-            JOptionPane.showMessageDialog(null, "Data exported successfully to " + path, "Export Successful", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, "Failed to export data", "Export Error", JOptionPane.ERROR_MESSAGE);
-        }
-        */
     }
 }
