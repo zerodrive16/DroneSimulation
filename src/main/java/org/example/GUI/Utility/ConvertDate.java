@@ -10,15 +10,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Utility class for converting date formats asynchronously.
- */
+
 public class ConvertDate {
 
     private static final Logger logger = Logger.getLogger(ConvertDate.class.getName());
 
     /**
-     * Asynchronously converts the last seen dates of drone dynamics data to a specific date format.
+     *  converts the last seen dates of drone dynamics data to a specific date format.
      *
      * @param droneDynamicData The drone dynamic data containing last seen dates.
      * @return A CompletableFuture that resolves to an ArrayList of formatted last seen dates.
@@ -50,7 +48,7 @@ public class ConvertDate {
     }
 
     /**
-     * Asynchronously converts the creation dates of drone data to a specific date format.
+     *  converts the creation dates of drone data to a specific date format.
      *
      * @param droneData The drone data containing creation dates.
      * @return A CompletableFuture that resolves to an ArrayList of formatted creation dates.

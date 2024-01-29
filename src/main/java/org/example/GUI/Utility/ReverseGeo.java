@@ -15,15 +15,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Utility class for performing asynchronous reverse geocoding using the Google Maps API.
- */
+
 public class ReverseGeo {
 
     private static final Logger logger = Logger.getLogger(ReverseGeo.class.getName());
 
     /**
-     * Asynchronously performs reverse geocoding for drone locations.
+     *  Performs reverse geocoding for drone locations.
      *
      * @param droneDynamicData The drone dynamic data containing latitude and longitude information.
      * @return A CompletableFuture that resolves to an ArrayList of formatted location results.
@@ -33,7 +31,7 @@ public class ReverseGeo {
         String apiKey = Config.geoToken;
 
         return CompletableFuture.supplyAsync(() -> {
-            // Initialize the list to store location results
+            // Create the list to store location results
             ArrayList<String> localResultLocation = new ArrayList<>();
 
             try {
@@ -42,7 +40,7 @@ public class ReverseGeo {
                         .apiKey(apiKey)
                         .build();
 
-                // Iterate through drone locations
+                // Iterate through all drone location
                 for (int i = 0; i < droneDynamicData.getDroneLongitude().size(); i++) {
                     try {
                         // Get latitude and longitude of the drone location
@@ -53,7 +51,7 @@ public class ReverseGeo {
                         // Perform reverse geocoding
                         GeocodingResult[] results = GeocodingApi.reverseGeocode(context, location).await();
 
-                        // Check if data are saved in results
+                        // Check if any data are saves in results
                         if (results.length > 0) {
                             // Extract postal code and city from geocoding results
                             String postalCode = "";
@@ -70,15 +68,14 @@ public class ReverseGeo {
                             logger.warning("No results found for location at index " + i);
                         }
                     } catch (Exception e) {
-                        // Log the exception and continue to the next location
+                        // Log the exception during reverse geocoding and show the index
                         logger.log(Level.SEVERE, "Exception during reverse geocoding for location at index " + i, e);
                     }
                 }
             } catch (Exception e) {
-                // Log the exception during GeoApiContext creation
+                // Log the exception when creating GeoApiContext
                 logger.log(Level.SEVERE, "Exception during GeoApiContext creation", e);
             }
-
             return localResultLocation;
         });
     }
