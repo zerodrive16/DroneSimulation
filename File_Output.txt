@@ -1,17 +1,17 @@
-Drone ID: 			93
-Manufacturer: 		Syma
-TypeName: 			X5C
-Serialnumber: 		HoHS-2030-68CDB8
+Drone ID: 			79
+Manufacturer: 		Ryze
+TypeName: 			Tello
+Serialnumber: 		GoKa-2031-AD19BD
 Created: 			27.12.2023 09:07 Uhr
-Carriage Type: 		ACT
+Carriage Type: 		SEN
 Location: 			65203, Wiesbaden
-Battery: 			700%
-Battery Capacity: 	500kW
-Weight: 			102g
-Max. Carriage: 		70g
-Carriage Weight: 	267g
-Speed: 				31km/h
-Max. Speed: 		40km/h
-Control Range: 		150m
+Battery: 			463%
+Battery Capacity: 	1100kW
+Weight: 			80g
+Max. Carriage: 		40g
+Carriage Weight: 	22g
+Speed: 				13km/h
+Max. Speed: 		28km/h
+Control Range: 		100m
 Status: 			ON
 Last update: 		27.12.2023 09:07Uhr

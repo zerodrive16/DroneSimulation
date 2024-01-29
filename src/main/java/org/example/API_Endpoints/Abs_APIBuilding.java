@@ -48,7 +48,6 @@ public abstract class Abs_APIBuilding<Generic> {
                 // setting the Authorization and token, GET operation
                 con.setRequestProperty("Authorization", retrieveToken());
                 con.setRequestMethod("GET");
-                con.setRequestProperty("User-Agent", "XYZ");
 
                 // reading from input stream reader
                 BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));

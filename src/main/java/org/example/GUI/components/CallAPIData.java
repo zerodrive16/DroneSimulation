@@ -14,6 +14,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.example.GUI.components.Dashboard.createDronePanel;
 import static org.example.GUI.components.Pagination.addPaginationControls;
@@ -25,6 +27,7 @@ import static org.example.GUI.components.Pagination.displayPage;
  * and updates the UI components with the fetched data.
  */
 public class CallAPIData {
+    private static final Logger logger = Logger.getLogger(CallAPIData.class.getName());
     /**
      * Fetches data from multiple asynchronous API calls and updates the UI components accordingly.
      *
@@ -82,15 +85,15 @@ public class CallAPIData {
                         addPaginationControls(topPanel, bottomPanel, droneData, droneTypeData, droneDynamicData, mainColor, geoData, convertCreateData, convertLastSeenData);
 
                     } catch(InterruptedException | ExecutionException ex) {
-                        ex.printStackTrace();
+                        logger.log(Level.SEVERE, "Error in Asynchronous part!", ex);
                     }
                 }));
 
             } catch (Exception ex) {
-                ex.printStackTrace();
+                logger.log(Level.SEVERE, "Error processing data", ex);
             }
         }).exceptionally(ex -> {
-            SwingUtilities.invokeLater(() -> ex.printStackTrace());
+            SwingUtilities.invokeLater(() -> logger.log(Level.SEVERE, "Error in Asynchronous part!", ex));
             return null;
         });
     }
