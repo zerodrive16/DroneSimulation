@@ -1,5 +1,6 @@
 package org.example.GUI.Utility;
 
+import org.example.API_Endpoints.Drones;
 import org.example.API_Properties.DroneDynamicsData;
 import org.example.API_Properties.DroneTypesData;
 import org.example.API_Properties.DronesData;
@@ -9,9 +10,12 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class StreamFiles {
+    private static final Logger logger = Logger.getLogger(StreamFiles.class.getName());
     /**
      * Writes data to a file and displays a success or error message using JOptionPane.
      *
@@ -73,7 +77,7 @@ public class StreamFiles {
             JOptionPane.showMessageDialog(null, "Data exported successfully to " + path, "Export Successful", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException ex) {
             // Handle IO exception and display data failed to export message
-            ex.printStackTrace();
+            logger.log(Level.SEVERE, "Error in export data", ex);
             JOptionPane.showMessageDialog(null, "Failed to export data", "Export Error", JOptionPane.ERROR_MESSAGE);
         }
     }
