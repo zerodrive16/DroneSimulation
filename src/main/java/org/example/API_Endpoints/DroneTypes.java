@@ -7,8 +7,10 @@ import org.example.API_StoreData.DroneTypesStore;
 
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Defining the class DroneTypes which builds the asynchronous API request and response
@@ -30,45 +32,52 @@ public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypesD
     public CompletableFuture<DroneTypesData.ReturnDroneTypesData> APIBuildAsync() {
         CompletableFuture<DroneTypesData.ReturnDroneTypesData> resultFuture = new CompletableFuture<>();
 
-        // calling the drones class with the URL
         new Drones().APIBuildAsync().thenAccept(returnData -> {
             ArrayList<String> droneTypeURL = returnData.getDroneTypeURL();
             if(!droneTypeURL.isEmpty()) {
-                ArrayList<CompletableFuture<Void>> futures = new ArrayList<>();
+                // A list to hold the futures, maintaining the order
+                ArrayList<CompletableFuture<DroneTypesData.DroneType>> futures = new ArrayList<>();
 
-                // iterating through every droneTypeURL to get the data to the corresponding drone id
                 for (String temp_URL : droneTypeURL) {
-                    // doing the API call and store the result to futures
-                    futures.add(APIRequestAsync(temp_URL).thenAccept(response -> {
+                    // Instead of void, we now store the drone type in the future
+                    CompletableFuture<DroneTypesData.DroneType> future = APIRequestAsync(temp_URL).thenApply(response -> {
                         try {
-                            // converting json format to java object
                             Gson gson = new Gson();
-                            DroneTypesData.DroneType apiResponse = gson.fromJson(response, DroneTypesData.DroneType.class);
-
-                            storeAPIResponse(apiResponse);
-                        } catch(JsonSyntaxException ex) {
+                            return gson.fromJson(response, DroneTypesData.DroneType.class);
+                        } catch (JsonSyntaxException ex) {
                             logger.log(Level.SEVERE, "Fatal error in JSON conversion!", ex);
-                            resultFuture.completeExceptionally(ex);
+                            throw new CompletionException(ex);
                         }
-                    }));
+                    });
+                    futures.add(future);
                 }
 
-                CompletableFuture<Void> chainFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
-                logger.info("Pagination has reached 0, Complete the resultFuture with its data.");
-                // completing the operation and store data to the constructor
-                chainFutures.thenRun(() -> resultFuture.complete(
-                        new DroneTypesData.ReturnDroneTypesData(storeDroneTypes.getDroneManufacturer(), storeDroneTypes.getDroneTypeName(),
-                        storeDroneTypes.getDroneWeight(), storeDroneTypes.getDroneMaxSpeed(), storeDroneTypes.getDroneBatteryCapacity(),
-                        storeDroneTypes.getDroneControlRange(), storeDroneTypes.getDroneMaxCarriage())
-                )).exceptionally(ex -> {
-                    resultFuture.completeExceptionally(new RuntimeException(ex));
-                    return null;
-                });
+                // ChatGPT generated!
+                // combining all futures and set the order of DroneTypes
+                CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
+                        .thenApply(v -> futures.stream()
+                                .map(CompletableFuture::join) // This will get the results in the order of futures
+                                .collect(Collectors.toList()))
+                        .thenAccept(orderedResponses -> {
+                            // storing each response inside the storeAPIResponse function
+                            orderedResponses.forEach(this::storeAPIResponse);
+                            // we complete the resultFuture operation and send it to the Constructor
+                            resultFuture.complete(
+                                    new DroneTypesData.ReturnDroneTypesData(storeDroneTypes.getDroneManufacturer(), storeDroneTypes.getDroneTypeName(),
+                                            storeDroneTypes.getDroneWeight(), storeDroneTypes.getDroneMaxSpeed(), storeDroneTypes.getDroneBatteryCapacity(),
+                                            storeDroneTypes.getDroneControlRange(), storeDroneTypes.getDroneMaxCarriage())
+                            );
+                        })
+                        .exceptionally(ex -> {
+                            resultFuture.completeExceptionally(ex);
+                            return null;
+                        });
             } else {
                 logger.log(Level.WARNING, "DroneTypeURL is empty!");
                 resultFuture.completeExceptionally(new IllegalStateException("DroneTypeURL is empty"));
             }
         });
+
         return resultFuture;
     }
 
