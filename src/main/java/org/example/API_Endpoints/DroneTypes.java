@@ -69,6 +69,7 @@ public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypesD
                             );
                         })
                         .exceptionally(ex -> {
+                            logger.log(Level.SEVERE, "Asynchronous process error!");
                             resultFuture.completeExceptionally(ex);
                             return null;
                         });
