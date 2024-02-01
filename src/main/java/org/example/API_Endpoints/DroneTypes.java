@@ -39,9 +39,9 @@ public class DroneTypes extends Abs_APIBuilding<DroneTypesData.ReturnDroneTypesD
                 ArrayList<CompletableFuture<DroneTypesData.DroneType>> futures = new ArrayList<>();
 
                 for (String temp_URL : droneTypeURL) {
-                    // Instead of void, we now store the drone type in the future
                     CompletableFuture<DroneTypesData.DroneType> future = APIRequestAsync(temp_URL).thenApply(response -> {
                         try {
+                            // json format to java object
                             Gson gson = new Gson();
                             return gson.fromJson(response, DroneTypesData.DroneType.class);
                         } catch (JsonSyntaxException ex) {

@@ -40,7 +40,7 @@ public class DroneDynamics extends Abs_APIBuilding<DroneDynamicsData.ReturnDrone
                     futures.add(getLastDroneDynamic(id));
                 }
 
-                // once all data from drone dynamics have been fetched return to the constructor
+                // once all data from drone dynamics have been fetched return to the constructor (ChatGPT)
                 CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).thenRun(() -> {
                     DroneDynamicsData.ReturnDroneDynamicData data = new DroneDynamicsData.ReturnDroneDynamicData(
                             storeDroneDynamics.getDroneSpeed(), storeDroneDynamics.getDroneLongitude(),
