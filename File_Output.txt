@@ -1,16 +1,16 @@
-Drone ID: 			76
+Drone ID: 			71
 Manufacturer: 		Holy Stone
 TypeName: 			HS100
-Serialnumber: 		HoHS-2022-00A010
+Serialnumber: 		HoHS-2024-F26CA5
 Created: 			27.12.2023 09:07 Uhr
 Carriage Type: 		SEN
-Location: 			60323, Frankfurt am Main
+Location: 			64283, Darmstadt
 Battery: 			100%
 Battery Capacity: 	3500kW
 Weight: 			700g
 Max. Carriage: 		500g
-Carriage Weight: 	388g
-Speed: 				24km/h
+Carriage Weight: 	387g
+Speed: 				27km/h
 Max. Speed: 		45km/h
 Control Range: 		500m
 Status: 			ON
