@@ -1,17 +1,17 @@
-Drone ID: 			95
-Manufacturer: 		Blade
-TypeName: 			Chroma Camera Drone
-Serialnumber: 		BlCh-2023-D1E287
+Drone ID: 			76
+Manufacturer: 		Holy Stone
+TypeName: 			HS100
+Serialnumber: 		HoHS-2022-00A010
 Created: 			27.12.2023 09:07 Uhr
-Carriage Type: 		NOT
-Location: 			61, Kronberg
+Carriage Type: 		SEN
+Location: 			60323, Frankfurt am Main
 Battery: 			100%
-Battery Capacity: 	5400kW
-Weight: 			1630g
-Max. Carriage: 		600g
-Carriage Weight: 	0g
-Speed: 				21km/h
-Max. Speed: 		65km/h
-Control Range: 		2500m
+Battery Capacity: 	3500kW
+Weight: 			700g
+Max. Carriage: 		500g
+Carriage Weight: 	388g
+Speed: 				24km/h
+Max. Speed: 		45km/h
+Control Range: 		500m
 Status: 			ON
 Last update: 		27.12.2023 09:07Uhr
