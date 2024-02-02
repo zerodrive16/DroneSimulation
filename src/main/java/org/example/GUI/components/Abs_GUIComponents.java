@@ -15,7 +15,6 @@ public abstract class Abs_GUIComponents {
     static protected Color buttonColor = new Color(66,66,66); //light Gray
     protected Font textFont = new Font("Roboto", Font.PLAIN,12);
     protected Font titleFont = new Font("Roboto", Font.PLAIN,26);
-    static protected ImageIcon clipboard = new ImageIcon("src/main/java/org/example/GUI/img/CopyClipboard.png");
     protected int width = 1600;
     protected int height = 900;
 }
