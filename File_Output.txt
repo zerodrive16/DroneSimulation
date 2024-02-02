@@ -1,17 +1,17 @@
-Drone ID: 			79
-Manufacturer: 		Ryze
-TypeName: 			Tello
-Serialnumber: 		GoKa-2031-AD19BD
+Drone ID: 			95
+Manufacturer: 		Blade
+TypeName: 			Chroma Camera Drone
+Serialnumber: 		BlCh-2023-D1E287
 Created: 			27.12.2023 09:07 Uhr
-Carriage Type: 		SEN
-Location: 			65203, Wiesbaden
-Battery: 			463%
-Battery Capacity: 	1100kW
-Weight: 			80g
-Max. Carriage: 		40g
-Carriage Weight: 	22g
-Speed: 				13km/h
-Max. Speed: 		28km/h
-Control Range: 		100m
+Carriage Type: 		NOT
+Location: 			61, Kronberg
+Battery: 			100%
+Battery Capacity: 	5400kW
+Weight: 			1630g
+Max. Carriage: 		600g
+Carriage Weight: 	0g
+Speed: 				21km/h
+Max. Speed: 		65km/h
+Control Range: 		2500m
 Status: 			ON
 Last update: 		27.12.2023 09:07Uhr
